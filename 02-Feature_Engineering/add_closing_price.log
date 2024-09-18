@@ -1,0 +1,1442 @@
+2024-09-17 21:30:33,705 ERROR:GILD: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:30:33,705 WARNING:No historical data found for GILD in 37555810_77274.csv
+2024-09-17 21:30:34,162 ERROR:LNC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:30:34,162 WARNING:No historical data found for LNC in 53418710_49015.csv
+2024-09-17 21:30:35,207 ERROR:XEL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:30:35,207 WARNING:No historical data found for XEL in 98389B10_23931.csv
+2024-09-17 21:30:36,410 ERROR:$VAR: possibly delisted; No timezone found
+2024-09-17 21:30:36,411 WARNING:No historical data found for VAR in 92220P10_27043.csv
+2024-09-17 21:30:37,496 ERROR:TFSL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:30:37,496 WARNING:No historical data found for TFSL in 87240R10_91968.csv
+2024-09-17 21:30:38,703 ERROR:DE: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:30:38,704 WARNING:No historical data found for DE in 24419910_19350.csv
+2024-09-17 21:30:39,625 ERROR:ADM: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:30:39,625 WARNING:No historical data found for ADM in 03948310_10516.csv
+2024-09-17 21:30:40,870 ERROR:TJX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:30:40,871 WARNING:No historical data found for TJX in 87254010_40539.csv
+2024-09-17 21:30:41,997 ERROR:FLO: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:30:41,998 WARNING:No historical data found for FLO in 34349810_88924.csv
+2024-09-17 21:30:42,925 ERROR:CNX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:30:42,925 WARNING:No historical data found for CNX in 20854P10_86799.csv
+2024-09-17 21:30:44,003 ERROR:IPG: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:30:44,003 WARNING:No historical data found for IPG in 46069010_53065.csv
+2024-09-17 21:30:44,995 ERROR:ATO: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:30:44,996 WARNING:No historical data found for ATO in 04956010_32986.csv
+2024-09-17 21:30:46,043 ERROR:$PBCT: possibly delisted; No timezone found
+2024-09-17 21:30:46,044 WARNING:No historical data found for PBCT in 71270410_12073.csv
+2024-09-17 21:30:47,099 ERROR:PBI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:30:47,099 WARNING:No historical data found for PBI in 72447910_24459.csv
+2024-09-17 21:30:47,967 ERROR:BAX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:30:47,968 WARNING:No historical data found for BAX in 07181310_27887.csv
+2024-09-17 21:30:48,918 ERROR:CHK: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:30:48,919 WARNING:No historical data found for CHK in 16516710_78877.csv
+2024-09-17 21:30:50,292 ERROR:PPL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:30:50,293 WARNING:No historical data found for PPL in 69351T10_22517.csv
+2024-09-17 21:30:51,098 ERROR:$ATVI: possibly delisted; No timezone found
+2024-09-17 21:30:51,099 WARNING:No historical data found for ATVI in 00507V10_79678.csv
+2024-09-17 21:30:52,211 ERROR:OMC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:30:52,211 WARNING:No historical data found for OMC in 68191910_30681.csv
+2024-09-17 21:30:53,185 ERROR:$DISH: possibly delisted; No timezone found
+2024-09-17 21:30:53,186 WARNING:No historical data found for DISH in 25470M10_81696.csv
+2024-09-17 21:30:54,435 ERROR:NYCB: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:30:54,435 WARNING:No historical data found for NYCB in 64944510_79859.csv
+2024-09-17 21:30:54,782 ERROR:$BA: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020231229)
+2024-09-17 21:30:54,783 WARNING:No historical data found for BA in 09702310_19561.csv
+2024-09-17 21:30:55,866 ERROR:$SYMC: possibly delisted; No timezone found
+2024-09-17 21:30:55,867 WARNING:No historical data found for SYMC in 87150310_75607.csv
+2024-09-17 21:30:56,858 ERROR:COH: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:30:56,860 WARNING:No historical data found for COH in 18975410_88661.csv
+2024-09-17 21:30:58,970 ERROR:AME: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:30:58,970 WARNING:No historical data found for AME in 03110010_85257.csv
+2024-09-17 21:30:59,894 ERROR:AAPL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:30:59,895 WARNING:No historical data found for AAPL in 03783310_14593.csv
+2024-09-17 21:31:00,266 ERROR:$GT: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020231229)
+2024-09-17 21:31:00,267 WARNING:No historical data found for GT in 38255010_16432.csv
+2024-09-17 21:31:02,391 ERROR:HOLX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:02,392 WARNING:No historical data found for HOLX in 43644010_76095.csv
+2024-09-17 21:31:03,578 ERROR:T: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:03,582 WARNING:No historical data found for T in 00206R10_66093.csv
+2024-09-17 21:31:04,813 ERROR:HUN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:04,813 WARNING:No historical data found for HUN in 44701110_90558.csv
+2024-09-17 21:31:05,801 ERROR:AMP: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:05,801 WARNING:No historical data found for AMP in 03076C10_90880.csv
+2024-09-17 21:31:06,831 ERROR:DOW: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:06,832 WARNING:No historical data found for DOW in 26054310_20626.csv
+2024-09-17 21:31:08,071 ERROR:DHR: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:08,072 WARNING:No historical data found for DHR in 23585110_49680.csv
+2024-09-17 21:31:09,111 ERROR:GXP: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:09,112 WARNING:No historical data found for GXP in 39116410_24432.csv
+2024-09-17 21:31:10,540 ERROR:AIZ: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:10,540 WARNING:No historical data found for AIZ in 04621X10_90038.csv
+2024-09-17 21:31:11,435 ERROR:$RHT: possibly delisted; No timezone found
+2024-09-17 21:31:11,436 WARNING:No historical data found for RHT in 75657710_87184.csv
+2024-09-17 21:31:12,421 ERROR:KSS: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:12,421 WARNING:No historical data found for KSS in 50025510_77606.csv
+2024-09-17 21:31:13,452 ERROR:PGR: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:13,453 WARNING:No historical data found for PGR in 74331510_64390.csv
+2024-09-17 21:31:13,717 ERROR:$XOM: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020231229)
+2024-09-17 21:31:13,717 WARNING:No historical data found for XOM in 30231G10_11850.csv
+2024-09-17 21:31:13,888 ERROR:$FDO: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020150630)
+2024-09-17 21:31:13,888 WARNING:No historical data found for FDO in 30700010_53866.csv
+2024-09-17 21:31:14,878 ERROR:WM: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:14,878 WARNING:No historical data found for WM in 94106L10_11955.csv
+2024-09-17 21:31:17,093 ERROR:AET: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:17,095 WARNING:No historical data found for AET in 00817Y10_88845.csv
+2024-09-17 21:31:18,141 ERROR:JPM: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:18,142 WARNING:No historical data found for JPM in 46625H10_47896.csv
+2024-09-17 21:31:19,400 ERROR:TAP: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:19,400 WARNING:No historical data found for TAP in 60871R20_59248.csv
+2024-09-17 21:31:20,755 ERROR:JKHY: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:20,756 WARNING:No historical data found for JKHY in 42628110_88664.csv
+2024-09-17 21:31:21,932 ERROR:$AGN: possibly delisted; No timezone found
+2024-09-17 21:31:21,932 WARNING:No historical data found for AGN in 01849010_75646.csv
+2024-09-17 21:31:23,106 ERROR:PEG: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:23,107 WARNING:No historical data found for PEG in 74457310_23712.csv
+2024-09-17 21:31:25,222 ERROR:TFX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:25,223 WARNING:No historical data found for TFX in 87936910_44329.csv
+2024-09-17 21:31:26,416 ERROR:BALL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:26,417 WARNING:No historical data found for BALL in 05849810_57568.csv
+2024-09-17 21:31:27,464 ERROR:GCI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:27,465 WARNING:No historical data found for GCI in 36473010_47941.csv
+2024-09-17 21:31:28,510 ERROR:WEC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:28,510 WARNING:No historical data found for WEC in 97665710_23536.csv
+2024-09-17 21:31:28,889 ERROR:$CAT: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020231229)
+2024-09-17 21:31:28,890 WARNING:No historical data found for CAT in 14912310_18542.csv
+2024-09-17 21:31:32,086 ERROR:WMT: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:32,086 WARNING:No historical data found for WMT in 93114210_55976.csv
+2024-09-17 21:31:33,433 ERROR:IM: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:33,434 WARNING:No historical data found for IM in 45715310_84168.csv
+2024-09-17 21:31:35,902 ERROR:K: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:35,903 WARNING:No historical data found for K in 48783610_26825.csv
+2024-09-17 21:31:37,180 ERROR:FITB: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:37,181 WARNING:No historical data found for FITB in 31677310_34746.csv
+2024-09-17 21:31:38,262 ERROR:$TIF: possibly delisted; No timezone found
+2024-09-17 21:31:38,263 WARNING:No historical data found for TIF in 88654710_75100.csv
+2024-09-17 21:31:41,620 ERROR:SJM: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:41,621 WARNING:No historical data found for SJM in 83269640_42585.csv
+2024-09-17 21:31:42,987 ERROR:JBHT: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:42,988 WARNING:No historical data found for JBHT in 44565810_42877.csv
+2024-09-17 21:31:45,116 ERROR:$NAV: possibly delisted; No timezone found
+2024-09-17 21:31:45,119 WARNING:No historical data found for NAV in 63934E10_12503.csv
+2024-09-17 21:31:46,451 ERROR:ROK: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:46,452 WARNING:No historical data found for ROK in 77390310_84381.csv
+2024-09-17 21:31:47,698 ERROR:BC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:47,699 WARNING:No historical data found for BC in 11704310_10874.csv
+2024-09-17 21:31:50,008 ERROR:PCP: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:50,009 WARNING:No historical data found for PCP in 74018910_63830.csv
+2024-09-17 21:31:51,247 ERROR:CI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:51,249 WARNING:No historical data found for CI in 12550910_64186.csv
+2024-09-17 21:31:52,352 ERROR:WMB: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:52,352 WARNING:No historical data found for WMB in 96945710_38156.csv
+2024-09-17 21:31:54,728 ERROR:TSN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:54,729 WARNING:No historical data found for TSN in 90249410_77730.csv
+2024-09-17 21:31:54,912 ERROR:$SNDK: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020160429)
+2024-09-17 21:31:54,913 WARNING:No historical data found for SNDK in 80004C10_82618.csv
+2024-09-17 21:31:56,122 ERROR:WYNN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:56,124 WARNING:No historical data found for WYNN in 98313410_89533.csv
+2024-09-17 21:31:56,412 ERROR:$MHFI: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020160331)
+2024-09-17 21:31:56,412 WARNING:No historical data found for MHFI in 58064510_17478.csv
+2024-09-17 21:31:57,708 ERROR:MKL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:57,709 WARNING:No historical data found for MKL in 57053510_10933.csv
+2024-09-17 21:31:58,017 ERROR:$TE: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020160630)
+2024-09-17 21:31:58,018 WARNING:No historical data found for TE in 87237510_37161.csv
+2024-09-17 21:31:59,240 ERROR:IGT: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:31:59,241 WARNING:No historical data found for IGT in 45990210_45277.csv
+2024-09-17 21:32:00,221 ERROR:$XEC: possibly delisted; No timezone found
+2024-09-17 21:32:00,222 WARNING:No historical data found for XEC in 17179810_89509.csv
+2024-09-17 21:32:01,335 ERROR:ORI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:32:01,335 WARNING:No historical data found for ORI in 68022310_59396.csv
+2024-09-17 21:32:02,325 ERROR:RRC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:32:02,327 WARNING:No historical data found for RRC in 75281A10_50017.csv
+2024-09-17 21:32:03,350 ERROR:CPRT: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:32:03,350 WARNING:No historical data found for CPRT in 21720410_80320.csv
+2024-09-17 21:32:04,491 ERROR:COL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:32:04,491 WARNING:No historical data found for COL in 77434110_89014.csv
+2024-09-17 21:32:05,646 ERROR:EMN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:32:05,647 WARNING:No historical data found for EMN in 27743210_80080.csv
+2024-09-17 21:32:06,077 ERROR:$FL: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020011130 -> 1970-01-02 00:00:00.020230531)
+2024-09-17 21:32:06,088 WARNING:No historical data found for FL in 34484910_15456.csv
+2024-09-17 21:32:08,050 ERROR:$BBBY: possibly delisted; No timezone found
+2024-09-17 21:32:08,051 WARNING:No historical data found for BBBY in 07589610_77659.csv
+2024-09-17 21:32:09,279 ERROR:LUMN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:32:09,279 WARNING:No historical data found for LUMN in 15670010_60599.csv
+2024-09-17 21:32:12,798 ERROR:RSG: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:32:12,801 WARNING:No historical data found for RSG in 76075910_86228.csv
+2024-09-17 21:32:14,151 ERROR:SLGN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:32:14,153 WARNING:No historical data found for SLGN in 82704810_84563.csv
+2024-09-17 21:32:15,458 ERROR:WHR: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:32:15,458 WARNING:No historical data found for WHR in 96332010_25419.csv
+2024-09-17 21:32:16,601 ERROR:IT: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:32:16,602 WARNING:No historical data found for IT in 36665110_79698.csv
+2024-09-17 21:32:17,694 ERROR:ZBH: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:32:17,695 WARNING:No historical data found for ZBH in 98956P10_89070.csv
+2024-09-17 21:32:18,906 ERROR:D: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:32:18,906 WARNING:No historical data found for D in 25746U10_64936.csv
+2024-09-17 21:32:19,758 ERROR:$CELG: possibly delisted; No timezone found
+2024-09-17 21:32:19,759 WARNING:No historical data found for CELG in 15102010_11552.csv
+2024-09-17 21:32:20,680 ERROR:ON: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:32:20,681 WARNING:No historical data found for ON in 68218910_88182.csv
+2024-09-17 21:32:23,437 ERROR:NFG: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:32:23,438 WARNING:No historical data found for NFG in 63618010_25590.csv
+2024-09-17 21:32:25,663 ERROR:BRKR: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:32:25,666 WARNING:No historical data found for BRKR in 11679410_88504.csv
+2024-09-17 21:32:26,802 ERROR:EIX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:32:26,802 WARNING:No historical data found for EIX in 28102010_15720.csv
+2024-09-17 21:32:27,967 ERROR:HAS: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:32:27,968 WARNING:No historical data found for HAS in 41805610_52978.csv
+2024-09-17 21:32:29,490 ERROR:UHS: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:32:29,493 WARNING:No historical data found for UHS in 91390310_79637.csv
+2024-09-17 21:32:30,495 ERROR:EXPD: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:32:30,496 WARNING:No historical data found for EXPD in 30213010_87717.csv
+2024-09-17 21:32:30,766 ERROR:$CVX: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020011031 -> 1970-01-02 00:00:00.020231229)
+2024-09-17 21:32:30,767 WARNING:No historical data found for CVX in 16676410_14541.csv
+2024-09-17 21:32:32,761 ERROR:NOV: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:32:32,761 WARNING:No historical data found for NOV in 63707110_84032.csv
+2024-09-17 21:32:34,865 ERROR:TXT: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:32:34,866 WARNING:No historical data found for TXT in 88320310_23579.csv
+2024-09-17 21:32:35,950 ERROR:LRCX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:32:35,951 WARNING:No historical data found for LRCX in 51280710_48486.csv
+2024-09-17 21:32:38,243 ERROR:JCI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:32:38,244 WARNING:No historical data found for JCI in 47836610_42534.csv
+2024-09-17 21:32:40,553 ERROR:ROL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:32:40,555 WARNING:No historical data found for ROL in 77571110_36003.csv
+2024-09-17 21:32:40,940 ERROR:$GD: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020231229)
+2024-09-17 21:32:40,942 WARNING:No historical data found for GD in 36955010_12052.csv
+2024-09-17 21:32:43,220 ERROR:PFE: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:32:43,221 WARNING:No historical data found for PFE in 71708110_21936.csv
+2024-09-17 21:32:44,535 ERROR:URI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:32:44,535 WARNING:No historical data found for URI in 91136310_85663.csv
+2024-09-17 21:32:46,632 ERROR:AMGN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:32:46,632 WARNING:No historical data found for AMGN in 03116210_14008.csv
+2024-09-17 21:32:47,754 ERROR:KLAC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:32:47,755 WARNING:No historical data found for KLAC in 48248010_46886.csv
+2024-09-17 21:32:48,855 ERROR:THO: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:32:48,856 WARNING:No historical data found for THO in 88516010_76081.csv
+2024-09-17 21:32:50,888 ERROR:MHK: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:32:50,889 WARNING:No historical data found for MHK in 60819010_77496.csv
+2024-09-17 21:32:51,941 ERROR:DOV: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:32:51,942 WARNING:No historical data found for DOV in 26000310_25953.csv
+2024-09-17 21:32:54,725 ERROR:VYX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:32:54,727 WARNING:No historical data found for VYX in 62886E10_84372.csv
+2024-09-17 21:32:56,070 ERROR:$AVP: possibly delisted; No timezone found
+2024-09-17 21:32:56,071 WARNING:No historical data found for AVP in 05430310_40416.csv
+2024-09-17 21:32:58,516 ERROR:ZION: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:32:58,517 WARNING:No historical data found for ZION in 98970110_84129.csv
+2024-09-17 21:32:59,857 ERROR:NI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:32:59,858 WARNING:No historical data found for NI in 65473P10_38762.csv
+2024-09-17 21:33:00,974 ERROR:FE: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:33:00,974 WARNING:No historical data found for FE in 33793210_23026.csv
+2024-09-17 21:33:01,976 ERROR:VFC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:33:01,977 WARNING:No historical data found for VFC in 91820410_43553.csv
+2024-09-17 21:33:03,159 ERROR:APA: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:33:03,161 WARNING:No historical data found for APA in 03741110_39490.csv
+2024-09-17 21:33:04,191 ERROR:MTG: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:33:04,191 WARNING:No historical data found for MTG in 55284810_76804.csv
+2024-09-17 21:33:06,295 ERROR:VRTX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:33:06,296 WARNING:No historical data found for VRTX in 92532F10_76744.csv
+2024-09-17 21:33:09,515 ERROR:$MXIM: possibly delisted; No timezone found
+2024-09-17 21:33:09,516 WARNING:No historical data found for MXIM in 57772K10_11896.csv
+2024-09-17 21:33:10,926 ERROR:WWD: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:33:10,927 WARNING:No historical data found for WWD in 98074510_84403.csv
+2024-09-17 21:33:12,218 ERROR:RPM: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:33:12,219 WARNING:No historical data found for RPM in 74968510_65307.csv
+2024-09-17 21:33:14,504 ERROR:FMC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:33:14,507 WARNING:No historical data found for FMC in 30249130_19166.csv
+2024-09-17 21:33:17,629 ERROR:MU: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:33:17,630 WARNING:No historical data found for MU in 59511210_53613.csv
+2024-09-17 21:33:18,978 ERROR:UNM: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:33:18,978 WARNING:No historical data found for UNM in 91529Y10_71175.csv
+2024-09-17 21:33:21,448 ERROR:TDG: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:33:21,449 WARNING:No historical data found for TDG in 89364110_91152.csv
+2024-09-17 21:33:21,581 ERROR:$OCR: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020150731)
+2024-09-17 21:33:21,581 WARNING:No historical data found for OCR in 68190410_63714.csv
+2024-09-17 21:33:24,132 ERROR:KEX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:33:24,133 WARNING:No historical data found for KEX in 49726610_59045.csv
+2024-09-17 21:33:24,386 ERROR:$CVC: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020160531)
+2024-09-17 21:33:24,387 WARNING:No historical data found for CVC in 12686C10_68857.csv
+2024-09-17 21:33:27,823 ERROR:AVY: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:33:27,824 WARNING:No historical data found for AVY in 05361110_44601.csv
+2024-09-17 21:33:29,281 ERROR:GAS: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:33:29,285 WARNING:No historical data found for GAS in 00120410_15553.csv
+2024-09-17 21:33:30,750 ERROR:DGX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:33:30,752 WARNING:No historical data found for DGX in 74834L10_84373.csv
+2024-09-17 21:33:32,246 ERROR:CMA: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:33:32,248 WARNING:No historical data found for CMA in 20034010_25081.csv
+2024-09-17 21:33:33,413 ERROR:EEP: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:33:33,413 WARNING:No historical data found for EEP in 29250R10_86106.csv
+2024-09-17 21:33:35,002 ERROR:ABT: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:33:35,003 WARNING:No historical data found for ABT in 00282410_20482.csv
+2024-09-17 21:33:37,035 ERROR:FSLR: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:33:37,035 WARNING:No historical data found for FSLR in 33643310_91611.csv
+2024-09-17 21:33:39,146 ERROR:VMI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:33:39,149 WARNING:No historical data found for VMI in 92025310_80128.csv
+2024-09-17 21:33:41,145 ERROR:PEP: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:33:41,147 WARNING:No historical data found for PEP in 71344810_13856.csv
+2024-09-17 21:33:42,304 ERROR:VMC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:33:42,304 WARNING:No historical data found for VMC in 92916010_15202.csv
+2024-09-17 21:33:43,317 ERROR:BAC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:33:43,318 WARNING:No historical data found for BAC in 06050510_59408.csv
+2024-09-17 21:33:44,372 ERROR:RGA: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:33:44,373 WARNING:No historical data found for RGA in 75935160_79210.csv
+2024-09-17 21:33:46,470 ERROR:DVA: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:33:46,472 WARNING:No historical data found for DVA in 23918K10_82307.csv
+2024-09-17 21:33:48,500 ERROR:PLL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:33:48,501 WARNING:No historical data found for PLL in 69642930_35051.csv
+2024-09-17 21:33:50,600 ERROR:CL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:33:50,601 WARNING:No historical data found for CL in 19416210_18729.csv
+2024-09-17 21:33:52,882 ERROR:FDX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:33:52,882 WARNING:No historical data found for FDX in 31428X10_60628.csv
+2024-09-17 21:33:53,909 ERROR:INTU: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:33:53,909 WARNING:No historical data found for INTU in 46120210_78975.csv
+2024-09-17 21:33:55,019 ERROR:WAT: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:33:55,020 WARNING:No historical data found for WAT in 94184810_82651.csv
+2024-09-17 21:33:56,132 ERROR:MS: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:33:56,133 WARNING:No historical data found for MS in 61744644_69032.csv
+2024-09-17 21:33:57,202 ERROR:COP: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:33:57,203 WARNING:No historical data found for COP in 20825C10_13928.csv
+2024-09-17 21:34:00,559 ERROR:XRAY: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:00,560 WARNING:No historical data found for XRAY in 24903010_11600.csv
+2024-09-17 21:34:02,387 ERROR:EA: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:02,389 WARNING:No historical data found for EA in 28551210_75828.csv
+2024-09-17 21:34:03,510 ERROR:PFG: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:03,510 WARNING:No historical data found for PFG in 74251V10_89195.csv
+2024-09-17 21:34:05,620 ERROR:$VMW: possibly delisted; No timezone found
+2024-09-17 21:34:05,620 WARNING:No historical data found for VMW in 92856340_92257.csv
+2024-09-17 21:34:05,978 ERROR:$MMM: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020020430 -> 1970-01-02 00:00:00.020231229)
+2024-09-17 21:34:05,978 WARNING:No historical data found for MMM in 88579Y10_22592.csv
+2024-09-17 21:34:08,426 ERROR:AXP: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:08,427 WARNING:No historical data found for AXP in 02581610_59176.csv
+2024-09-17 21:34:09,725 ERROR:YUM: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:09,725 WARNING:No historical data found for YUM in 98849810_85348.csv
+2024-09-17 21:34:10,883 ERROR:SCCO: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:10,883 WARNING:No historical data found for SCCO in 84265V10_82800.csv
+2024-09-17 21:34:11,774 ERROR:SNPS: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:11,775 WARNING:No historical data found for SNPS in 87160710_77357.csv
+2024-09-17 21:34:12,890 ERROR:EL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:12,891 WARNING:No historical data found for EL in 51843910_82642.csv
+2024-09-17 21:34:15,239 ERROR:AFL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:15,242 WARNING:No historical data found for AFL in 00105510_57904.csv
+2024-09-17 21:34:16,434 ERROR:NRG: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:16,434 WARNING:No historical data found for NRG in 62937750_90071.csv
+2024-09-17 21:34:18,576 ERROR:GPN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:18,577 WARNING:No historical data found for GPN in 37940X10_88873.csv
+2024-09-17 21:34:20,895 ERROR:SYY: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:20,897 WARNING:No historical data found for SYY in 87182910_52038.csv
+2024-09-17 21:34:22,054 ERROR:$ADS: possibly delisted; No timezone found
+2024-09-17 21:34:22,055 WARNING:No historical data found for ADS in 01858110_89002.csv
+2024-09-17 21:34:23,503 ERROR:TER: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:23,503 WARNING:No historical data found for TER in 88077010_51369.csv
+2024-09-17 21:34:24,677 ERROR:PH: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:24,677 WARNING:No historical data found for PH in 70109410_41355.csv
+2024-09-17 21:34:26,251 ERROR:EMR: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:26,251 WARNING:No historical data found for EMR in 29101110_22103.csv
+2024-09-17 21:34:27,579 ERROR:UGI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:27,582 WARNING:No historical data found for UGI in 90268110_17929.csv
+2024-09-17 21:34:28,731 ERROR:CBSH: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:28,732 WARNING:No historical data found for CBSH in 20052510_25129.csv
+2024-09-17 21:34:29,808 ERROR:CMS: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:29,809 WARNING:No historical data found for CMS in 12589610_23229.csv
+2024-09-17 21:34:30,745 ERROR:CINF: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:30,745 WARNING:No historical data found for CINF in 17206210_23473.csv
+2024-09-17 21:34:31,844 ERROR:CSCO: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:31,845 WARNING:No historical data found for CSCO in 17275R10_76076.csv
+2024-09-17 21:34:32,205 ERROR:$MRO: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020020131 -> 1970-01-02 00:00:00.020231229)
+2024-09-17 21:34:32,205 WARNING:No historical data found for MRO in 56584910_15069.csv
+2024-09-17 21:34:33,468 ERROR:UPS: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:33,471 WARNING:No historical data found for UPS in 91131210_87447.csv
+2024-09-17 21:34:34,719 ERROR:CSL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:34,720 WARNING:No historical data found for CSL in 14233910_27334.csv
+2024-09-17 21:34:36,867 ERROR:BOKF: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:36,870 WARNING:No historical data found for BOKF in 05561Q20_76892.csv
+2024-09-17 21:34:37,890 ERROR:CME: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:37,891 WARNING:No historical data found for CME in 12572Q10_89626.csv
+2024-09-17 21:34:39,111 ERROR:NSC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:39,113 WARNING:No historical data found for NSC in 65584410_64311.csv
+2024-09-17 21:34:40,169 ERROR:HE: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:40,169 WARNING:No historical data found for HE in 41987010_41187.csv
+2024-09-17 21:34:41,454 ERROR:$CREE: possibly delisted; No timezone found
+2024-09-17 21:34:41,454 WARNING:No historical data found for CREE in 22544710_78875.csv
+2024-09-17 21:34:42,337 ERROR:HSY: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:42,337 WARNING:No historical data found for HSY in 42786610_16600.csv
+2024-09-17 21:34:43,362 ERROR:CLX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:43,362 WARNING:No historical data found for CLX in 18905410_46578.csv
+2024-09-17 21:34:44,502 ERROR:LUV: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:44,502 WARNING:No historical data found for LUV in 84474110_58683.csv
+2024-09-17 21:34:45,647 ERROR:CAH: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:45,647 WARNING:No historical data found for CAH in 14149Y10_21371.csv
+2024-09-17 21:34:46,711 ERROR:ADI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:46,712 WARNING:No historical data found for ADI in 03265410_60871.csv
+2024-09-17 21:34:50,058 ERROR:HRB: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:50,059 WARNING:No historical data found for HRB in 09367110_49373.csv
+2024-09-17 21:34:52,274 ERROR:CB: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:52,275 WARNING:No historical data found for CB in 17123210_59192.csv
+2024-09-17 21:34:53,404 ERROR:$TSS: possibly delisted; No timezone found
+2024-09-17 21:34:53,405 WARNING:No historical data found for TSS in 89190610_76639.csv
+2024-09-17 21:34:54,669 ERROR:AMAT: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:54,670 WARNING:No historical data found for AMAT in 03822210_14702.csv
+2024-09-17 21:34:56,889 ERROR:NYT: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:56,889 WARNING:No historical data found for NYT in 65011110_47466.csv
+2024-09-17 21:34:57,977 ERROR:ARW: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:57,977 WARNING:No historical data found for ARW in 04273510_29209.csv
+2024-09-17 21:34:59,069 ERROR:BOH: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:34:59,069 WARNING:No historical data found for BOH in 06254010_16548.csv
+2024-09-17 21:35:01,176 ERROR:STI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:35:01,177 WARNING:No historical data found for STI in 86791410_68144.csv
+2024-09-17 21:35:02,431 ERROR:BRO: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:35:02,431 WARNING:No historical data found for BRO in 11523610_63467.csv
+2024-09-17 21:35:03,480 ERROR:AZO: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:35:03,481 WARNING:No historical data found for AZO in 05333210_76605.csv
+2024-09-17 21:35:06,258 ERROR:PII: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:35:06,259 WARNING:No historical data found for PII in 73106810_75182.csv
+2024-09-17 21:35:07,774 ERROR:LH: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:35:07,775 WARNING:No historical data found for LH in 50540R40_12062.csv
+2024-09-17 21:35:09,767 ERROR:$JCP: possibly delisted; No timezone found
+2024-09-17 21:35:09,768 WARNING:No historical data found for JCP in 70816010_18403.csv
+2024-09-17 21:36:05,340 ERROR:GILD: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:05,341 WARNING:No historical data found for GILD in 37555810_77274.csv
+2024-09-17 21:36:05,993 ERROR:LNC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:05,993 WARNING:No historical data found for LNC in 53418710_49015.csv
+2024-09-17 21:36:06,651 ERROR:XEL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:06,652 WARNING:No historical data found for XEL in 98389B10_23931.csv
+2024-09-17 21:36:08,019 ERROR:$VAR: possibly delisted; No timezone found
+2024-09-17 21:36:08,020 WARNING:No historical data found for VAR in 92220P10_27043.csv
+2024-09-17 21:36:08,719 ERROR:TFSL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:08,720 WARNING:No historical data found for TFSL in 87240R10_91968.csv
+2024-09-17 21:36:10,404 ERROR:DE: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:10,408 WARNING:No historical data found for DE in 24419910_19350.csv
+2024-09-17 21:36:12,218 ERROR:ADM: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:12,219 WARNING:No historical data found for ADM in 03948310_10516.csv
+2024-09-17 21:36:13,380 ERROR:TJX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:13,380 WARNING:No historical data found for TJX in 87254010_40539.csv
+2024-09-17 21:36:14,425 ERROR:FLO: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:14,425 WARNING:No historical data found for FLO in 34349810_88924.csv
+2024-09-17 21:36:15,304 ERROR:CNX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:15,304 WARNING:No historical data found for CNX in 20854P10_86799.csv
+2024-09-17 21:36:16,041 ERROR:IPG: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:16,042 WARNING:No historical data found for IPG in 46069010_53065.csv
+2024-09-17 21:36:16,876 ERROR:ATO: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:16,876 WARNING:No historical data found for ATO in 04956010_32986.csv
+2024-09-17 21:36:18,539 ERROR:$PBCT: possibly delisted; No timezone found
+2024-09-17 21:36:18,540 WARNING:No historical data found for PBCT in 71270410_12073.csv
+2024-09-17 21:36:20,301 ERROR:PBI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:20,302 WARNING:No historical data found for PBI in 72447910_24459.csv
+2024-09-17 21:36:21,227 ERROR:BAX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:21,228 WARNING:No historical data found for BAX in 07181310_27887.csv
+2024-09-17 21:36:22,937 ERROR:CHK: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:22,937 WARNING:No historical data found for CHK in 16516710_78877.csv
+2024-09-17 21:36:24,835 ERROR:PPL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:24,836 WARNING:No historical data found for PPL in 69351T10_22517.csv
+2024-09-17 21:36:25,590 ERROR:$ATVI: possibly delisted; No timezone found
+2024-09-17 21:36:25,591 WARNING:No historical data found for ATVI in 00507V10_79678.csv
+2024-09-17 21:36:27,365 ERROR:OMC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:27,365 WARNING:No historical data found for OMC in 68191910_30681.csv
+2024-09-17 21:36:29,170 ERROR:$DISH: possibly delisted; No timezone found
+2024-09-17 21:36:29,170 WARNING:No historical data found for DISH in 25470M10_81696.csv
+2024-09-17 21:36:29,985 ERROR:NYCB: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:29,985 WARNING:No historical data found for NYCB in 64944510_79859.csv
+2024-09-17 21:36:30,133 ERROR:$BA: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020231229)
+2024-09-17 21:36:30,135 WARNING:No historical data found for BA in 09702310_19561.csv
+2024-09-17 21:36:31,034 ERROR:$SYMC: possibly delisted; No timezone found
+2024-09-17 21:36:31,035 WARNING:No historical data found for SYMC in 87150310_75607.csv
+2024-09-17 21:36:31,750 ERROR:COH: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:31,751 WARNING:No historical data found for COH in 18975410_88661.csv
+2024-09-17 21:36:32,503 ERROR:AME: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:32,503 WARNING:No historical data found for AME in 03110010_85257.csv
+2024-09-17 21:36:34,341 ERROR:AAPL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:34,341 WARNING:No historical data found for AAPL in 03783310_14593.csv
+2024-09-17 21:36:34,477 ERROR:$GT: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020231229)
+2024-09-17 21:36:34,478 WARNING:No historical data found for GT in 38255010_16432.csv
+2024-09-17 21:36:35,384 ERROR:HOLX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:35,385 WARNING:No historical data found for HOLX in 43644010_76095.csv
+2024-09-17 21:36:36,547 ERROR:T: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:36,547 WARNING:No historical data found for T in 00206R10_66093.csv
+2024-09-17 21:36:38,425 ERROR:HUN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:38,425 WARNING:No historical data found for HUN in 44701110_90558.csv
+2024-09-17 21:36:39,421 ERROR:AMP: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:39,423 WARNING:No historical data found for AMP in 03076C10_90880.csv
+2024-09-17 21:36:40,603 ERROR:DOW: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:40,605 WARNING:No historical data found for DOW in 26054310_20626.csv
+2024-09-17 21:36:42,044 ERROR:DHR: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:42,045 WARNING:No historical data found for DHR in 23585110_49680.csv
+2024-09-17 21:36:42,923 ERROR:GXP: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:42,923 WARNING:No historical data found for GXP in 39116410_24432.csv
+2024-09-17 21:36:44,816 ERROR:AIZ: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:44,817 WARNING:No historical data found for AIZ in 04621X10_90038.csv
+2024-09-17 21:36:46,343 ERROR:$RHT: possibly delisted; No timezone found
+2024-09-17 21:36:46,345 WARNING:No historical data found for RHT in 75657710_87184.csv
+2024-09-17 21:36:47,345 ERROR:KSS: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:47,346 WARNING:No historical data found for KSS in 50025510_77606.csv
+2024-09-17 21:36:48,059 ERROR:PGR: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:48,060 WARNING:No historical data found for PGR in 74331510_64390.csv
+2024-09-17 21:36:48,233 ERROR:$XOM: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020231229)
+2024-09-17 21:36:48,234 WARNING:No historical data found for XOM in 30231G10_11850.csv
+2024-09-17 21:36:48,379 ERROR:$FDO: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020150630)
+2024-09-17 21:36:48,379 WARNING:No historical data found for FDO in 30700010_53866.csv
+2024-09-17 21:36:49,202 ERROR:WM: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:49,202 WARNING:No historical data found for WM in 94106L10_11955.csv
+2024-09-17 21:36:50,770 ERROR:AET: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:50,771 WARNING:No historical data found for AET in 00817Y10_88845.csv
+2024-09-17 21:36:52,383 ERROR:JPM: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:52,385 WARNING:No historical data found for JPM in 46625H10_47896.csv
+2024-09-17 21:36:53,262 ERROR:TAP: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:53,262 WARNING:No historical data found for TAP in 60871R20_59248.csv
+2024-09-17 21:36:54,209 ERROR:JKHY: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:54,210 WARNING:No historical data found for JKHY in 42628110_88664.csv
+2024-09-17 21:36:55,966 ERROR:$AGN: possibly delisted; No timezone found
+2024-09-17 21:36:55,967 WARNING:No historical data found for AGN in 01849010_75646.csv
+2024-09-17 21:36:57,929 ERROR:PEG: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:57,931 WARNING:No historical data found for PEG in 74457310_23712.csv
+2024-09-17 21:36:58,820 ERROR:TFX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:58,821 WARNING:No historical data found for TFX in 87936910_44329.csv
+2024-09-17 21:36:59,639 ERROR:BALL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:36:59,639 WARNING:No historical data found for BALL in 05849810_57568.csv
+2024-09-17 21:37:01,742 ERROR:GCI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:01,742 WARNING:No historical data found for GCI in 36473010_47941.csv
+2024-09-17 21:37:02,588 ERROR:WEC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:02,588 WARNING:No historical data found for WEC in 97665710_23536.csv
+2024-09-17 21:37:02,747 ERROR:$CAT: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020231229)
+2024-09-17 21:37:02,748 WARNING:No historical data found for CAT in 14912310_18542.csv
+2024-09-17 21:37:05,510 ERROR:WMT: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:05,511 WARNING:No historical data found for WMT in 93114210_55976.csv
+2024-09-17 21:37:07,358 ERROR:IM: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:07,359 WARNING:No historical data found for IM in 45715310_84168.csv
+2024-09-17 21:37:08,034 ERROR:K: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:08,035 WARNING:No historical data found for K in 48783610_26825.csv
+2024-09-17 21:37:08,867 ERROR:FITB: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:08,867 WARNING:No historical data found for FITB in 31677310_34746.csv
+2024-09-17 21:37:09,566 ERROR:$TIF: possibly delisted; No timezone found
+2024-09-17 21:37:09,567 WARNING:No historical data found for TIF in 88654710_75100.csv
+2024-09-17 21:37:10,245 ERROR:SJM: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:10,246 WARNING:No historical data found for SJM in 83269640_42585.csv
+2024-09-17 21:37:11,155 ERROR:JBHT: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:11,155 WARNING:No historical data found for JBHT in 44565810_42877.csv
+2024-09-17 21:37:11,974 ERROR:$NAV: possibly delisted; No timezone found
+2024-09-17 21:37:11,974 WARNING:No historical data found for NAV in 63934E10_12503.csv
+2024-09-17 21:37:12,687 ERROR:ROK: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:12,688 WARNING:No historical data found for ROK in 77390310_84381.csv
+2024-09-17 21:37:13,377 ERROR:BC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:13,377 WARNING:No historical data found for BC in 11704310_10874.csv
+2024-09-17 21:37:14,147 ERROR:PCP: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:14,147 WARNING:No historical data found for PCP in 74018910_63830.csv
+2024-09-17 21:37:14,843 ERROR:CI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:14,843 WARNING:No historical data found for CI in 12550910_64186.csv
+2024-09-17 21:37:16,735 ERROR:WMB: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:16,736 WARNING:No historical data found for WMB in 96945710_38156.csv
+2024-09-17 21:37:17,417 ERROR:TSN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:17,417 WARNING:No historical data found for TSN in 90249410_77730.csv
+2024-09-17 21:37:17,482 ERROR:$SNDK: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020160429)
+2024-09-17 21:37:17,483 WARNING:No historical data found for SNDK in 80004C10_82618.csv
+2024-09-17 21:37:18,222 ERROR:WYNN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:18,222 WARNING:No historical data found for WYNN in 98313410_89533.csv
+2024-09-17 21:37:18,291 ERROR:$MHFI: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020160331)
+2024-09-17 21:37:18,291 WARNING:No historical data found for MHFI in 58064510_17478.csv
+2024-09-17 21:37:19,047 ERROR:MKL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:19,049 WARNING:No historical data found for MKL in 57053510_10933.csv
+2024-09-17 21:37:19,117 ERROR:$TE: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020160630)
+2024-09-17 21:37:19,117 WARNING:No historical data found for TE in 87237510_37161.csv
+2024-09-17 21:37:19,934 ERROR:IGT: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:19,935 WARNING:No historical data found for IGT in 45990210_45277.csv
+2024-09-17 21:37:20,645 ERROR:$XEC: possibly delisted; No timezone found
+2024-09-17 21:37:20,646 WARNING:No historical data found for XEC in 17179810_89509.csv
+2024-09-17 21:37:22,052 ERROR:ORI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:22,052 WARNING:No historical data found for ORI in 68022310_59396.csv
+2024-09-17 21:37:22,941 ERROR:RRC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:22,941 WARNING:No historical data found for RRC in 75281A10_50017.csv
+2024-09-17 21:37:23,781 ERROR:CPRT: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:23,782 WARNING:No historical data found for CPRT in 21720410_80320.csv
+2024-09-17 21:37:25,613 ERROR:COL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:25,614 WARNING:No historical data found for COL in 77434110_89014.csv
+2024-09-17 21:37:27,451 ERROR:EMN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:27,452 WARNING:No historical data found for EMN in 27743210_80080.csv
+2024-09-17 21:37:27,661 ERROR:$FL: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020011130 -> 1970-01-02 00:00:00.020230531)
+2024-09-17 21:37:27,662 WARNING:No historical data found for FL in 34484910_15456.csv
+2024-09-17 21:37:28,593 ERROR:$BBBY: possibly delisted; No timezone found
+2024-09-17 21:37:28,593 WARNING:No historical data found for BBBY in 07589610_77659.csv
+2024-09-17 21:37:29,373 ERROR:LUMN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:29,373 WARNING:No historical data found for LUMN in 15670010_60599.csv
+2024-09-17 21:37:30,985 ERROR:RSG: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:30,985 WARNING:No historical data found for RSG in 76075910_86228.csv
+2024-09-17 21:37:32,658 ERROR:SLGN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:32,658 WARNING:No historical data found for SLGN in 82704810_84563.csv
+2024-09-17 21:37:33,572 ERROR:WHR: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:33,572 WARNING:No historical data found for WHR in 96332010_25419.csv
+2024-09-17 21:37:35,171 ERROR:IT: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:35,171 WARNING:No historical data found for IT in 36665110_79698.csv
+2024-09-17 21:37:36,047 ERROR:ZBH: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:36,047 WARNING:No historical data found for ZBH in 98956P10_89070.csv
+2024-09-17 21:37:38,900 ERROR:D: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:38,901 WARNING:No historical data found for D in 25746U10_64936.csv
+2024-09-17 21:37:40,817 ERROR:$CELG: possibly delisted; No timezone found
+2024-09-17 21:37:40,818 WARNING:No historical data found for CELG in 15102010_11552.csv
+2024-09-17 21:37:43,790 ERROR:ON: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:43,790 WARNING:No historical data found for ON in 68218910_88182.csv
+2024-09-17 21:37:44,750 ERROR:NFG: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:44,751 WARNING:No historical data found for NFG in 63618010_25590.csv
+2024-09-17 21:37:45,922 ERROR:BRKR: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:45,922 WARNING:No historical data found for BRKR in 11679410_88504.csv
+2024-09-17 21:37:47,055 ERROR:EIX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:47,056 WARNING:No historical data found for EIX in 28102010_15720.csv
+2024-09-17 21:37:47,767 ERROR:HAS: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:47,767 WARNING:No historical data found for HAS in 41805610_52978.csv
+2024-09-17 21:37:48,626 ERROR:UHS: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:48,626 WARNING:No historical data found for UHS in 91390310_79637.csv
+2024-09-17 21:37:50,109 ERROR:EXPD: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:50,109 WARNING:No historical data found for EXPD in 30213010_87717.csv
+2024-09-17 21:37:50,326 ERROR:$CVX: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020011031 -> 1970-01-02 00:00:00.020231229)
+2024-09-17 21:37:50,333 WARNING:No historical data found for CVX in 16676410_14541.csv
+2024-09-17 21:37:51,062 ERROR:NOV: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:51,062 WARNING:No historical data found for NOV in 63707110_84032.csv
+2024-09-17 21:37:53,459 ERROR:TXT: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:53,459 WARNING:No historical data found for TXT in 88320310_23579.csv
+2024-09-17 21:37:54,981 ERROR:LRCX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:54,981 WARNING:No historical data found for LRCX in 51280710_48486.csv
+2024-09-17 21:37:55,768 ERROR:JCI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:55,768 WARNING:No historical data found for JCI in 47836610_42534.csv
+2024-09-17 21:37:56,584 ERROR:ROL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:56,585 WARNING:No historical data found for ROL in 77571110_36003.csv
+2024-09-17 21:37:56,722 ERROR:$GD: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020231229)
+2024-09-17 21:37:56,723 WARNING:No historical data found for GD in 36955010_12052.csv
+2024-09-17 21:37:58,656 ERROR:PFE: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:58,656 WARNING:No historical data found for PFE in 71708110_21936.csv
+2024-09-17 21:37:59,539 ERROR:URI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:37:59,539 WARNING:No historical data found for URI in 91136310_85663.csv
+2024-09-17 21:38:01,272 ERROR:AMGN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:01,273 WARNING:No historical data found for AMGN in 03116210_14008.csv
+2024-09-17 21:38:02,545 ERROR:KLAC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:02,545 WARNING:No historical data found for KLAC in 48248010_46886.csv
+2024-09-17 21:38:03,554 ERROR:THO: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:03,555 WARNING:No historical data found for THO in 88516010_76081.csv
+2024-09-17 21:38:05,452 ERROR:MHK: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:05,453 WARNING:No historical data found for MHK in 60819010_77496.csv
+2024-09-17 21:38:06,181 ERROR:DOV: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:06,182 WARNING:No historical data found for DOV in 26000310_25953.csv
+2024-09-17 21:38:08,027 ERROR:VYX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:08,031 WARNING:No historical data found for VYX in 62886E10_84372.csv
+2024-09-17 21:38:08,762 ERROR:$AVP: possibly delisted; No timezone found
+2024-09-17 21:38:08,762 WARNING:No historical data found for AVP in 05430310_40416.csv
+2024-09-17 21:38:09,509 ERROR:ZION: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:09,510 WARNING:No historical data found for ZION in 98970110_84129.csv
+2024-09-17 21:38:11,460 ERROR:NI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:11,461 WARNING:No historical data found for NI in 65473P10_38762.csv
+2024-09-17 21:38:12,386 ERROR:FE: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:12,388 WARNING:No historical data found for FE in 33793210_23026.csv
+2024-09-17 21:38:13,853 ERROR:VFC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:13,857 WARNING:No historical data found for VFC in 91820410_43553.csv
+2024-09-17 21:38:15,120 ERROR:APA: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:15,120 WARNING:No historical data found for APA in 03741110_39490.csv
+2024-09-17 21:38:16,206 ERROR:MTG: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:16,206 WARNING:No historical data found for MTG in 55284810_76804.csv
+2024-09-17 21:38:18,350 ERROR:VRTX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:18,350 WARNING:No historical data found for VRTX in 92532F10_76744.csv
+2024-09-17 21:38:19,235 ERROR:$MXIM: possibly delisted; No timezone found
+2024-09-17 21:38:19,236 WARNING:No historical data found for MXIM in 57772K10_11896.csv
+2024-09-17 21:38:20,002 ERROR:WWD: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:20,003 WARNING:No historical data found for WWD in 98074510_84403.csv
+2024-09-17 21:38:21,191 ERROR:RPM: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:21,191 WARNING:No historical data found for RPM in 74968510_65307.csv
+2024-09-17 21:38:22,799 ERROR:FMC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:22,799 WARNING:No historical data found for FMC in 30249130_19166.csv
+2024-09-17 21:38:24,600 ERROR:MU: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:24,601 WARNING:No historical data found for MU in 59511210_53613.csv
+2024-09-17 21:38:25,682 ERROR:UNM: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:25,683 WARNING:No historical data found for UNM in 91529Y10_71175.csv
+2024-09-17 21:38:26,816 ERROR:TDG: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:26,836 WARNING:No historical data found for TDG in 89364110_91152.csv
+2024-09-17 21:38:27,019 ERROR:$OCR: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020150731)
+2024-09-17 21:38:27,021 WARNING:No historical data found for OCR in 68190410_63714.csv
+2024-09-17 21:38:29,726 ERROR:KEX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:29,727 WARNING:No historical data found for KEX in 49726610_59045.csv
+2024-09-17 21:38:29,799 ERROR:$CVC: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020160531)
+2024-09-17 21:38:29,800 WARNING:No historical data found for CVC in 12686C10_68857.csv
+2024-09-17 21:38:30,892 ERROR:AVY: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:30,893 WARNING:No historical data found for AVY in 05361110_44601.csv
+2024-09-17 21:38:32,861 ERROR:GAS: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:32,861 WARNING:No historical data found for GAS in 00120410_15553.csv
+2024-09-17 21:38:33,718 ERROR:DGX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:33,718 WARNING:No historical data found for DGX in 74834L10_84373.csv
+2024-09-17 21:38:36,702 ERROR:CMA: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:36,705 WARNING:No historical data found for CMA in 20034010_25081.csv
+2024-09-17 21:38:37,715 ERROR:EEP: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:37,715 WARNING:No historical data found for EEP in 29250R10_86106.csv
+2024-09-17 21:38:39,486 ERROR:ABT: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:39,487 WARNING:No historical data found for ABT in 00282410_20482.csv
+2024-09-17 21:38:41,193 ERROR:FSLR: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:41,193 WARNING:No historical data found for FSLR in 33643310_91611.csv
+2024-09-17 21:38:42,986 ERROR:VMI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:42,987 WARNING:No historical data found for VMI in 92025310_80128.csv
+2024-09-17 21:38:43,895 ERROR:PEP: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:43,896 WARNING:No historical data found for PEP in 71344810_13856.csv
+2024-09-17 21:38:44,727 ERROR:VMC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:44,727 WARNING:No historical data found for VMC in 92916010_15202.csv
+2024-09-17 21:38:45,479 ERROR:BAC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:45,480 WARNING:No historical data found for BAC in 06050510_59408.csv
+2024-09-17 21:38:47,222 ERROR:RGA: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:47,223 WARNING:No historical data found for RGA in 75935160_79210.csv
+2024-09-17 21:38:48,061 ERROR:DVA: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:48,061 WARNING:No historical data found for DVA in 23918K10_82307.csv
+2024-09-17 21:38:49,035 ERROR:PLL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:49,036 WARNING:No historical data found for PLL in 69642930_35051.csv
+2024-09-17 21:38:49,752 ERROR:CL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:49,753 WARNING:No historical data found for CL in 19416210_18729.csv
+2024-09-17 21:38:51,666 ERROR:FDX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:51,666 WARNING:No historical data found for FDX in 31428X10_60628.csv
+2024-09-17 21:38:52,325 ERROR:INTU: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:52,326 WARNING:No historical data found for INTU in 46120210_78975.csv
+2024-09-17 21:38:53,255 ERROR:WAT: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:53,255 WARNING:No historical data found for WAT in 94184810_82651.csv
+2024-09-17 21:38:53,901 ERROR:MS: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:53,901 WARNING:No historical data found for MS in 61744644_69032.csv
+2024-09-17 21:38:55,262 ERROR:COP: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:55,264 WARNING:No historical data found for COP in 20825C10_13928.csv
+2024-09-17 21:38:57,173 ERROR:XRAY: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:57,174 WARNING:No historical data found for XRAY in 24903010_11600.csv
+2024-09-17 21:38:58,883 ERROR:EA: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:38:58,883 WARNING:No historical data found for EA in 28551210_75828.csv
+2024-09-17 21:39:00,721 ERROR:PFG: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:00,721 WARNING:No historical data found for PFG in 74251V10_89195.csv
+2024-09-17 21:39:01,558 ERROR:$VMW: possibly delisted; No timezone found
+2024-09-17 21:39:01,558 WARNING:No historical data found for VMW in 92856340_92257.csv
+2024-09-17 21:39:01,700 ERROR:$MMM: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020020430 -> 1970-01-02 00:00:00.020231229)
+2024-09-17 21:39:01,700 WARNING:No historical data found for MMM in 88579Y10_22592.csv
+2024-09-17 21:39:02,558 ERROR:AXP: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:02,559 WARNING:No historical data found for AXP in 02581610_59176.csv
+2024-09-17 21:39:04,295 ERROR:YUM: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:04,295 WARNING:No historical data found for YUM in 98849810_85348.csv
+2024-09-17 21:39:06,223 ERROR:SCCO: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:06,224 WARNING:No historical data found for SCCO in 84265V10_82800.csv
+2024-09-17 21:39:07,045 ERROR:SNPS: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:07,046 WARNING:No historical data found for SNPS in 87160710_77357.csv
+2024-09-17 21:39:07,888 ERROR:EL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:07,889 WARNING:No historical data found for EL in 51843910_82642.csv
+2024-09-17 21:39:08,599 ERROR:AFL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:08,600 WARNING:No historical data found for AFL in 00105510_57904.csv
+2024-09-17 21:39:09,370 ERROR:NRG: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:09,370 WARNING:No historical data found for NRG in 62937750_90071.csv
+2024-09-17 21:39:10,072 ERROR:GPN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:10,072 WARNING:No historical data found for GPN in 37940X10_88873.csv
+2024-09-17 21:39:10,944 ERROR:SYY: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:10,944 WARNING:No historical data found for SYY in 87182910_52038.csv
+2024-09-17 21:39:14,003 ERROR:$ADS: possibly delisted; No timezone found
+2024-09-17 21:39:14,003 WARNING:No historical data found for ADS in 01858110_89002.csv
+2024-09-17 21:39:14,835 ERROR:TER: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:14,836 WARNING:No historical data found for TER in 88077010_51369.csv
+2024-09-17 21:39:16,608 ERROR:PH: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:16,608 WARNING:No historical data found for PH in 70109410_41355.csv
+2024-09-17 21:39:17,562 ERROR:EMR: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:17,563 WARNING:No historical data found for EMR in 29101110_22103.csv
+2024-09-17 21:39:18,281 ERROR:UGI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:18,282 WARNING:No historical data found for UGI in 90268110_17929.csv
+2024-09-17 21:39:18,990 ERROR:CBSH: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:18,990 WARNING:No historical data found for CBSH in 20052510_25129.csv
+2024-09-17 21:39:19,900 ERROR:CMS: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:19,904 WARNING:No historical data found for CMS in 12589610_23229.csv
+2024-09-17 21:39:20,693 ERROR:CINF: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:20,693 WARNING:No historical data found for CINF in 17206210_23473.csv
+2024-09-17 21:39:23,745 ERROR:CSCO: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:23,746 WARNING:No historical data found for CSCO in 17275R10_76076.csv
+2024-09-17 21:39:23,888 ERROR:$MRO: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020020131 -> 1970-01-02 00:00:00.020231229)
+2024-09-17 21:39:23,889 WARNING:No historical data found for MRO in 56584910_15069.csv
+2024-09-17 21:39:24,820 ERROR:UPS: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:24,823 WARNING:No historical data found for UPS in 91131210_87447.csv
+2024-09-17 21:39:25,666 ERROR:CSL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:25,667 WARNING:No historical data found for CSL in 14233910_27334.csv
+2024-09-17 21:39:26,476 ERROR:BOKF: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:26,476 WARNING:No historical data found for BOKF in 05561Q20_76892.csv
+2024-09-17 21:39:28,301 ERROR:CME: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:28,301 WARNING:No historical data found for CME in 12572Q10_89626.csv
+2024-09-17 21:39:29,054 ERROR:NSC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:29,055 WARNING:No historical data found for NSC in 65584410_64311.csv
+2024-09-17 21:39:31,027 ERROR:HE: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:31,027 WARNING:No historical data found for HE in 41987010_41187.csv
+2024-09-17 21:39:31,695 ERROR:$CREE: possibly delisted; No timezone found
+2024-09-17 21:39:31,700 WARNING:No historical data found for CREE in 22544710_78875.csv
+2024-09-17 21:39:32,688 ERROR:HSY: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:32,688 WARNING:No historical data found for HSY in 42786610_16600.csv
+2024-09-17 21:39:34,405 ERROR:CLX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:34,405 WARNING:No historical data found for CLX in 18905410_46578.csv
+2024-09-17 21:39:35,354 ERROR:LUV: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:35,355 WARNING:No historical data found for LUV in 84474110_58683.csv
+2024-09-17 21:39:37,244 ERROR:CAH: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:37,244 WARNING:No historical data found for CAH in 14149Y10_21371.csv
+2024-09-17 21:39:39,007 ERROR:ADI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:39,008 WARNING:No historical data found for ADI in 03265410_60871.csv
+2024-09-17 21:39:39,937 ERROR:HRB: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:39,938 WARNING:No historical data found for HRB in 09367110_49373.csv
+2024-09-17 21:39:41,524 ERROR:CB: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:41,524 WARNING:No historical data found for CB in 17123210_59192.csv
+2024-09-17 21:39:42,793 ERROR:$TSS: possibly delisted; No timezone found
+2024-09-17 21:39:42,794 WARNING:No historical data found for TSS in 89190610_76639.csv
+2024-09-17 21:39:43,687 ERROR:AMAT: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:43,688 WARNING:No historical data found for AMAT in 03822210_14702.csv
+2024-09-17 21:39:44,498 ERROR:NYT: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:44,498 WARNING:No historical data found for NYT in 65011110_47466.csv
+2024-09-17 21:39:45,238 ERROR:ARW: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:45,239 WARNING:No historical data found for ARW in 04273510_29209.csv
+2024-09-17 21:39:45,936 ERROR:BOH: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:45,936 WARNING:No historical data found for BOH in 06254010_16548.csv
+2024-09-17 21:39:46,834 ERROR:STI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:46,837 WARNING:No historical data found for STI in 86791410_68144.csv
+2024-09-17 21:39:47,756 ERROR:BRO: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:48,108 WARNING:No historical data found for BRO in 11523610_63467.csv
+2024-09-17 21:39:48,906 ERROR:AZO: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:48,906 WARNING:No historical data found for AZO in 05333210_76605.csv
+2024-09-17 21:39:49,742 ERROR:PII: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:49,742 WARNING:No historical data found for PII in 73106810_75182.csv
+2024-09-17 21:39:51,568 ERROR:LH: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:51,569 WARNING:No historical data found for LH in 50540R40_12062.csv
+2024-09-17 21:39:53,335 ERROR:$JCP: possibly delisted; No timezone found
+2024-09-17 21:39:53,354 WARNING:No historical data found for JCP in 70816010_18403.csv
+2024-09-17 21:39:55,133 ERROR:RS: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:55,134 WARNING:No historical data found for RS in 75950910_80864.csv
+2024-09-17 21:39:55,893 ERROR:WBS: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:55,893 WARNING:No historical data found for WBS in 94789010_10932.csv
+2024-09-17 21:39:56,760 ERROR:PRU: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:56,761 WARNING:No historical data found for PRU in 74432010_89258.csv
+2024-09-17 21:39:57,656 ERROR:MET: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:57,656 WARNING:No historical data found for MET in 59156R10_87842.csv
+2024-09-17 21:39:58,979 ERROR:CPB: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:39:58,979 WARNING:No historical data found for CPB in 13442910_25320.csv
+2024-09-17 21:40:01,022 ERROR:APD: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:01,022 WARNING:No historical data found for APD in 00915810_28222.csv
+2024-09-17 21:40:01,896 ERROR:WDC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:01,897 WARNING:No historical data found for WDC in 95810210_66384.csv
+2024-09-17 21:40:04,308 ERROR:ILMN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:04,309 WARNING:No historical data found for ILMN in 45232710_88446.csv
+2024-09-17 21:40:05,339 ERROR:CNA: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:05,339 WARNING:No historical data found for CNA in 12611710_47626.csv
+2024-09-17 21:40:06,188 ERROR:NFLX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:06,188 WARNING:No historical data found for NFLX in 64110L10_89393.csv
+2024-09-17 21:40:08,094 ERROR:WAB: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:08,095 WARNING:No historical data found for WAB in 92974010_81677.csv
+2024-09-17 21:40:08,844 ERROR:CTAS: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:08,844 WARNING:No historical data found for CTAS in 17290810_23660.csv
+2024-09-17 21:40:09,817 ERROR:RMD: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:09,818 WARNING:No historical data found for RMD in 76115210_81736.csv
+2024-09-17 21:40:09,946 ERROR:$HCBK: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000831 -> 1970-01-02 00:00:00.020151030)
+2024-09-17 21:40:09,946 WARNING:No historical data found for HCBK in 44368310_87070.csv
+2024-09-17 21:40:10,629 ERROR:MDU: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:10,629 WARNING:No historical data found for MDU in 55269010_23835.csv
+2024-09-17 21:40:11,330 ERROR:DHI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:11,330 WARNING:No historical data found for DHI in 23331A10_77661.csv
+2024-09-17 21:40:11,808 ERROR:$KSU: possibly delisted; No timezone found
+2024-09-17 21:40:11,809 WARNING:No historical data found for KSU in 48517030_12650.csv
+2024-09-17 21:40:12,587 ERROR:RHI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:12,587 WARNING:No historical data found for RHI in 77032310_52230.csv
+2024-09-17 21:40:13,336 ERROR:GPC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:13,337 WARNING:No historical data found for GPC in 37246010_46674.csv
+2024-09-17 21:40:14,957 ERROR:HAL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:14,958 WARNING:No historical data found for HAL in 40621610_23819.csv
+2024-09-17 21:40:15,584 ERROR:CVS: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:15,584 WARNING:No historical data found for CVS in 12665010_17005.csv
+2024-09-17 21:40:16,152 ERROR:GNTX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:16,152 WARNING:No historical data found for GNTX in 37190110_38659.csv
+2024-09-17 21:40:16,740 ERROR:CRL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:16,740 WARNING:No historical data found for CRL in 15986410_88281.csv
+2024-09-17 21:40:17,268 ERROR:MA: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:17,268 WARNING:No historical data found for MA in 57636Q10_91233.csv
+2024-09-17 21:40:17,790 ERROR:$TCF: possibly delisted; No timezone found
+2024-09-17 21:40:17,791 WARNING:No historical data found for TCF in 87227510_10375.csv
+2024-09-17 21:40:20,350 ERROR:CBT: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:20,351 WARNING:No historical data found for CBT in 12705510_46690.csv
+2024-09-17 21:40:21,046 ERROR:CFR: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:21,046 WARNING:No historical data found for CFR in 22989910_27888.csv
+2024-09-17 21:40:21,780 ERROR:NVR: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:21,780 WARNING:No historical data found for NVR in 62944T10_79785.csv
+2024-09-17 21:40:22,454 ERROR:HAR: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:22,454 WARNING:No historical data found for HAR in 41308610_75224.csv
+2024-09-17 21:40:25,220 ERROR:MCO: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:25,222 WARNING:No historical data found for MCO in 61536910_48506.csv
+2024-09-17 21:40:26,115 ERROR:VLO: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:26,116 WARNING:No historical data found for VLO in 91913Y10_85269.csv
+2024-09-17 21:40:27,255 ERROR:$XLNX: possibly delisted; No timezone found
+2024-09-17 21:40:27,255 WARNING:No historical data found for XLNX in 98391910_76201.csv
+2024-09-17 21:40:28,104 ERROR:ECL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:28,104 WARNING:No historical data found for ECL in 27886510_70578.csv
+2024-09-17 21:40:28,781 ERROR:$FLIR: possibly delisted; No timezone found
+2024-09-17 21:40:28,781 WARNING:No historical data found for FLIR in 30244510_79265.csv
+2024-09-17 21:40:29,074 ERROR:$MCD: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020231229)
+2024-09-17 21:40:29,074 WARNING:No historical data found for MCD in 58013510_43449.csv
+2024-09-17 21:40:31,256 ERROR:CDNS: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:31,257 WARNING:No historical data found for CDNS in 12738710_11403.csv
+2024-09-17 21:40:32,105 ERROR:HRL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:32,106 WARNING:No historical data found for HRL in 44045210_32870.csv
+2024-09-17 21:40:32,832 ERROR:MKC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:32,834 WARNING:No historical data found for MKC in 57978020_52090.csv
+2024-09-17 21:40:34,518 ERROR:EW: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:34,518 WARNING:No historical data found for EW in 28176E10_87657.csv
+2024-09-17 21:40:38,349 ERROR:VRSN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:38,350 WARNING:No historical data found for VRSN in 92343E10_85753.csv
+2024-09-17 21:40:40,321 ERROR:MCHP: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:40,322 WARNING:No historical data found for MCHP in 59501710_78987.csv
+2024-09-17 21:40:43,223 ERROR:BMS: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:43,225 WARNING:No historical data found for BMS in 08143710_43772.csv
+2024-09-17 21:40:44,094 ERROR:MUR: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:44,094 WARNING:No historical data found for MUR in 62671710_28345.csv
+2024-09-17 21:40:44,984 ERROR:HIG: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:44,984 WARNING:No historical data found for HIG in 41651510_82775.csv
+2024-09-17 21:40:45,901 ERROR:BEN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:45,902 WARNING:No historical data found for BEN in 35461310_37584.csv
+2024-09-17 21:40:46,718 ERROR:EGN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:46,718 WARNING:No historical data found for EGN in 29265N10_26470.csv
+2024-09-17 21:40:47,618 ERROR:VZ: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:47,619 WARNING:No historical data found for VZ in 92343V10_65875.csv
+2024-09-17 21:40:48,360 ERROR:MTB: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:48,360 WARNING:No historical data found for MTB in 55261F10_35554.csv
+2024-09-17 21:40:50,085 ERROR:MSCI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:50,085 WARNING:No historical data found for MSCI in 55354G10_92402.csv
+2024-09-17 21:40:50,884 ERROR:CTSH: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:50,884 WARNING:No historical data found for CTSH in 19244610_86158.csv
+2024-09-17 21:40:51,254 ERROR:$GE: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020210730)
+2024-09-17 21:40:51,254 WARNING:No historical data found for GE in 36960410_12060.csv
+2024-09-17 21:40:52,132 ERROR:KMB: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:52,133 WARNING:No historical data found for KMB in 49436810_17750.csv
+2024-09-17 21:40:52,960 ERROR:M: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:52,961 WARNING:No historical data found for M in 55616P10_77462.csv
+2024-09-17 21:40:53,710 ERROR:FI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:53,711 WARNING:No historical data found for FI in 33773810_10696.csv
+2024-09-17 21:40:55,462 ERROR:RVTY: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:55,462 WARNING:No historical data found for RVTY in 71404610_42200.csv
+2024-09-17 21:40:55,595 ERROR:$HUB.B: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020151130)
+2024-09-17 21:40:55,595 WARNING:No historical data found for HUB.B in 44351020_32942.csv
+2024-09-17 21:40:56,415 ERROR:EOG: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:56,416 WARNING:No historical data found for EOG in 26875P10_75825.csv
+2024-09-17 21:40:57,079 ERROR:$TMK: possibly delisted; No timezone found
+2024-09-17 21:40:57,079 WARNING:No historical data found for TMK in 89102710_62308.csv
+2024-09-17 21:40:57,685 ERROR:BIIB: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:57,686 WARNING:No historical data found for BIIB in 09062X10_76841.csv
+2024-09-17 21:40:58,283 ERROR:UTHR: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:40:58,283 WARNING:No historical data found for UTHR in 91307C10_87006.csv
+2024-09-17 21:40:59,998 ERROR:$YHOO: possibly delisted; No timezone found
+2024-09-17 21:40:59,999 WARNING:No historical data found for YHOO in 98433210_83435.csv
+2024-09-17 21:41:00,708 ERROR:FIS: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:00,709 WARNING:No historical data found for FIS in 31620M10_89003.csv
+2024-09-17 21:41:02,464 ERROR:FAST: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:02,466 WARNING:No historical data found for FAST in 31190010_11618.csv
+2024-09-17 21:41:03,355 ERROR:COST: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:03,355 WARNING:No historical data found for COST in 22160K10_87055.csv
+2024-09-17 21:41:04,092 ERROR:TGT: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:04,092 WARNING:No historical data found for TGT in 87612E10_49154.csv
+2024-09-17 21:41:04,962 ERROR:STR: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:04,962 WARNING:No historical data found for STR in 74835610_27756.csv
+2024-09-17 21:41:05,672 ERROR:CYN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:05,673 WARNING:No historical data found for CYN in 17856610_23916.csv
+2024-09-17 21:41:07,612 ERROR:$UTX: possibly delisted; No timezone found
+2024-09-17 21:41:07,612 WARNING:No historical data found for UTX in 91301710_17830.csv
+2024-09-17 21:41:09,222 ERROR:SRCL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:09,222 WARNING:No historical data found for SRCL in 85891210_83906.csv
+2024-09-17 21:41:09,352 ERROR:$WFM: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020170731)
+2024-09-17 21:41:09,352 WARNING:No historical data found for WFM in 96683710_77281.csv
+2024-09-17 21:41:11,071 ERROR:DCI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:11,071 WARNING:No historical data found for DCI in 25765110_61313.csv
+2024-09-17 21:41:13,497 ERROR:LNT: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:13,498 WARNING:No historical data found for LNT in 01880210_58819.csv
+2024-09-17 21:41:15,827 ERROR:DO: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:15,828 WARNING:No historical data found for DO in 25271C10_82298.csv
+2024-09-17 21:41:18,792 ERROR:GWW: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:18,796 WARNING:No historical data found for GWW in 38480210_52695.csv
+2024-09-17 21:41:19,696 ERROR:INTC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:19,697 WARNING:No historical data found for INTC in 45814010_59328.csv
+2024-09-17 21:41:22,092 ERROR:LOW: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:22,092 WARNING:No historical data found for LOW in 54866110_61399.csv
+2024-09-17 21:41:23,068 ERROR:TROW: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:23,068 WARNING:No historical data found for TROW in 74144T10_10138.csv
+2024-09-17 21:41:24,883 ERROR:LII: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:24,884 WARNING:No historical data found for LII in 52610710_87034.csv
+2024-09-17 21:41:26,794 ERROR:SEIC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:26,795 WARNING:No historical data found for SEIC in 78411710_68196.csv
+2024-09-17 21:41:27,646 ERROR:CHRW: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:27,646 WARNING:No historical data found for CHRW in 12541W20_85459.csv
+2024-09-17 21:41:27,928 ERROR:$KO: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020231229)
+2024-09-17 21:41:27,928 WARNING:No historical data found for KO in 19121610_11308.csv
+2024-09-17 21:41:28,581 ERROR:NVDA: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:28,581 WARNING:No historical data found for NVDA in 67066G10_86580.csv
+2024-09-17 21:41:29,409 ERROR:JWN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:29,409 WARNING:No historical data found for JWN in 65566410_57817.csv
+2024-09-17 21:41:30,120 ERROR:CMCSA: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:30,121 WARNING:No historical data found for CMCSA in 20030N10_89525.csv
+2024-09-17 21:41:31,893 ERROR:HP: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:31,894 WARNING:No historical data found for HP in 42345210_32707.csv
+2024-09-17 21:41:34,966 ERROR:RF: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:34,966 WARNING:No historical data found for RF in 7591EP10_35044.csv
+2024-09-17 21:41:35,822 ERROR:DFS: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:35,823 WARNING:No historical data found for DFS in 25470910_92121.csv
+2024-09-17 21:41:36,172 ERROR:$IBM: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020231229)
+2024-09-17 21:41:36,172 WARNING:No historical data found for IBM in 45920010_12490.csv
+2024-09-17 21:41:37,958 ERROR:CE: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:37,959 WARNING:No historical data found for CE in 15087010_90520.csv
+2024-09-17 21:41:39,719 ERROR:EMC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:39,719 WARNING:No historical data found for EMC in 26864810_10147.csv
+2024-09-17 21:41:40,637 ERROR:IEX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:40,638 WARNING:No historical data found for IEX in 45167R10_75591.csv
+2024-09-17 21:41:42,900 ERROR:USB: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:42,900 WARNING:No historical data found for USB in 90297330_66157.csv
+2024-09-17 21:41:44,900 ERROR:LVS: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:44,900 WARNING:No historical data found for LVS in 51783410_90505.csv
+2024-09-17 21:41:46,829 ERROR:SHW: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:46,830 WARNING:No historical data found for SHW in 82434810_36468.csv
+2024-09-17 21:41:48,666 ERROR:STZ: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:48,667 WARNING:No historical data found for STZ in 21036P10_69796.csv
+2024-09-17 21:41:50,647 ERROR:LEG: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:50,647 WARNING:No historical data found for LEG in 52466010_60943.csv
+2024-09-17 21:41:51,475 ERROR:PTEN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:51,475 WARNING:No historical data found for PTEN in 70348110_79857.csv
+2024-09-17 21:41:52,213 ERROR:NEM: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:52,213 WARNING:No historical data found for NEM in 65163910_21207.csv
+2024-09-17 21:41:54,108 ERROR:OGE: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:54,108 WARNING:No historical data found for OGE in 67083710_24440.csv
+2024-09-17 21:41:54,888 ERROR:ITW: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:54,889 WARNING:No historical data found for ITW in 45230810_56573.csv
+2024-09-17 21:41:56,831 ERROR:FHI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:56,836 WARNING:No historical data found for FHI in 31421110_86102.csv
+2024-09-17 21:41:58,809 ERROR:DST: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:41:58,810 WARNING:No historical data found for DST in 23332610_83186.csv
+2024-09-17 21:42:00,714 ERROR:BDX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:00,715 WARNING:No historical data found for BDX in 07588710_39642.csv
+2024-09-17 21:42:01,549 ERROR:$CERN: possibly delisted; No timezone found
+2024-09-17 21:42:01,549 WARNING:No historical data found for CERN in 15678210_10909.csv
+2024-09-17 21:42:02,392 ERROR:UNP: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:02,392 WARNING:No historical data found for UNP in 90781810_48725.csv
+2024-09-17 21:42:03,234 ERROR:HUM: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:03,234 WARNING:No historical data found for HUM in 44485910_48653.csv
+2024-09-17 21:42:06,108 ERROR:ALB: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:06,108 WARNING:No historical data found for ALB in 01265310_80191.csv
+2024-09-17 21:42:08,877 ERROR:RJF: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:08,878 WARNING:No historical data found for RJF in 75473010_69649.csv
+2024-09-17 21:42:09,610 ERROR:ANSS: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:09,611 WARNING:No historical data found for ANSS in 03662Q10_83621.csv
+2024-09-17 21:42:12,615 ERROR:EAT: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:12,615 WARNING:No historical data found for EAT in 10964110_23297.csv
+2024-09-17 21:42:13,458 ERROR:CSX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:13,459 WARNING:No historical data found for CSX in 12640810_62148.csv
+2024-09-17 21:42:14,320 ERROR:DAL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:14,323 WARNING:No historical data found for DAL in 24736170_91926.csv
+2024-09-17 21:42:16,202 ERROR:CHD: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:16,202 WARNING:No historical data found for CHD in 17134010_23393.csv
+2024-09-17 21:42:16,891 ERROR:REGN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:16,891 WARNING:No historical data found for REGN in 75886F10_76614.csv
+2024-09-17 21:42:17,775 ERROR:PCG: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:17,776 WARNING:No historical data found for PCG in 69331C10_13688.csv
+2024-09-17 21:42:21,139 ERROR:AES: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:21,140 WARNING:No historical data found for AES in 00130H10_76712.csv
+2024-09-17 21:42:21,887 ERROR:HCC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:21,888 WARNING:No historical data found for HCC in 40413210_78033.csv
+2024-09-17 21:42:23,650 ERROR:$APC: possibly delisted; No timezone found
+2024-09-17 21:42:23,650 WARNING:No historical data found for APC in 03251110_70332.csv
+2024-09-17 21:42:25,353 ERROR:EXC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:25,353 WARNING:No historical data found for EXC in 30161N10_21776.csv
+2024-09-17 21:42:26,256 ERROR:MTD: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:26,257 WARNING:No historical data found for MTD in 59268810_85621.csv
+2024-09-17 21:42:27,104 ERROR:WSM: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:27,104 WARNING:No historical data found for WSM in 96990410_83011.csv
+2024-09-17 21:42:27,880 ERROR:GS: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:27,881 WARNING:No historical data found for GS in 38141G10_86868.csv
+2024-09-17 21:42:28,706 ERROR:SON: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:28,707 WARNING:No historical data found for SON in 83549510_71176.csv
+2024-09-17 21:42:31,938 ERROR:GIS: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:31,938 WARNING:No historical data found for GIS in 37033410_17144.csv
+2024-09-17 21:42:32,669 ERROR:AN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:32,669 WARNING:No historical data found for AN in 05329W10_76282.csv
+2024-09-17 21:42:32,920 ERROR:$DIS: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020231229)
+2024-09-17 21:42:32,920 WARNING:No historical data found for DIS in 25468710_26403.csv
+2024-09-17 21:42:34,652 ERROR:OXY: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:34,652 WARNING:No historical data found for OXY in 67459910_34833.csv
+2024-09-17 21:42:35,307 ERROR:ROST: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:35,307 WARNING:No historical data found for ROST in 77829610_91556.csv
+2024-09-17 21:42:36,028 ERROR:$NATI: possibly delisted; No timezone found
+2024-09-17 21:42:36,028 WARNING:No historical data found for NATI in 63651810_81501.csv
+2024-09-17 21:42:36,714 ERROR:AMD: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:36,714 WARNING:No historical data found for AMD in 00790310_61241.csv
+2024-09-17 21:42:37,561 ERROR:NDAQ: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:37,562 WARNING:No historical data found for NDAQ in 63110310_90601.csv
+2024-09-17 21:42:37,708 ERROR:$LLTC: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020170228)
+2024-09-17 21:42:37,708 WARNING:No historical data found for LLTC in 53567810_10299.csv
+2024-09-17 21:42:38,415 ERROR:PNC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:38,415 WARNING:No historical data found for PNC in 69347510_60442.csv
+2024-09-17 21:42:38,906 ERROR:$CTXS: possibly delisted; No timezone found
+2024-09-17 21:42:38,906 WARNING:No historical data found for CTXS in 17737610_82686.csv
+2024-09-17 21:42:40,716 ERROR:MAS: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:40,716 WARNING:No historical data found for MAS in 57459910_34032.csv
+2024-09-17 21:42:42,537 ERROR:COR: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:42,538 WARNING:No historical data found for COR in 03073E10_81540.csv
+2024-09-17 21:42:43,375 ERROR:X: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:43,376 WARNING:No historical data found for X in 91290910_76644.csv
+2024-09-17 21:42:44,142 ERROR:ZBRA: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:44,142 WARNING:No historical data found for ZBRA in 98920710_76795.csv
+2024-09-17 21:42:44,448 ERROR:$MO: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020030228 -> 1970-01-02 00:00:00.020231229)
+2024-09-17 21:42:44,448 WARNING:No historical data found for MO in 02209S10_13901.csv
+2024-09-17 21:42:45,130 ERROR:BR: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:45,130 WARNING:No historical data found for BR in 11133T10_91849.csv
+2024-09-17 21:42:45,247 ERROR:$SWY: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020141231)
+2024-09-17 21:42:45,248 WARNING:No historical data found for SWY in 78651420_76149.csv
+2024-09-17 21:42:46,034 ERROR:CTRA: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:46,036 WARNING:No historical data found for CTRA in 12709710_76082.csv
+2024-09-17 21:42:46,753 ERROR:CCK: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:46,753 WARNING:No historical data found for CCK in 22836810_17726.csv
+2024-09-17 21:42:48,568 ERROR:OSK: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:48,568 WARNING:No historical data found for OSK in 68823920_90756.csv
+2024-09-17 21:42:49,216 ERROR:TRMB: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:49,216 WARNING:No historical data found for TRMB in 89623910_76230.csv
+2024-09-17 21:42:50,901 ERROR:ADP: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:50,902 WARNING:No historical data found for ADP in 05301510_44644.csv
+2024-09-17 21:42:51,014 ERROR:$SPLS: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020170831)
+2024-09-17 21:42:51,015 WARNING:No historical data found for SPLS in 85503010_75489.csv
+2024-09-17 21:42:51,704 ERROR:SYK: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:51,704 WARNING:No historical data found for SYK in 86366710_73139.csv
+2024-09-17 21:42:54,512 ERROR:BWA: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:54,513 WARNING:No historical data found for BWA in 09972410_79545.csv
+2024-09-17 21:42:55,457 ERROR:CMI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:55,457 WARNING:No historical data found for CMI in 23102110_41080.csv
+2024-09-17 21:42:56,131 ERROR:SRE: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:56,131 WARNING:No historical data found for SRE in 81685110_86136.csv
+2024-09-17 21:42:56,942 ERROR:NDSN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:56,943 WARNING:No historical data found for NDSN in 65566310_57809.csv
+2024-09-17 21:42:57,792 ERROR:MAT: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:42:57,793 WARNING:No historical data found for MAT in 57708110_39538.csv
+2024-09-17 21:42:58,507 ERROR:$NBL: possibly delisted; No timezone found
+2024-09-17 21:42:58,508 WARNING:No historical data found for NBL in 65504410_61815.csv
+2024-09-17 21:43:00,883 ERROR:NOC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:00,884 WARNING:No historical data found for NOC in 66680710_24766.csv
+2024-09-17 21:43:01,665 ERROR:ADSK: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:01,666 WARNING:No historical data found for ADSK in 05276910_85631.csv
+2024-09-17 21:43:02,359 ERROR:BMRN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:02,360 WARNING:No historical data found for BMRN in 09061G10_87056.csv
+2024-09-17 21:43:02,987 ERROR:$BRK.A: possibly delisted; No timezone found
+2024-09-17 21:43:02,987 WARNING:No historical data found for BRK.A in 08467010_17778.csv
+2024-09-17 21:43:03,878 ERROR:LSTR: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:03,878 WARNING:No historical data found for LSTR in 51509810_78981.csv
+2024-09-17 21:43:04,657 ERROR:RDN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:04,657 WARNING:No historical data found for RDN in 75023610_78038.csv
+2024-09-17 21:43:04,843 ERROR:$BCR: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020171130)
+2024-09-17 21:43:04,843 WARNING:No historical data found for BCR in 06738310_46877.csv
+2024-09-17 21:43:06,590 ERROR:EWBC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:06,591 WARNING:No historical data found for EWBC in 27579R10_86719.csv
+2024-09-17 21:43:08,319 ERROR:$RRD: possibly delisted; No timezone found
+2024-09-17 21:43:08,320 WARNING:No historical data found for RRD in 25786710_38682.csv
+2024-09-17 21:43:09,136 ERROR:VLY: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:09,136 WARNING:No historical data found for VLY in 91979410_80072.csv
+2024-09-17 21:43:09,801 ERROR:$RTN: possibly delisted; No timezone found
+2024-09-17 21:43:09,802 WARNING:No historical data found for RTN in 75511150_24942.csv
+2024-09-17 21:43:09,982 ERROR:$SPW: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020150930)
+2024-09-17 21:43:09,982 WARNING:No historical data found for SPW in 78463510_55212.csv
+2024-09-17 21:43:12,825 ERROR:SMG: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:12,825 WARNING:No historical data found for SMG in 81018610_77300.csv
+2024-09-17 21:43:13,695 ERROR:DVN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:13,696 WARNING:No historical data found for DVN in 25179M10_87137.csv
+2024-09-17 21:43:15,984 ERROR:FLS: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:15,984 WARNING:No historical data found for FLS in 34354P10_30940.csv
+2024-09-17 21:43:16,843 ERROR:ATI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:16,843 WARNING:No historical data found for ATI in 01741R10_43123.csv
+2024-09-17 21:43:17,757 ERROR:LMT: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:17,757 WARNING:No historical data found for LMT in 53983010_21178.csv
+2024-09-17 21:43:18,554 ERROR:APH: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:18,555 WARNING:No historical data found for APH in 03209510_84769.csv
+2024-09-17 21:43:19,299 ERROR:COO: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:19,300 WARNING:No historical data found for COO in 21664840_65541.csv
+2024-09-17 21:43:20,032 ERROR:STLD: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:20,032 WARNING:No historical data found for STLD in 85811910_84262.csv
+2024-09-17 21:43:21,792 ERROR:TRV: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:21,792 WARNING:No historical data found for TRV in 89417E10_59459.csv
+2024-09-17 21:43:22,449 ERROR:SWN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:22,450 WARNING:No historical data found for SWN in 84546710_63765.csv
+2024-09-17 21:43:23,247 ERROR:LEN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:23,247 WARNING:No historical data found for LEN in 52605710_52708.csv
+2024-09-17 21:43:25,028 ERROR:IFF: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:25,030 WARNING:No historical data found for IFF in 45950610_40272.csv
+2024-09-17 21:43:25,823 ERROR:GPS: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:25,825 WARNING:No historical data found for GPS in 36476010_59010.csv
+2024-09-17 21:43:28,425 ERROR:SCI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:28,425 WARNING:No historical data found for SCI in 81756510_51625.csv
+2024-09-17 21:43:30,318 ERROR:SWKS: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:30,318 WARNING:No historical data found for SWKS in 83088M10_45911.csv
+2024-09-17 21:43:32,085 ERROR:$MON: possibly delisted; No timezone found
+2024-09-17 21:43:32,086 WARNING:No historical data found for MON in 61166W10_88668.csv
+2024-09-17 21:43:33,962 ERROR:NFX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:33,963 WARNING:No historical data found for NFX in 65129010_79915.csv
+2024-09-17 21:43:35,835 ERROR:$LM: possibly delisted; No timezone found
+2024-09-17 21:43:35,835 WARNING:No historical data found for LM in 52490110_65330.csv
+2024-09-17 21:43:36,616 ERROR:CHH: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:36,616 WARNING:No historical data found for CHH in 16990510_85517.csv
+2024-09-17 21:43:37,458 ERROR:PHM: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:37,459 WARNING:No historical data found for PHM in 74586710_54148.csv
+2024-09-17 21:43:38,107 ERROR:PCAR: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:38,107 WARNING:No historical data found for PCAR in 69371810_60506.csv
+2024-09-17 21:43:38,904 ERROR:COF: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:38,904 WARNING:No historical data found for COF in 14040H10_81055.csv
+2024-09-17 21:43:39,020 ERROR:$BF.B: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020231229)
+2024-09-17 21:43:39,020 WARNING:No historical data found for BF.B in 11563720_29946.csv
+2024-09-17 21:43:41,102 ERROR:DNB: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:41,102 WARNING:No historical data found for DNB in 26483E10_88590.csv
+2024-09-17 21:43:44,053 ERROR:SNA: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:44,053 WARNING:No historical data found for SNA in 83303410_60206.csv
+2024-09-17 21:43:44,436 ERROR:$AA: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020160930)
+2024-09-17 21:43:44,436 WARNING:No historical data found for AA in 01381710_24643.csv
+2024-09-17 21:43:45,415 ERROR:GLW: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:45,415 WARNING:No historical data found for GLW in 21935010_22293.csv
+2024-09-17 21:43:46,290 ERROR:MGM: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:46,291 WARNING:No historical data found for MGM in 55295310_11891.csv
+2024-09-17 21:43:48,143 ERROR:AJG: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:48,143 WARNING:No historical data found for AJG in 36357610_38093.csv
+2024-09-17 21:43:48,852 ERROR:TOL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:48,853 WARNING:No historical data found for TOL in 88947810_70228.csv
+2024-09-17 21:43:49,602 ERROR:ALL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:49,602 WARNING:No historical data found for ALL in 02000210_79323.csv
+2024-09-17 21:43:50,350 ERROR:QCOM: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:50,350 WARNING:No historical data found for QCOM in 74752510_77178.csv
+2024-09-17 21:43:53,058 ERROR:BHI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:53,058 WARNING:No historical data found for BHI in 05722410_75034.csv
+2024-09-17 21:43:53,383 ERROR:$ED: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000229 -> 1970-01-02 00:00:00.020231229)
+2024-09-17 21:43:53,384 WARNING:No historical data found for ED in 20911510_11404.csv
+2024-09-17 21:43:55,191 ERROR:$BBT: possibly delisted; No timezone found
+2024-09-17 21:43:55,192 WARNING:No historical data found for BBT in 05493710_71563.csv
+2024-09-17 21:43:57,158 ERROR:L: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:57,159 WARNING:No historical data found for L in 54042410_26710.csv
+2024-09-17 21:43:57,953 ERROR:TSCO: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:57,954 WARNING:No historical data found for TSCO in 89235610_80286.csv
+2024-09-17 21:43:58,910 ERROR:NTRS: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:43:58,911 WARNING:No historical data found for NTRS in 66585910_58246.csv
+2024-09-17 21:43:59,258 ERROR:$PG: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020231229)
+2024-09-17 21:43:59,258 WARNING:No historical data found for PG in 74271810_18163.csv
+2024-09-17 21:44:00,178 ERROR:SBUX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:44:00,179 WARNING:No historical data found for SBUX in 85524410_77702.csv
+2024-09-17 21:44:00,332 ERROR:$JNJ: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020231229)
+2024-09-17 21:44:00,332 WARNING:No historical data found for JNJ in 47816010_22111.csv
+2024-09-17 21:44:02,292 ERROR:SO: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:44:02,293 WARNING:No historical data found for SO in 84258710_18411.csv
+2024-09-17 21:44:04,318 ERROR:DLTR: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:44:04,319 WARNING:No historical data found for DLTR in 25674610_81481.csv
+2024-09-17 21:44:06,390 ERROR:KMT: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:44:06,390 WARNING:No historical data found for KMT in 48917010_44134.csv
+2024-09-17 21:44:07,419 ERROR:SCG: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:44:07,419 WARNING:No historical data found for SCG in 80589M10_23085.csv
+2024-09-17 21:44:09,311 ERROR:JLL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:44:09,312 WARNING:No historical data found for JLL in 48020Q10_85246.csv
+2024-09-17 21:44:11,227 ERROR:PPG: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:44:11,227 WARNING:No historical data found for PPG in 69350610_22509.csv
+2024-09-17 21:44:13,231 ERROR:PAYX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:44:13,231 WARNING:No historical data found for PAYX in 70432610_61621.csv
+2024-09-17 21:44:17,479 ERROR:DRI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:44:17,480 WARNING:No historical data found for DRI in 23719410_81655.csv
+2024-09-17 21:44:19,810 ERROR:PNW: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:44:19,811 WARNING:No historical data found for PNW in 72348410_27991.csv
+2024-09-17 21:44:20,824 ERROR:CSC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:44:20,824 WARNING:No historical data found for CSC in 20536310_40125.csv
+2024-09-17 21:44:23,015 ERROR:FHN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:44:23,016 WARNING:No historical data found for FHN in 32051710_36397.csv
+2024-09-17 21:44:27,102 ERROR:ROP: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:44:27,103 WARNING:No historical data found for ROP in 77669610_77338.csv
+2024-09-17 21:44:30,556 ERROR:GGG: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:44:30,558 WARNING:No historical data found for GGG in 38410910_39571.csv
+2024-09-17 21:44:34,921 ERROR:ERIE: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:44:34,922 WARNING:No historical data found for ERIE in 29530P10_82486.csv
+2024-09-17 21:44:37,349 ERROR:AEO: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:44:37,351 WARNING:No historical data found for AEO in 02553E10_80432.csv
+2024-09-17 21:44:38,672 ERROR:KEY: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:44:38,672 WARNING:No historical data found for KEY in 49326710_64995.csv
+2024-09-17 21:44:39,726 ERROR:MCY: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:44:39,726 WARNING:No historical data found for MCY in 58940010_52936.csv
+2024-09-17 21:44:40,050 ERROR:$KR: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020231229)
+2024-09-17 21:44:40,051 WARNING:No historical data found for KR in 50104410_16678.csv
+2024-09-17 21:44:41,106 ERROR:BLK: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:44:41,106 WARNING:No historical data found for BLK in 09247X10_87267.csv
+2024-09-17 21:44:42,143 ERROR:TKR: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:44:42,143 WARNING:No historical data found for TKR in 88738910_14795.csv
+2024-09-17 21:44:44,263 ERROR:AAP: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:44:44,264 WARNING:No historical data found for AAP in 00751Y10_89217.csv
+2024-09-17 21:44:45,403 ERROR:F: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:44:45,403 WARNING:No historical data found for F in 34537086_25785.csv
+2024-09-17 21:44:45,759 ERROR:$DTE: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020231229)
+2024-09-17 21:44:45,760 WARNING:No historical data found for DTE in 23333110_11674.csv
+2024-09-17 21:44:46,784 ERROR:WRB: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:44:46,784 WARNING:No historical data found for WRB in 08442310_17743.csv
+2024-09-17 21:44:47,560 ERROR:FFIV: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:44:47,560 WARNING:No historical data found for FFIV in 31561610_86964.csv
+2024-09-17 21:44:49,470 ERROR:LECO: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:44:49,472 WARNING:No historical data found for LECO in 53390010_81678.csv
+2024-09-17 21:44:50,228 ERROR:IDXX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:44:50,228 WARNING:No historical data found for IDXX in 45168D10_76709.csv
+2024-09-17 21:44:51,166 ERROR:DD: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:44:51,167 WARNING:No historical data found for DD in 26353410_11703.csv
+2024-09-17 21:44:51,688 ERROR:$IP: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020231229)
+2024-09-17 21:44:51,688 WARNING:No historical data found for IP in 46014610_21573.csv
+2024-09-17 21:44:52,595 ERROR:SCHW: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:44:52,596 WARNING:No historical data found for SCHW in 80851310_75186.csv
+2024-09-17 21:44:55,763 ERROR:HSIC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:44:55,765 WARNING:No historical data found for HSIC in 80640710_82581.csv
+2024-09-17 21:44:56,789 ERROR:URBN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:44:56,789 WARNING:No historical data found for URBN in 91704710_79881.csv
+2024-09-17 21:44:56,987 ERROR:$AEP: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020231229)
+2024-09-17 21:44:56,991 WARNING:No historical data found for AEP in 02553710_24109.csv
+2024-09-17 21:44:57,805 ERROR:AMZN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:44:57,805 WARNING:No historical data found for AMZN in 02313510_84788.csv
+2024-09-17 21:44:58,141 ERROR:$XRX: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020170531)
+2024-09-17 21:44:58,144 WARNING:No historical data found for XRX in 98412110_27983.csv
+2024-09-17 21:45:00,180 ERROR:LKQ: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:00,181 WARNING:No historical data found for LKQ in 50188920_89866.csv
+2024-09-17 21:45:00,976 ERROR:MSFT: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:00,976 WARNING:No historical data found for MSFT in 59491810_10107.csv
+2024-09-17 21:45:01,831 ERROR:AMG: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:01,832 WARNING:No historical data found for AMG in 00825210_85593.csv
+2024-09-17 21:45:02,607 ERROR:BSX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:02,607 WARNING:No historical data found for BSX in 10113710_77605.csv
+2024-09-17 21:45:04,627 ERROR:ASB: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:04,628 WARNING:No historical data found for ASB in 04548710_15318.csv
+2024-09-17 21:45:06,711 ERROR:STT: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:06,712 WARNING:No historical data found for STT in 85747710_72726.csv
+2024-09-17 21:45:08,993 ERROR:ETR: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:08,995 WARNING:No historical data found for ETR in 29364G10_24010.csv
+2024-09-17 21:45:12,032 ERROR:OI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:12,032 WARNING:No historical data found for OI in 69076840_77157.csv
+2024-09-17 21:45:14,083 ERROR:$HRS: possibly delisted; No timezone found
+2024-09-17 21:45:14,083 WARNING:No historical data found for HRS in 41387510_25582.csv
+2024-09-17 21:45:15,088 ERROR:HD: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:15,088 WARNING:No historical data found for HD in 43707610_66181.csv
+2024-09-17 21:45:16,949 ERROR:AKAM: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:16,949 WARNING:No historical data found for AKAM in 00971T10_87299.csv
+2024-09-17 21:45:18,783 ERROR:JNPR: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:18,783 WARNING:No historical data found for JNPR in 48203R10_86979.csv
+2024-09-17 21:45:20,767 ERROR:FLR: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:20,767 WARNING:No historical data found for FLR in 34341210_88853.csv
+2024-09-17 21:45:22,669 ERROR:ACM: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:22,669 WARNING:No historical data found for ACM in 00766T10_91975.csv
+2024-09-17 21:45:23,546 ERROR:TMO: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:23,546 WARNING:No historical data found for TMO in 88355610_62092.csv
+2024-09-17 21:45:24,453 ERROR:NWL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:24,454 WARNING:No historical data found for NWL in 65122910_60986.csv
+2024-09-17 21:45:26,342 ERROR:HOG: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:26,343 WARNING:No historical data found for HOG in 41282210_70033.csv
+2024-09-17 21:45:27,236 ERROR:COLM: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:27,236 WARNING:No historical data found for COLM in 19851610_85863.csv
+2024-09-17 21:45:27,912 ERROR:ADBE: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:27,917 WARNING:No historical data found for ADBE in 00724F10_75510.csv
+2024-09-17 21:45:29,692 ERROR:FDS: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:29,692 WARNING:No historical data found for FDS in 30307510_83597.csv
+2024-09-17 21:45:31,340 ERROR:ISRG: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:31,341 WARNING:No historical data found for ISRG in 46120E60_88352.csv
+2024-09-17 21:45:32,582 ERROR:AGCO: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:32,584 WARNING:No historical data found for AGCO in 00108410_77520.csv
+2024-09-17 21:45:34,562 ERROR:BK: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:34,563 WARNING:No historical data found for BK in 06405810_49656.csv
+2024-09-17 21:45:36,517 ERROR:NKE: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:36,518 WARNING:No historical data found for NKE in 65410610_57665.csv
+2024-09-17 21:45:37,387 ERROR:MDT: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:37,387 WARNING:No historical data found for MDT in 58505510_60097.csv
+2024-09-17 21:45:38,182 ERROR:UNH: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:38,183 WARNING:No historical data found for UNH in 91324P10_92655.csv
+2024-09-17 21:45:38,348 ERROR:$HON: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020231229)
+2024-09-17 21:45:38,348 WARNING:No historical data found for HON in 43851610_10145.csv
+2024-09-17 21:45:38,965 ERROR:$Y: possibly delisted; No timezone found
+2024-09-17 21:45:38,965 WARNING:No historical data found for Y in 01717510_71271.csv
+2024-09-17 21:45:39,754 ERROR:A: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:39,756 WARNING:No historical data found for A in 00846U10_87432.csv
+2024-09-17 21:45:41,543 ERROR:CF: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:41,544 WARNING:No historical data found for CF in 12526910_90829.csv
+2024-09-17 21:45:42,316 ERROR:PKG: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:42,316 WARNING:No historical data found for PKG in 69515610_87541.csv
+2024-09-17 21:45:43,159 ERROR:R: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:43,160 WARNING:No historical data found for R in 78354910_27633.csv
+2024-09-17 21:45:46,000 ERROR:CR: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:46,001 WARNING:No historical data found for CR in 22439910_20204.csv
+2024-09-17 21:45:47,837 ERROR:$MYL: possibly delisted; No timezone found
+2024-09-17 21:45:47,838 WARNING:No historical data found for MYL in 62853010_69550.csv
+2024-09-17 21:45:48,701 ERROR:CAG: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:48,702 WARNING:No historical data found for CAG in 20588710_56274.csv
+2024-09-17 21:45:50,581 ERROR:ORCL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:50,581 WARNING:No historical data found for ORCL in 68389X10_10104.csv
+2024-09-17 21:45:51,274 ERROR:PX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:51,275 WARNING:No historical data found for PX in 74005P10_77768.csv
+2024-09-17 21:45:53,195 ERROR:AEE: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:53,195 WARNING:No historical data found for AEE in 02360810_24985.csv
+2024-09-17 21:45:54,884 ERROR:$LLL: possibly delisted; No timezone found
+2024-09-17 21:45:54,884 WARNING:No historical data found for LLL in 50242410_86021.csv
+2024-09-17 21:45:56,936 ERROR:AVT: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:56,938 WARNING:No historical data found for AVT in 05380710_27684.csv
+2024-09-17 21:45:57,606 ERROR:TXN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:57,608 WARNING:No historical data found for TXN in 88250810_15579.csv
+2024-09-17 21:45:58,367 ERROR:$PXD: possibly delisted; No timezone found
+2024-09-17 21:45:58,368 WARNING:No historical data found for PXD in 72378710_75241.csv
+2024-09-17 21:45:59,114 ERROR:VAL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:59,115 WARNING:No historical data found for VAL in 92035510_37807.csv
+2024-09-17 21:45:59,904 ERROR:OKE: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:45:59,905 WARNING:No historical data found for OKE in 68268010_25232.csv
+2024-09-17 21:46:01,516 ERROR:J: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:46:01,517 WARNING:No historical data found for J in 46981410_52329.csv
+2024-09-17 21:46:03,308 ERROR:LLY: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:46:03,308 WARNING:No historical data found for LLY in 53245710_50876.csv
+2024-09-17 21:46:05,186 ERROR:PWR: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:46:05,186 WARNING:No historical data found for PWR in 74762E10_85792.csv
+2024-09-17 21:46:05,302 ERROR:$SIAL: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020151030)
+2024-09-17 21:46:05,302 WARNING:No historical data found for SIAL in 82655210_70536.csv
+2024-09-17 21:46:07,406 ERROR:WU: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:46:07,406 WARNING:No historical data found for WU in 95980210_91461.csv
+2024-09-17 21:46:08,325 ERROR:NUE: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:46:08,325 WARNING:No historical data found for NUE in 67034610_34817.csv
+2024-09-17 21:46:13,310 ERROR:MCK: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:46:13,311 WARNING:No historical data found for MCK in 58155Q10_81061.csv
+2024-09-17 21:46:14,373 ERROR:MAN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:46:14,374 WARNING:No historical data found for MAN in 56418H10_75285.csv
+2024-09-17 21:46:18,817 ERROR:CRM: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:46:18,817 WARNING:No historical data found for CRM in 79466L30_90215.csv
+2024-09-17 21:46:20,049 ERROR:EBAY: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:46:20,049 WARNING:No historical data found for EBAY in 27864210_86356.csv
+2024-09-17 21:46:20,172 ERROR:$STJ: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020161230)
+2024-09-17 21:46:20,173 WARNING:No historical data found for STJ in 79084910_68591.csv
+2024-09-17 21:46:20,354 ERROR:$BRCM: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020160129)
+2024-09-17 21:46:20,356 WARNING:No historical data found for BRCM in 11132010_85963.csv
+2024-09-17 21:46:20,816 ERROR:$HPQ: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020000131 -> 1970-01-02 00:00:00.020151030)
+2024-09-17 21:46:20,817 WARNING:No historical data found for HPQ in 42823610_27828.csv
+2024-09-17 21:46:21,917 ERROR:AFG: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:46:21,917 WARNING:No historical data found for AFG in 02593210_60687.csv
+2024-09-17 21:46:22,712 ERROR:MAR: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:46:22,714 WARNING:No historical data found for MAR in 57190320_85913.csv
+2024-09-17 21:46:23,741 ERROR:EFX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:46:23,742 WARNING:No historical data found for EFX in 29442910_52476.csv
+2024-09-17 21:46:24,881 ERROR:KMX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:46:24,882 WARNING:No historical data found for KMX in 14313010_89508.csv
+2024-09-17 21:46:25,836 ERROR:HBAN: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:46:25,837 WARNING:No historical data found for HBAN in 44615010_42906.csv
+2024-09-17 21:46:27,941 ERROR:MSM: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:46:27,941 WARNING:No historical data found for MSM in 55353010_82777.csv
+2024-09-17 21:46:28,998 ERROR:HES: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:46:29,001 WARNING:No historical data found for HES in 42809H10_28484.csv
+2024-09-17 21:46:30,047 ERROR:BBY: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:46:30,048 WARNING:No historical data found for BBY in 08651610_85914.csv
+2024-09-17 21:46:30,994 ERROR:VVC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:46:30,995 WARNING:No historical data found for VVC in 92240G10_51633.csv
+2024-09-17 21:46:33,095 ERROR:OC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:46:33,096 WARNING:No historical data found for OC in 69074210_91531.csv
+2024-09-17 21:46:34,014 ERROR:ALTR: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:46:34,015 WARNING:No historical data found for ALTR in 02144110_75577.csv
+2024-09-17 21:46:35,170 ERROR:SEE: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:46:35,170 WARNING:No historical data found for SEE in 81211K10_85926.csv
+2024-09-17 21:46:37,401 ERROR:BIO: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:46:37,402 WARNING:No historical data found for BIO in 09057220_61516.csv
+2024-09-17 21:46:38,452 ERROR:ALV: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:46:38,453 WARNING:No historical data found for ALV in 05280010_84656.csv
+2024-09-17 21:46:39,420 ERROR:BMY: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:46:39,421 WARNING:No historical data found for BMY in 11012210_19393.csv
+2024-09-17 21:46:40,410 ERROR:ATR: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:46:40,411 WARNING:No historical data found for ATR in 03833610_79133.csv
+2024-09-17 21:46:41,516 ERROR:$CY: possibly delisted; No timezone found
+2024-09-17 21:46:41,517 WARNING:No historical data found for CY in 23280610_10302.csv
+2024-09-17 21:46:42,439 ERROR:MMC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:46:42,440 WARNING:No historical data found for MMC in 57174810_45751.csv
+2024-09-17 21:46:43,491 ERROR:WFC: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:46:43,492 WARNING:No historical data found for WFC in 94974610_38703.csv
+2024-09-17 21:46:44,465 ERROR:JBL: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:46:44,465 WARNING:No historical data found for JBL in 46631310_79094.csv
+2024-09-17 21:46:45,248 ERROR:EV: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:46:45,249 WARNING:No historical data found for EV in 27826510_31500.csv
+2024-09-17 21:46:46,201 ERROR:MLM: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:46:46,201 WARNING:No historical data found for MLM in 57328410_80204.csv
+2024-09-17 21:46:47,950 ERROR:$WTR: possibly delisted; No timezone found
+2024-09-17 21:46:47,950 WARNING:No historical data found for WTR in 03836W10_52898.csv
+2024-09-17 21:46:49,938 ERROR:FCX: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:46:49,940 WARNING:No historical data found for FCX in 35671D85_81774.csv
+2024-09-17 21:46:50,970 ERROR:AYI: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:46:50,970 WARNING:No historical data found for AYI in 00508Y10_89216.csv
+2024-09-17 21:46:52,106 ERROR:SLM: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:46:52,106 WARNING:No historical data found for SLM in 78442P10_66325.csv
+2024-09-17 21:46:52,402 ERROR:$CNP: possibly delisted; No price data found  (1d 1970-01-01 00:00:00.020021129 -> 1970-01-02 00:00:00.020231229)
+2024-09-17 21:46:52,402 WARNING:No historical data found for CNP in 15189T10_21792.csv
+2024-09-17 21:46:53,373 ERROR:NTAP: Data doesn't exist for startDate = 18000, endDate = 104400
+2024-09-17 21:46:53,373 WARNING:No historical data found for NTAP in 64110D10_82598.csv
