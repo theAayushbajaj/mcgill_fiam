@@ -1,7 +1,12 @@
 import pandas as pd
 
+import sys
+import os
 
-data = pd.read_csv('raw_data/hackathon_sample_v2.csv')
+# set the current working directory
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
+data = pd.read_csv('../raw_data/hackathon_sample_v2.csv')
 
 # Define the minimum number of records required
 min_records = 180
@@ -19,7 +24,7 @@ def apply_last_stock_ticker(group):
         last_ticker = group['stock_ticker'].iloc[-1]
         group['stock_ticker'] = last_ticker
         # Save the group as a CSV file using the format 'cusip_permno.csv'
-        file_name = f"stocks_data/{str(group['cusip'].iloc[0])}_{str(group['permno'].iloc[0])}.csv"
+        file_name = f"../stocks_data/{str(group['cusip'].iloc[0])}_{str(group['permno'].iloc[0])}.csv"
         group.to_csv(file_name, index=False)
         return group
 
