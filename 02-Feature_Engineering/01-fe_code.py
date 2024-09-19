@@ -209,3 +209,117 @@ for file_name in csv_files:
     # Save the updated DataFrame back to the CSV file
     df.to_csv(file_path)
 # %%
+
+# Structural Breaks
+
+# Snippet 17.1: SADF's inner loop
+def get_bsadf(logP, minSL, constant, lags):
+    y, x = getYX(logP, constant=constant, lags=lags)
+    startPoints = range(0, y.shape[0] + lags - minSL + 1)
+    bsadf = None
+    allADF = []
+    
+    # Loop through the time series and compute ADF statistics
+    for start in startPoints:
+        y_, x_ = y[start:], x[start:]
+        bMean_, bStd_ = getBetas(y_, x_)
+        bMean_, bStd_ = bMean_[0, 0], bStd_[0, 0] ** 0.5
+        allADF.append(bMean_ / bStd_)  # ADF statistic
+        
+        # Update bsadf with the maximum ADF value
+        if bsadf is None or allADF[-1] > bsadf:
+            bsadf = allADF[-1]
+    
+    # Return result as a dictionary with the final bsadf
+    out = {'date': logP.index[-1], 'bsadf': bsadf}
+    return out
+
+# Snippet 17.2: Preparing the datasets
+def getYX(series, constant, lags):
+    # Compute differences and apply lags
+    series_ = series.diff().dropna()
+    x = lagDF(series_, lags).dropna()
+    
+    seriesdf = series.to_frame()
+    series_df = series_.to_frame()
+    
+    # Set the lagged level of the original series as the first column
+    x.iloc[:, 0] = seriesdf.values[-x.shape[0]-1:-1, 0]
+    y = series_df.iloc[-x.shape[0]:].values
+    
+    # Add constant or time trend components if needed
+    if constant != 'nc':  # Add a constant if necessary
+        x = np.append(x, np.ones((x.shape[0], 1)), axis=1)
+    if constant[:2] == 'ct':  # Add a linear time trend if necessary
+        trend = np.arange(x.shape[0]).reshape(-1, 1)
+        x = np.append(x, trend, axis=1)
+    if constant == 'ctt':  # Add a second-degree polynomial time trend if necessary
+        x = np.append(x, trend ** 2, axis=1)
+    
+    return y, x
+
+# Snippet 17.3: Apply lags to a dataframe
+def lagDF(df0, lags):
+    df0_ = df0.to_frame()
+    df1 = pd.DataFrame()
+    
+    if isinstance(lags, int):
+        lags = range(lags + 1)
+    else:
+        lags = [int(lag) for lag in lags]
+    
+    # Apply lags to the dataframe
+    for lag in lags:
+        df_ = df0_.shift(lag).copy(deep=True)
+
+        # If df_ is a Series, convert it to a DataFrame
+        if isinstance(df_, pd.Series):
+            df_ = df_.to_frame()
+
+        df_.columns = [str(i) + '_' + str(lag) for i in df_.columns]
+        df1 = df1.join(df_, how='outer')
+    
+    return df1
+
+# Snippet 17.4: Fitting the ADF specification (regression)
+def getBetas(y, x):
+    # Perform the regression using the normal equations
+    xy = np.dot(x.T, y)
+    xx = np.dot(x.T, x)
+    xxinv = np.linalg.inv(xx)
+    bMean = np.dot(xxinv, xy)
+    
+    # Calculate the variance of the betas
+    err = y - np.dot(x, bMean)
+    bVar = np.dot(err.T, err) / (x.shape[0] - x.shape[1]) * xxinv
+    
+    return bMean, bVar
+
+# Outer loop for SADF computation
+def get_sadf(logP, minSL, constant, lags):
+    gsadf_values = []
+    
+    # Iterate over the time series and compute bsadf for each window
+    for window_end in range(minSL, len(logP)):
+        window_logP = logP.iloc[:window_end + 1]  # Define the current window
+        bsadf_result = get_bsadf(window_logP, minSL, constant, lags)
+        gsadf_values.append(bsadf_result['bsadf'])
+    
+    # Return a DataFrame with sadf values and corresponding time index
+    return pd.DataFrame({'date': logP.index[minSL:], 'sadf': gsadf_values})
+
+# Loop through each CSV file
+for file_name in tqdm(csv_files):
+    file_path = os.path.join(stocks_data_dir, file_name)
+    
+    df = pd.read_csv(file_path, index_col='datetime', parse_dates=True)
+    col = 'log_price'
+    sadf = get_sadf(df[col], 20, 'ct', 1)
+    
+    # Merge SADF values with the original DataFrame
+    # Assuming 'sadf_result' is a DataFrame with 'Date' as the index
+    df_with_sadf = df.join(sadf.set_index('date'), on='datetime')
+    df_with_sadf['sadf'] = df_with_sadf['sadf'].fillna(0)
+    df_with_sadf.to_csv(file_path)
+
+# %%
