@@ -6,3 +6,6 @@ stocks_data/*
 
 # notebooks/*
 # !notebooks/.gitkeep
+
+objects/*
+!objects/.gitkeep

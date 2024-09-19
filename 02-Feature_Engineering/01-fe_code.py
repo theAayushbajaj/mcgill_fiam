@@ -192,3 +192,50 @@ for file_name in tqdm(csv_files):
     df.to_csv(file_path)
     
 # %%
+
+# Missing Values
+# Fill missing values with the previous value
+# Loop through each CSV file
+
+for file_name in csv_files:
+    file_path = os.path.join(stocks_data_dir, file_name)
+    try:
+        print(f"Processing file: {file_name}")
+        
+        # Read the CSV file into a DataFrame
+        df = pd.read_csv(
+            file_path,
+            index_col='datetime',
+            parse_dates=True,
+            na_values=['', 'NA', 'NULL', 'null', 'NaN']
+        )
+        
+        # Check DataFrame shape and types
+        print(f"DataFrame shape: {df.shape}")
+        print(df.dtypes)
+        
+        # Convert columns to appropriate types if necessary
+        # For example, ensure numeric columns are numeric
+        for col in df.columns:
+            if df[col].dtype == 'object':
+                try:
+                    df[col] = pd.to_numeric(df[col], errors='coerce')
+                except Exception as e:
+                    print(f"Error converting column {col} to numeric: {e}")
+        
+        # Handle missing values without inplace modification
+        df = df.fillna(method='ffill', axis=0)
+        # df = df.fillna(method='bfill', axis=0)
+        
+        # Alternatively, apply fillna to numeric columns only
+        numeric_cols = df.select_dtypes(include=[np.number]).columns
+        df[numeric_cols] = df[numeric_cols].fillna(method='ffill', axis=0)
+        # df[numeric_cols] = df[numeric_cols].fillna(method='bfill', axis=0)
+        
+        # Save the updated DataFrame back to the CSV file
+        df.to_csv(file_path)
+        
+        print(f"Successfully processed {file_name}")
+    except Exception as e:
+        print(f"Error processing {file_name}: {e}")
+# %%
