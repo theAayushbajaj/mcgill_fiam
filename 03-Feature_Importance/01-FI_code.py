@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import os
 from tqdm import tqdm
+from sklearn.impute import KNNImputer
 
 import pickle
 
@@ -89,6 +90,35 @@ def orthoFeats(dfX, varThres=0.95):
     dfP = np.dot(dfZ, eVec)
     return dfP
 
+# %%
+if any(X_dataset.isna().sum() > 0):
+    # Get columns with non-zero NaNs
+    non_zero_nan_columns = X_dataset.isna().sum()[X_dataset.isna().sum() > 1000].sort_values(ascending=False)
+    print(len(non_zero_nan_columns))  # Print only columns with non-zero NaNs
+    
+    # Drop the columns with more than 1000 NaNs
+    X_dataset = X_dataset.drop(non_zero_nan_columns.index, axis=1)
+    
+    print(f"Columns dropped: {non_zero_nan_columns.index.tolist()}")
+
+# %%
+X_dataset[X_dataset.isna().any(axis=1)]
+
+# %%
+# Create the KNN imputer
+knn_imputer = KNNImputer(n_neighbors=5)
+
+# Perform the imputation
+X_imputed = knn_imputer.fit_transform(X_dataset)
+
+# Convert the imputed data back to a DataFrame
+X_imputed_df = pd.DataFrame(X_imputed, columns=X_dataset.columns)
+
+# Verify if there are any remaining NaNs
+print(X_imputed_df.isna().sum().sum()) 
+
+# Check the imputed DataFrame
+X_imputed_df.head()
 
 # %%
 X_pca = orthoFeats(X_dataset)
