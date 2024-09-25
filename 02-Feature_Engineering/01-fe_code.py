@@ -50,7 +50,7 @@ for file_name in csv_files:
 # Create t1 object, save it in \objects folder as t1.pkl
 
 # APPL stock has all the datetime rows
-path = '../stocks_data/AAPL_03783310_14593.csv'
+path = '../stocks_data/AAPL.csv'
 df = pd.read_csv(path)
 t1 = pd.Series()
 tmp = df['datetime'].shift(-1).dropna()
@@ -92,6 +92,35 @@ for file_name in csv_files:
     
     # Save the updated DataFrame back to the CSV file
     df.to_csv(file_path)
+
+
+# %%
+
+# Create a dataframe of prices for all stocks
+# Save it in \objects folder as prices.pkl
+
+# start with APPL since it has all the datetime rows
+path = '../stocks_data/AAPL.csv'
+df = pd.read_csv(path)
+prices = pd.DataFrame()
+prices.index = pd.to_datetime(df['datetime'])
+
+# Loop through each CSV file
+for file_name in tqdm(csv_files):
+    file_path = os.path.join(stocks_data_dir, file_name)
+    
+    # Read the CSV file into a DataFrame
+    df = pd.read_csv(file_path, index_col='datetime', parse_dates=True)
+    
+    # Add the 'adj_price' column to the prices DataFrame
+    prices[file_name] = df['adj_price']
+    
+# Save the prices DataFrame
+with open('../objects/prices.pkl', 'wb') as f:
+    pickle.dump(prices, f)
+
+
+
 
 
 # %%

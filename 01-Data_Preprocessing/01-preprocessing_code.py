@@ -30,7 +30,8 @@ def apply_last_stock_ticker(group):
         last_ticker = group['stock_ticker'].iloc[-1]
         group['stock_ticker'] = last_ticker
         # Save the group as a CSV file using the format 'cusip_permno.csv'
-        file_name = f"../stocks_data/{str(last_ticker)}_{str(group['cusip'].iloc[0])}_{str(group['permno'].iloc[0])}.csv"
+        # file_name = f"../stocks_data/{str(last_ticker)}_{str(group['cusip'].iloc[0])}_{str(group['permno'].iloc[0])}.csv"
+        file_name = f"../stocks_data/{str(last_ticker)}.csv"
         group.to_csv(file_name, index=False)
         return group
 
