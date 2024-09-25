@@ -2,6 +2,8 @@
 import numpy as np
 import pandas as pd
 
+from sklearn.covariance import LedoitWolf
+
 import pickle
 #%%
 
@@ -24,16 +26,20 @@ prices = pd.read_pickle(path)
 prices
 # %%
 
+# Step 1) Gather the returns
 Start_Date = '2015-01-01'
 End_Date = '2019-12-01'
 
 training = prices.loc[Start_Date:End_Date].dropna(axis=1)
-training
+returns = training.pct_change().dropna()
+returns
 # %%
-training_rets = training.pct_change().dropna()
-training_rets
+# Step 2) 
+# Estimate the Ledoit-Wolf Shrunk Covariance Matrix
+lw = LedoitWolf()
+shrunk_cov_matrix = lw.fit(returns).covariance_
+shrunk_cov_matrix.shape
 
 # %%
-cov_matrix = training_rets.cov()
-cov_matrix
+
 # %%
