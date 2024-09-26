@@ -1,6 +1,11 @@
+import sys
+import os
+
 # SNIPPET 16.4 FULL IMPLEMENTATION OF THE HRP ALGORITHM
 import matplotlib.pyplot as mpl
 import scipy.cluster.hierarchy as sch,random,numpy as np,pandas as pd
+
+from sklearn.covariance import LedoitWolf
 #———————————————————————————————————————
 
 def getIVP(cov, **kargs):
@@ -69,20 +74,21 @@ def plotCorrMatrix(path,corr,labels=None):
     mpl.clf();mpl.close() # reset pylab
     return
 #———————————————————————————————————————
-def generateData(nObs,size0,size1,sigma1):
-    # Time series of correlated variables
-    #1) generating some uncorrelated data
-    np.random.seed(seed=12345);random.seed(12345)
-    x=np.random.normal(0,1,size=(nObs,size0)) # each row is a variable
-    #2) creating correlation between the variables
-    cols=[random.randint(0,size0–1) for i in xrange(size1)]
-    y=x[:,cols]+np.random.normal(0,sigma1,size=(nObs,len(cols)))
-    x=np.append(x,y,axis=1)
-    x=pd.DataFrame(x,columns=range(1,x.shape[1]+1))
-    return x,cols
+# def generateData(nObs,size0,size1,sigma1):
+#     # Time series of correlated variables
+#     #1) generating some uncorrelated data
+#     np.random.seed(seed=12345);random.seed(12345)
+#     x=np.random.normal(0,1,size=(nObs,size0)) # each row is a variable
+#     #2) creating correlation between the variables
+#     cols=[random.randint(0,size0–1) for i in xrange(size1)]
+#     y=x[:,cols]+np.random.normal(0,sigma1,size=(nObs,len(cols)))
+#     x=np.append(x,y,axis=1)
+#     x=pd.DataFrame(x,columns=range(1,x.shape[1]+1))
+#     return x,cols
 #———————————————————————————————————————
 def main():
     # LOAD /Users/paulkelendji/Desktop/GitHub_paul/mcgill_fiam/objects/prices.pkl
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
     path = '../objects/prices.pkl'
 
     prices = pd.read_pickle(path)
@@ -95,6 +101,12 @@ def main():
     training = prices.loc[Start_Date:End_Date].dropna(axis=1)
     x = training.pct_change().dropna()
     cov,corr=x.cov(),x.corr()
+    
+    lw = LedoitWolf()
+    shrunk_cov_matrix = lw.fit(x).covariance_
+    cov = shrunk_cov_matrix
+    # array to DataFrame
+    cov = pd.DataFrame(cov, index=x.columns, columns=x.columns)
     
     #2) compute and plot correl matrix
     plotCorrMatrix('HRP3_corr0.png',corr,labels=corr.columns)
