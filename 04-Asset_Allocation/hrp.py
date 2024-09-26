@@ -44,8 +44,11 @@ def getRecBipart(cov, sortIx):
             cVar0 = getClusterVar(cov, cItems0)
             cVar1 = getClusterVar(cov, cItems1)
             alpha = 1 - cVar0 / (cVar0 + cVar1)
+            alpha = 2 * alpha - 1
+
             w[cItems0] *= alpha  # weight 1
-            w[cItems1] *= 1 - alpha  # weight 2
+            w[cItems1] *= 1 - alpha if alpha >= 0 else -1 - alpha  # weight 2
+    w/=w.abs().sum()
     return w
 #———————————————————————————————————————
 def correlDist(corr):
@@ -79,23 +82,35 @@ def generateData(nObs,size0,size1,sigma1):
     return x,cols
 #———————————————————————————————————————
 def main():
-#1) Generate correlated data
-nObs,size0,size1,sigma1=10000,5,5,.25
-x,cols=generateData(nObs,size0,size1,sigma1)
-print [(j+1,size0+i) for i,j in enumerate(cols,1)]
-cov,corr=x.cov(),x.corr()
-#2) compute and plot correl matrix
-plotCorrMatrix('HRP3_corr0.png',corr,labels=corr.columns)
-#3) cluster
-dist=correlDist(corr)
-link=sch.linkage(dist,'single')
-sortIx=getQuasiDiag(link)
-sortIx=corr.index[sortIx].tolist() # recover labels
-df0=corr.loc[sortIx,sortIx] # reorder
-plotCorrMatrix('HRP3_corr1.png',df0,labels=df0.columns)
-#4) Capital allocation
-hrp=getRecBipart(cov,sortIx)
-print hrp
-return
+    # LOAD /Users/paulkelendji/Desktop/GitHub_paul/mcgill_fiam/objects/prices.pkl
+    path = '../objects/prices.pkl'
+
+    prices = pd.read_pickle(path)
+    prices
+
+    # Step 1) Gather the returns
+    Start_Date = '2015-01-01'
+    End_Date = '2019-12-01'
+
+    training = prices.loc[Start_Date:End_Date].dropna(axis=1)
+    x = training.pct_change().dropna()
+    cov,corr=x.cov(),x.corr()
+    
+    #2) compute and plot correl matrix
+    plotCorrMatrix('HRP3_corr0.png',corr,labels=corr.columns)
+    
+    #3) cluster
+    dist=correlDist(corr)
+    link=sch.linkage(dist,'single')
+    sortIx=getQuasiDiag(link)
+    sortIx=corr.index[sortIx].tolist() # recover labels
+    df0=corr.loc[sortIx,sortIx] # reorder
+    plotCorrMatrix('HRP3_corr1.png',df0,labels=df0.columns)
+    
+    #4) Capital allocation
+    hrp=getRecBipart(cov,sortIx)
+    print(hrp)
+    print(hrp.abs().sum())
 #———————————————————————————————————————
-if __name__=='__main__':main()
+if __name__=='__main__':
+    main()
