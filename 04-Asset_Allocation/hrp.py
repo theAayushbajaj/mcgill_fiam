@@ -1,6 +1,7 @@
 import sys
 import os
 
+#%%
 # SNIPPET 16.4 FULL IMPLEMENTATION OF THE HRP ALGORITHM
 import matplotlib.pyplot as mpl
 import scipy.cluster.hierarchy as sch,random,numpy as np,pandas as pd
@@ -121,8 +122,12 @@ def main():
     
     #4) Capital allocation
     hrp=getRecBipart(cov,sortIx)
+    print('Showing weights asociated with each ticker: ')
     print(hrp)
-    print(hrp.abs().sum())
+    print('Market exposure : ', hrp.sum())
+    print('Sum of absolute values of weights: ', hrp.abs().sum())
 #———————————————————————————————————————
+#%%
 if __name__=='__main__':
     main()
+# %%
