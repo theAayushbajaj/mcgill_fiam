@@ -51,8 +51,8 @@ path = '../raw_data/factor_char_list.csv'
 features = pd.read_csv(path)
 features_list = features.values.ravel().tolist()
 # Add created features
-added_features = ['log_diff', 'frac_diff']
-features_list+=added_features
+# added_features = ['log_diff', 'frac_diff']
+# features_list+=added_features
 X_dataset = stacked_data[features_list]
 # to pickle
 X_dataset.to_pickle('../objects/X_dataset.pkl')
