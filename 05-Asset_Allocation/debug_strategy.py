@@ -1,10 +1,19 @@
+#%%
 import numpy as np
 import pandas as pd
 
 from hrp import *
 from hrpBL import *
-
+#%%
 def asset_allocator(start_date, end_date, prices, signals, market_caps_df, lambda_=0.5):
+    #%%
+    lambda_=0.5
+    prices = pd.read_pickle('../objects/prices.pkl')
+    signals = pd.read_pickle('../objects/signals.pkl')
+    market_caps_df = pd.read_pickle('../objects/market_caps.pkl')
+    start_date = 0
+    end_date = 100
+    #%%
     """
     Inputs :
     - Start Date
@@ -67,6 +76,7 @@ def asset_allocator(start_date, end_date, prices, signals, market_caps_df, lambd
 
     # Define P (Identity matrix for individual asset views)
     P = np.eye(len(selected_stocks))
+    #%%
 
     # Construct Omega, the diagonal covariance matrix of the error terms in the views
     # Confidence levels are between 0 and 1
@@ -102,7 +112,7 @@ def asset_allocator(start_date, end_date, prices, signals, market_caps_df, lambd
     # Ensure values are within [-1, 1]
     corr = np.clip(corr, -1, 1)
     # Set diagonal elements to 1
-    np.fill_diagonal(corr, 1.0)
+    corr.values[range(corr.shape[0]), range(corr.shape[1])] = 1.0
     corr = pd.DataFrame(corr, index=selected_stocks, columns=selected_stocks)
 
     # Now compute the distance matrix
@@ -143,16 +153,4 @@ def asset_allocator(start_date, end_date, prices, signals, market_caps_df, lambd
     print("Final Weights:")
     print(weights)
     return weights
-
-
-if __name__ == '__main__':
-    # Load data
-    prices = pd.read_pickle('objects/prices.pkl')
-    signals = pd.read_pickle('objects/signals.pkl')
-    market_caps = pd.read_pickle('objects/market_caps.pkl')
-    start_date = 0
-    end_date = 100
-    
-    # Run the asset allocator
-    asset_allocator(start_date, end_date, prices, signals, market_caps)
-    
+# %%
