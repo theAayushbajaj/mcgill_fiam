@@ -96,28 +96,28 @@ for file_name in csv_files:
 
 # %%
 
-# Create a dataframe of prices for all stocks
-# Save it in \objects folder as prices.pkl
+# # Create a dataframe of prices for all stocks
+# # Save it in \objects folder as prices.pkl
 
-# start with APPL since it has all the datetime rows
-path = '../stocks_data/AAPL.csv'
-df = pd.read_csv(path)
-prices = pd.DataFrame()
-prices.index = pd.to_datetime(df['datetime'])
+# # start with APPL since it has all the datetime rows
+# path = '../stocks_data/AAPL.csv'
+# df = pd.read_csv(path)
+# prices = pd.DataFrame()
+# prices.index = pd.to_datetime(df['datetime'])
 
-# Loop through each CSV file
-for file_name in tqdm(csv_files):
-    file_path = os.path.join(stocks_data_dir, file_name)
+# # Loop through each CSV file
+# for file_name in tqdm(csv_files):
+#     file_path = os.path.join(stocks_data_dir, file_name)
     
-    # Read the CSV file into a DataFrame
-    df = pd.read_csv(file_path, index_col='datetime', parse_dates=True)
+#     # Read the CSV file into a DataFrame
+#     df = pd.read_csv(file_path, index_col='datetime', parse_dates=True)
     
-    # Add the 'adj_price' column to the prices DataFrame
-    prices[file_name] = df['adj_price']
+#     # Add the 'adj_price' column to the prices DataFrame
+#     prices[file_name] = df['adj_price']
     
-# Save the prices DataFrame
-with open('../objects/prices.pkl', 'wb') as f:
-    pickle.dump(prices, f)
+# # Save the prices DataFrame
+# with open('../objects/prices.pkl', 'wb') as f:
+#     pickle.dump(prices, f)
 
 
 
@@ -149,6 +149,28 @@ for file_name in csv_files:
     # Save the updated DataFrame back to the CSV file (or to a new file)
     df.to_csv(file_path)
 # %%
+
+
+#%%
+# Add the 'target' column to each stock CSV file
+# WILL BE OVERWITTEN BY 04-PREDICTOR
+
+# Loop through each CSV file
+for file_name in csv_files:
+    file_path = os.path.join(stocks_data_dir, file_name)
+    
+    # Read the CSV file into a DataFrame
+    df = pd.read_csv(file_path)
+    
+    # ['prediction', 'probability']
+    # add column, prediction, random number from -1, 1
+    df['prediction'] = np.random.uniform(-1, 1, df.shape[0])
+    df['probability'] = np.abs(df['prediction'])
+    df['prediction'] = np.sign(df['prediction'])
+    
+    df.to_csv(file_path, index=False)
+    
+#%%
 
 # Fractionally Differentiated Price as a Feature
 
@@ -220,23 +242,7 @@ for file_name in tqdm(csv_files):
     df['frac_diff'] = df['frac_diff'].fillna(0)
     df.to_csv(file_path)
     
-# %%
 
-# Missing Values
-# Fill missing values with the previous value
-# Loop through each CSV file
-
-for file_name in csv_files:
-    file_path = os.path.join(stocks_data_dir, file_name)
-    
-    # Read the CSV file into a DataFrame
-    df = pd.read_csv(file_path, index_col='datetime', parse_dates=True)
-    
-    # Fill missing values with the previous value
-    df.fillna(method='ffill', axis=0, inplace=True)
-    
-    # Save the updated DataFrame back to the CSV file
-    df.to_csv(file_path)
 # %%
 
 # Structural Breaks
@@ -351,4 +357,21 @@ for file_name in tqdm(csv_files):
     df_with_sadf['sadf'] = df_with_sadf['sadf'].fillna(0)
     df_with_sadf.to_csv(file_path)
 
+# %%
+
+# Missing Values
+# Fill missing values with the previous value
+# Loop through each CSV file
+
+for file_name in csv_files:
+    file_path = os.path.join(stocks_data_dir, file_name)
+    
+    # Read the CSV file into a DataFrame
+    df = pd.read_csv(file_path, index_col='datetime', parse_dates=True)
+    
+    # Fill missing values with the previous value
+    df.fillna(method='ffill', axis=0, inplace=True)
+    
+    # Save the updated DataFrame back to the CSV file
+    df.to_csv(file_path)
 # %%
