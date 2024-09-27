@@ -43,7 +43,7 @@ def getCont(stacked_data, dropped_indices=None):
     
     return cont
 
-def runFeatureImportance(data):
+def runFeatureImportance(data, case_tag):
     # Bagging classifier on RF where max_samples is set to average uniqueness
     clf2 = RandomForestClassifier(
         n_estimators=1,  # 1 tree
@@ -74,7 +74,7 @@ def runFeatureImportance(data):
                                         pctEmbargo=pctEmbargo, method=method)
         
         # Plot the feature importance using the provided function
-        f_ch8.plotFeatImportance(pathOut='./', imp=imp, oob=oob, oos=oos, method=method, tag='test', simNum=0)
+        f_ch8.plotFeatImportance(pathOut='./', imp=imp, oob=oob, oos=oos, method=method, tag=case_tag, simNum=0)
 
 # Remove NAs from X_dataset and run feature importance code
 X_clean = X.copy()
@@ -90,7 +90,7 @@ cont = getCont(stacked_data, dropped_indices)
 X_clean['datetime'] = cont.index
 X_clean.set_index('datetime', inplace=True)
 
-runFeatureImportance(X_clean)
+runFeatureImportance(X_clean, 'dropNA')
 
 # -------------------------X--------------------------X------------------------X----------------- #
 
@@ -104,4 +104,4 @@ cont = getCont(stacked_data)
 X['datetime'] = cont.index
 X.set_index('datetime', inplace=True)
 
-runFeatureImportance(X)
+runFeatureImportance(X, 'fillNA')
