@@ -49,21 +49,45 @@ for file_name in csv_files:
 
 # Create t1 object, save it in \objects folder as t1.pkl
 
-# APPL stock has all the datetime rows
-path = '../stocks_data/AAPL.csv'
-df = pd.read_csv(path)
-t1 = pd.Series()
-tmp = df['datetime'].shift(-1).dropna()
-tmp = pd.to_datetime(tmp)
-# last date
-result = tmp.iloc[-1] + pd.DateOffset(days=5) + pd.tseries.offsets.BMonthEnd(1)
-tmp = pd.concat([tmp, pd.Series([result])], ignore_index=True)
-t1 = tmp
-# index as first business day of the following month
-t1.index = pd.to_datetime(df['datetime']) + pd.DateOffset(days=5) - pd.tseries.offsets.BMonthBegin(1)
-# save t1
-with open('../objects/t1.pkl', 'wb') as f:
-    pickle.dump(t1, f)
+# # APPL stock has all the datetime rows
+# path = '../stocks_data/AAPL.csv'
+# df = pd.read_csv(path)
+# t1 = pd.Series()
+# tmp = df['datetime'].shift(-1).dropna()
+# tmp = pd.to_datetime(tmp)
+# # last date
+# result = tmp.iloc[-1] + pd.DateOffset(days=5) + pd.tseries.offsets.BMonthEnd(1)
+# tmp = pd.concat([tmp, pd.Series([result])], ignore_index=True)
+# t1 = tmp
+# # index as first business day of the following month
+# t1.index = pd.to_datetime(df['datetime']) + pd.DateOffset(days=5) - pd.tseries.offsets.BMonthBegin(1)
+# # save t1
+# with open('../objects/t1.pkl', 'wb') as f:
+#     pickle.dump(t1, f)
+    
+    
+#%%
+
+# Add two columns
+# 't1_index' which is the first business day of the current month
+# 't1' which is the last business day of the current month
+
+# Loop through each CSV file
+for file_name in csv_files:
+    file_path = os.path.join(stocks_data_dir, file_name)
+    
+    # Read the CSV file into a DataFrame
+    df = pd.read_csv(file_path, index_col='datetime', parse_dates=True)
+    
+    df['t1']=df.index
+    
+    # 't1_index' which is the first business day of the current month
+    df['t1_index'] = df.index - pd.tseries.offsets.BMonthBegin(1)
+    
+    df.to_csv(file_path)
+
+    
+
     
 #%%
 
@@ -411,7 +435,7 @@ causal_dataset.to_pickle('../objects/causal_dataset.pkl')
 # FOR PREDICTION TASK
 
 X_DATASET = FULL_stacked_data[features_list + added_features]
-relevant_targets = ['stock_exret', 'target', 'prediction', 'probability']
+relevant_targets = ['stock_exret', 'target', 'prediction', 'probability', 't1', 't1_index', 'weight_attr']
 Y_DATASET = FULL_stacked_data[relevant_targets]
 WEIGHT_SAMPLING = FULL_stacked_data['weight_attr']
 
