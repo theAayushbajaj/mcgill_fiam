@@ -152,7 +152,7 @@ for file_name in csv_files:
 
 
 #%%
-# Add the 'target' column to each stock CSV file
+# Add the 'target' predictions column to each stock CSV file
 # WILL BE OVERWITTEN BY 04-PREDICTOR
 
 # Loop through each CSV file

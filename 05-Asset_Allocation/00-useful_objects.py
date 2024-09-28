@@ -99,3 +99,27 @@ for file_name in tqdm(csv_files):
 with open('../objects/market_caps.pkl', 'wb') as f:
     pickle.dump(market_caps, f)
 # %%
+
+# create a dataframe of stockexret for all stocks
+# Save it in \objects folder as stockexret.pkl
+
+# start with APPL since it has all the datetime rows
+path = '../stocks_data/AAPL.csv'
+df = pd.read_csv(path)
+stockexret = pd.DataFrame()
+stockexret.index = pd.to_datetime(df['datetime'])
+
+# Loop through each CSV file
+for file_name in tqdm(csv_files):
+    file_path = os.path.join(stocks_data_dir, file_name)
+    
+    # Read the CSV file into a DataFrame
+    df = pd.read_csv(file_path, index_col='datetime', parse_dates=True)
+    
+    # Add the 'stockexret' column to the stockexret DataFrame
+    stockexret[file_name] = df['stock_exret']
+    
+# Save the stockexret DataFrame
+with open('../objects/stockexret.pkl', 'wb') as f:
+    pickle.dump(stockexret, f)
+# %%

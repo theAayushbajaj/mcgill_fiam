@@ -4,28 +4,42 @@ import pandas as pd
 from hrp import *
 from hrpBL import *
 
-def asset_allocator(start_date, end_date, prices, signals, market_caps_df, lambda_=0.5):
+
+def asset_allocator(
+    start_date=0,
+    end_date=None,
+    prices=None,
+    signals=None,
+    market_caps_df=None,
+    lambda_=0.5,
+    tau=1.0,
+):
     """
     Inputs :
     - Start Date
-    - End Date
+    - End Date # THIS IS THE DATE WE ARE MAKING THE PREDICTIONS FOR
     - prices : pd.DataFrame : to compute returns and then covariance matrix
     - signals : A pandas datafram of signals (predictions and probabilities)
     Should have the same columns as prices
-    We'll need a function to gather the signals (simply the predictions and 
+    We'll need a function to gather the signals (simply the predictions and
     probabilities columns at row End Date)
-    
+
     Outputs :
     Dataframe of weights, with the same columns as prices
     """
+
+    # For debugging
+    print("Lambda: ", lambda_)
+    print("Tau: ", tau)
+
     # Initialize the weights to return
     weights = pd.DataFrame(index=prices.columns)
-    weights['Weight'] = 0.0
-    
+    weights["Weight"] = 0.0
+
     # Step 0) Adjust the prices to the start and end date
     # Index in terms of months
-    prices = prices[start_date:end_date+1]
-    
+    prices = prices[start_date : end_date + 1]
+
     # Step 1) Stock Selection
     # Select the top 100 stocks based on the absolute value of the signal
     signals_end = signals.iloc[end_date]
@@ -42,25 +56,29 @@ def asset_allocator(start_date, end_date, prices, signals, market_caps_df, lambd
     # Filter the data to only include the selected stocks
     prices = prices[selected_stocks]
     market_caps_df = market_caps_df[selected_stocks]
-    
+
     # Step 2) Compute the covariance matrix
     # Covariance matrix using Ledoit-Wolf shrinkage
     returns = prices.pct_change().dropna()
     lw = LedoitWolf()
     shrunk_cov_matrix = lw.fit(returns).covariance_
-    cov = pd.DataFrame(shrunk_cov_matrix, index=selected_stocks, columns=selected_stocks)
-    
+    cov = pd.DataFrame(
+        shrunk_cov_matrix, index=selected_stocks, columns=selected_stocks
+    )
+
     # Step 3) Market-implied returns
     # Extract market capitalizations
     market_caps = market_caps_df.iloc[end_date]
     # Normalize to get market weights
     market_weights = market_caps / market_caps.sum()
+    print("Market Weights:")
+    print(market_weights)
 
     # Use these weights to compute market-implied returns
     delta = 2.5  # Risk aversion coefficient (common default)
     pi = get_market_implied_returns(cov, market_weights, delta)
     pi = pd.Series(pi, index=selected_stocks)
-    
+
     # Step 4) Incorporate views from signals
     volatility = returns.std()
     Q = signals_end * volatility * lambda_
@@ -68,30 +86,41 @@ def asset_allocator(start_date, end_date, prices, signals, market_caps_df, lambd
     # Define P (Identity matrix for individual asset views)
     P = np.eye(len(selected_stocks))
 
-    # Construct Omega, the diagonal covariance matrix of the error terms in the views
-    # Confidence levels are between 0 and 1
-    confidence_levels = signals_end.abs()
-    # Ensure confidence levels are not exactly 0 to avoid division by zero
-    confidence_levels = confidence_levels.replace(0, 1e-6)
-    # Calculate the variance of each view
-    tau = 0.05  # Scaling factor for uncertainty in the prior estimate
-    diag_cov = np.diag(cov)
-    Omega_values = ((1 - confidence_levels) / confidence_levels) * tau * diag_cov
-    # Handle infinite or NaN values
-    Omega_values = np.where(np.isfinite(Omega_values), Omega_values, 1e6)
+    # Extract probabilities and directions from signals
+    # Assuming signals are probabilities times direction (-1 or 1)
+    probabilities = signals_end.abs()
+    # Ensure probabilities are within (0, 1)
+    probabilities = probabilities.clip(1e-6, 1 - 1e-6)
+    print("Probabilities:")
+    print(probabilities)
+
+    # Compute Omega as variance of Bernoulli distribution
+    # tau is a scaling parameter to ensure that the views are not too strong
+    # The higher the tau, the more weight is given to the prior
+    Omega_values = probabilities * (1 - probabilities)
+    print("Omega:")
+    print(Omega_values)
+    # Set a minimum variance to avoid zeros
+    min_variance = 1e-6
+    Omega_values = np.maximum(Omega_values, min_variance)
     Omega = np.diag(Omega_values)
-    
+    print("Omega Updated:")
+    print(Omega)
+
     # Step 5) Black-Litterman
     posterior_mean, posterior_cov = black_litterman(cov, pi, P, Q, Omega, tau=tau)
     posterior_mean = pd.Series(posterior_mean, index=selected_stocks)
-    posterior_cov = pd.DataFrame(posterior_cov, index=selected_stocks, columns=selected_stocks)
-    
+    posterior_cov = pd.DataFrame(
+        posterior_cov, index=selected_stocks, columns=selected_stocks
+    )
+
     # Ensure posterior covariance matrix is positive definite
     # Add a small value to the diagonal if necessary
     min_eigenvalue = np.min(np.linalg.eigvals(posterior_cov))
     if min_eigenvalue < 0:
+        print("Adding small value to diagonal of posterior covariance matrix.")
         posterior_cov += np.eye(len(posterior_cov)) * (-min_eigenvalue + 1e-6)
-        
+
     # Step 6) Hierarchical Risk Parity (HRP)
     # Reconstruct the correlation matrix from the posterior covariance matrix
     std_devs = np.sqrt(np.diag(posterior_cov))
@@ -102,25 +131,26 @@ def asset_allocator(start_date, end_date, prices, signals, market_caps_df, lambd
     # Ensure values are within [-1, 1]
     corr = np.clip(corr, -1, 1)
     # Set diagonal elements to 1
-    np.fill_diagonal(corr, 1.0)
+    corr.values[range(corr.shape[0]), range(corr.shape[1])] = 1.0
     corr = pd.DataFrame(corr, index=selected_stocks, columns=selected_stocks)
 
     # Now compute the distance matrix
     dist = correlDist(corr)
 
     # Check for NaNs in the distance matrix
-    if np.isnan(dist).any():
+    if np.isnan(dist.to_numpy()).any():
         print("NaNs detected in distance matrix.")
         # Investigate and handle NaNs
         # Replace NaNs with large distances to prevent clustering them together
         dist = np.nan_to_num(dist, nan=1e6)
+
     dist = pd.DataFrame(dist, index=selected_stocks, columns=selected_stocks)
 
     # Plot correlation matrix
-    plotCorrMatrix('HRP_BL_corr0.png', corr, labels=corr.columns)
+    # plotCorrMatrix('HRP_BL_corr0.png', corr, labels=corr.columns)
 
     # Cluster using hierarchical clustering
-    link = sch.linkage(dist, method='single')
+    link = sch.linkage(dist, method="single")
     sortIx = getQuasiDiag(link)
     sortIx = corr.index[sortIx].tolist()
 
@@ -129,30 +159,33 @@ def asset_allocator(start_date, end_date, prices, signals, market_caps_df, lambd
     corr_reordered = corr.loc[sortIx, sortIx]
 
     # Plot reordered correlation matrix
-    plotCorrMatrix('HRP_BL_corr1.png', corr_reordered, labels=corr_reordered.columns)
+    # plotCorrMatrix('HRP_BL_corr1.png', corr_reordered, labels=corr_reordered.columns)
 
     # Apply HRP with Black-Litterman posterior covariance
     hrp_weights = getRecBipart(cov_reordered, sortIx)
-    print("HRP Weights:")
-    print(hrp_weights)
-    print('Market exposure (sum of weights): ', hrp_weights.sum())
-    print('Sum of absolute values of weights: ', hrp_weights.abs().sum())
+    # print("HRP Weights:")
+    # print(hrp_weights)
+    # print('Market exposure (sum of weights): ', hrp_weights.sum())
+    # print('Sum of absolute values of weights: ', hrp_weights.abs().sum())
 
     # Assign the weights to the output DataFrame
-    weights.loc[hrp_weights.index, 'Weight'] = hrp_weights
+    weights.loc[hrp_weights.index, "Weight"] = hrp_weights
     print("Final Weights:")
     print(weights)
+
     return weights
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Load data
-    prices = pd.read_pickle('objects/prices.pkl')
-    signals = pd.read_pickle('objects/signals.pkl')
-    market_caps = pd.read_pickle('objects/market_caps.pkl')
+    prices = pd.read_pickle("objects/prices.pkl")
+    signals = pd.read_pickle("objects/signals.pkl")
+    market_caps = pd.read_pickle("objects/market_caps.pkl")
     start_date = 0
     end_date = 100
-    
+
     # Run the asset allocator
-    asset_allocator(start_date, end_date, prices, signals, market_caps)
-    
+    weights = asset_allocator(start_date, end_date, prices, signals, market_caps)
+    print("Market exposure (sum of weights): ", weights.sum())
+    print("Sum of absolute values of weights: ", weights.abs().sum())
+    print(weights)

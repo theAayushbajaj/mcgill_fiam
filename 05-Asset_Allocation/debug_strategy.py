@@ -5,9 +5,10 @@ import pandas as pd
 from hrp import *
 from hrpBL import *
 #%%
-def asset_allocator(start_date, end_date, prices, signals, market_caps_df, lambda_=0.5):
+def asset_allocator(start_date, end_date, prices, signals, market_caps_df, lambda_=0.5, tau = 1.0):
     #%%
     lambda_=0.5
+    tau = 1.0
     prices = pd.read_pickle('../objects/prices.pkl')
     signals = pd.read_pickle('../objects/signals.pkl')
     market_caps_df = pd.read_pickle('../objects/market_caps.pkl')
@@ -76,19 +77,18 @@ def asset_allocator(start_date, end_date, prices, signals, market_caps_df, lambd
 
     # Define P (Identity matrix for individual asset views)
     P = np.eye(len(selected_stocks))
-    #%%
 
-    # Construct Omega, the diagonal covariance matrix of the error terms in the views
-    # Confidence levels are between 0 and 1
-    confidence_levels = signals_end.abs()
-    # Ensure confidence levels are not exactly 0 to avoid division by zero
-    confidence_levels = confidence_levels.replace(0, 1e-6)
-    # Calculate the variance of each view
-    tau = 0.05  # Scaling factor for uncertainty in the prior estimate
-    diag_cov = np.diag(cov)
-    Omega_values = ((1 - confidence_levels) / confidence_levels) * tau * diag_cov
-    # Handle infinite or NaN values
-    Omega_values = np.where(np.isfinite(Omega_values), Omega_values, 1e6)
+    # Extract probabilities and directions from signals
+    # Assuming signals are probabilities times direction (-1 or 1)
+    probabilities = signals_end.abs()
+    # Ensure probabilities are within (0, 1)
+    probabilities = probabilities.clip(1e-6, 1 - 1e-6)
+
+    # Compute Omega as variance of Bernoulli distribution
+    Omega_values = tau * probabilities * (1 - probabilities)
+    # Set a minimum variance to avoid zeros
+    min_variance = 1e-6
+    Omega_values = np.maximum(Omega_values, min_variance)
     Omega = np.diag(Omega_values)
     
     # Step 5) Black-Litterman
@@ -100,8 +100,9 @@ def asset_allocator(start_date, end_date, prices, signals, market_caps_df, lambd
     # Add a small value to the diagonal if necessary
     min_eigenvalue = np.min(np.linalg.eigvals(posterior_cov))
     if min_eigenvalue < 0:
+        print("Adding small value to diagonal of posterior covariance matrix.")
         posterior_cov += np.eye(len(posterior_cov)) * (-min_eigenvalue + 1e-6)
-        
+    
     # Step 6) Hierarchical Risk Parity (HRP)
     # Reconstruct the correlation matrix from the posterior covariance matrix
     std_devs = np.sqrt(np.diag(posterior_cov))
@@ -119,18 +120,21 @@ def asset_allocator(start_date, end_date, prices, signals, market_caps_df, lambd
     dist = correlDist(corr)
 
     # Check for NaNs in the distance matrix
-    if np.isnan(dist).any():
+    if np.isnan(dist.to_numpy()).any():
         print("NaNs detected in distance matrix.")
         # Investigate and handle NaNs
         # Replace NaNs with large distances to prevent clustering them together
         dist = np.nan_to_num(dist, nan=1e6)
+        
     dist = pd.DataFrame(dist, index=selected_stocks, columns=selected_stocks)
 
     # Plot correlation matrix
-    plotCorrMatrix('HRP_BL_corr0.png', corr, labels=corr.columns)
+    # plotCorrMatrix('HRP_BL_corr0.png', corr, labels=corr.columns)
 
     # Cluster using hierarchical clustering
+    #%%
     link = sch.linkage(dist, method='single')
+    #%%
     sortIx = getQuasiDiag(link)
     sortIx = corr.index[sortIx].tolist()
 
@@ -139,18 +143,19 @@ def asset_allocator(start_date, end_date, prices, signals, market_caps_df, lambd
     corr_reordered = corr.loc[sortIx, sortIx]
 
     # Plot reordered correlation matrix
-    plotCorrMatrix('HRP_BL_corr1.png', corr_reordered, labels=corr_reordered.columns)
+    # plotCorrMatrix('HRP_BL_corr1.png', corr_reordered, labels=corr_reordered.columns)
 
     # Apply HRP with Black-Litterman posterior covariance
     hrp_weights = getRecBipart(cov_reordered, sortIx)
-    print("HRP Weights:")
-    print(hrp_weights)
-    print('Market exposure (sum of weights): ', hrp_weights.sum())
-    print('Sum of absolute values of weights: ', hrp_weights.abs().sum())
+    # print("HRP Weights:")
+    # print(hrp_weights)
+    # print('Market exposure (sum of weights): ', hrp_weights.sum())
+    # print('Sum of absolute values of weights: ', hrp_weights.abs().sum())
 
     # Assign the weights to the output DataFrame
     weights.loc[hrp_weights.index, 'Weight'] = hrp_weights
-    print("Final Weights:")
-    print(weights)
+    # print("Final Weights:")
+    # print(weights)
+    #%%
     return weights
 # %%
