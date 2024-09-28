@@ -358,12 +358,9 @@ def plotFeatImportance(pathOut, imp, oob, oos, method, tag=0, simNum=0, **kargs)
         + " | oos="
         + str(round(oos, 4))
     )
-    # mpl.saveﬁg(
-    #     pathOut + "featImportance_" + str(simNum) + f"{method}" + ".png", dpi=100
-    # )
-    # mpl.clf()
-    # mpl.close()
-    
-    # plot
-    mpl.show()
+    mpl.saveﬁg(
+        pathOut + "featImportance_" + str(simNum) + f"{method}" + ".png", dpi=100
+    )
+    mpl.clf()
+    mpl.close()
     return
