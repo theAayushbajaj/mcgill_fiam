@@ -221,6 +221,8 @@ stacked_data = pd.concat(dfs, ignore_index=True)
 stacked_data = stacked_data.sort_values(by='datetime')
 
 stacked_data
+# save the stacked data as pickle
+stacked_data.to_pickle('../objects/stacked_data.pkl')
 # %%
 
 # features
@@ -235,8 +237,6 @@ X_dataset = stacked_data[features_list]
 X_dataset.to_pickle('../objects/X_dataset.pkl')
 y_dataset = stacked_data['target']
 # %%
-stacked_data
-# save the stacked data as pickle
-stacked_data.to_pickle('../objects/stacked_data.pkl')
+
 
 # %%

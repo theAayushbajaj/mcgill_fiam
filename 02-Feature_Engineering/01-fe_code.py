@@ -375,3 +375,52 @@ for file_name in csv_files:
     # Save the updated DataFrame back to the CSV file
     df.to_csv(file_path)
 # %%
+
+# Stack all the CSV files into one DataFrame
+
+# Create an empty list to store the DataFrames
+dfs = []
+
+# Loop through each CSV file
+for file_name in tqdm(csv_files):
+    file_path = os.path.join(stocks_data_dir, file_name)
+    
+    # Read the CSV file into a DataFrame
+    df = pd.read_csv(file_path)
+    
+    # Append the DataFrame to the list
+    dfs.append(df)
+    
+# Concatenate all the DataFrames in the list
+FULL_stacked_data = pd.concat(dfs, ignore_index=True)
+FULL_stacked_data = FULL_stacked_data.sort_values(by='datetime')
+
+# features
+path = '../raw_data/factor_char_list.csv'
+features = pd.read_csv(path)
+features_list = features.values.ravel().tolist()
+
+# Added features
+added_features = ['log_diff', 'frac_diff', 'sadf']
+
+# FOR MOOSA
+causal_dataset = FULL_stacked_data[features_list + ['stock_exret']]
+# save the data as pickle
+causal_dataset.to_pickle('../objects/causal_dataset.pkl')
+
+# FOR PREDICTION TASK
+
+X_DATASET = FULL_stacked_data[features_list + added_features]
+relevant_targets = ['stock_exret', 'target', 'prediction', 'probability']
+Y_DATASET = FULL_stacked_data[relevant_targets]
+WEIGHT_SAMPLING = FULL_stacked_data['weight_attr']
+
+# to pickle
+X_DATASET.to_pickle('../objects/X_DATASET.pkl')
+Y_DATASET.to_pickle('../objects/Y_DATASET.pkl')
+WEIGHT_SAMPLING.to_pickle('../objects/WEIGHT_SAMPLING.pkl')
+# save the stacked data as pickle
+FULL_stacked_data.to_pickle('../objects/FULL_stacked_data.pkl')
+
+
+# %%
