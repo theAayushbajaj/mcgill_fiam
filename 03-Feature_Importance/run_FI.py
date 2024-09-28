@@ -1,3 +1,4 @@
+#%%
 import numpy as np
 import pandas as pd
 
@@ -23,6 +24,10 @@ path = '../raw_data/factor_char_list.csv'
 features = pd.read_csv(path)
 features_list = features.values.ravel().tolist()
 
+# We just want to do feature importance on given features
+X = X[features_list]
+X
+#%%
 def getCont(t1, dropped_indices=None):
     cont = pd.concat([t1['t1_index'], t1['t1'], t1['target'], t1['weight_attr']], axis=1, ignore_index=True)
     cont.rename(columns={cont.columns[0]: 't1_index', cont.columns[1]: 't1', cont.columns[2]: 'bin', cont.columns[3]: 'w'}, inplace=True)
@@ -71,6 +76,7 @@ def runFeatureImportance(data, case_tag):
         # Plot the feature importance using the provided function
         f_ch8.plotFeatImportance(pathOut='./', imp=imp, oob=oob, oos=oos, method=method, tag=case_tag, simNum=0)
 
+#%%
 # Remove NAs from X_dataset and run feature importance code
 X_clean = X.copy()
 
@@ -86,6 +92,7 @@ X_clean['datetime'] = cont.index
 X_clean.set_index('datetime', inplace=True)
 
 runFeatureImportance(X_clean, 'dropNA')
+#%%
 
 # -------------------------X--------------------------X------------------------X----------------- #
 
