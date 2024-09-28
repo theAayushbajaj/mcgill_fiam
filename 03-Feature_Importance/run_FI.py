@@ -15,37 +15,32 @@ from sklearn.metrics import accuracy_score
 import warnings
 warnings.filterwarnings('ignore')
 
-with open('../objects/X_dataset.pkl', 'rb') as f:
+with open('../objects/X_DATASET.pkl', 'rb') as f:
     X = pickle.load(f)
     
-with open('../objects/stacked_data.pkl', 'rb') as f:
-    stacked_data = pickle.load(f)
+with open('../objects/Y_DATASET.pkl', 'rb') as f:
+    t1 = pickle.load(f)
 
 path = '../raw_data/factor_char_list.csv'
 features = pd.read_csv(path)
 features_list = features.values.ravel().tolist()
 
-def getCont(stacked_data, dropped_indices=None):
-    cont = pd.concat([stacked_data['datetime'], stacked_data['target'], stacked_data['weight_attr']], axis=1, ignore_index=True)
-    cont.rename(columns={cont.columns[0]: 't1', cont.columns[1]: 'bin', cont.columns[2]: 'w'}, inplace=True)
-    
+def getCont(t1, dropped_indices=None):
+    cont = pd.concat([t1['t1_index'], t1['t1'], t1['target'], t1['weight_attr']], axis=1, ignore_index=True)
+    cont.rename(columns={cont.columns[0]: 't1_index', cont.columns[1]: 't1', cont.columns[2]: 'bin', cont.columns[3]: 'w'}, inplace=True)
+
     if dropped_indices is not None:
         cont = cont.drop(dropped_indices)
     
-    tmp = cont['t1'].shift(-1).dropna()
-    tmp = pd.to_datetime(tmp)
-    # last date
-    result = tmp.iloc[-1] + pd.DateOffset(days=5) + pd.tseries.offsets.BMonthEnd(1)
-    tmp = pd.concat([tmp, pd.Series([result])], ignore_index=True)
-    # index as first business day of the following month
-    # t1.index = pd.to_datetime(datetime) + pd.DateOffset(days=5) - pd.tseries.offsets.BMonthBegin(1)
-    cont.index = pd.to_datetime(cont['t1']) - pd.DateOffset(days=40) + pd.tseries.offsets.BMonthEnd(1)
-    
+    cont.set_index('t1_index', inplace=True)
+    cont['t1'] = pd.to_datetime(cont['t1'])
+    cont.index = pd.to_datetime(cont.index)
+
     cont['w'] *= cont.shape[0]/cont['w'].sum()
     
     return cont
 
-def runFeatureImportance(data):
+def runFeatureImportance(data, case_tag):
     # Bagging classifier on RF where max_samples is set to average uniqueness
     clf2 = RandomForestClassifier(
         n_estimators=1,  # 1 tree
@@ -76,7 +71,7 @@ def runFeatureImportance(data):
                                         pctEmbargo=pctEmbargo, method=method)
         
         # Plot the feature importance using the provided function
-        f_ch8.plotFeatImportance(pathOut='./', imp=imp, oob=oob, oos=oos, method=method, tag='test', simNum=0)
+        f_ch8.plotFeatImportance(pathOut='./', imp=imp, oob=oob, oos=oos, method=method, tag=case_tag, simNum=0)
 
 # Remove NAs from X_dataset and run feature importance code
 X_clean = X.copy()
@@ -88,11 +83,11 @@ print("Record count AFTER dropping NaN records: ", len(X_clean))
 # Get the indices that were dropped from X_clean
 dropped_indices = X.index.difference(X_clean.index)
 
-cont = getCont(stacked_data, dropped_indices)
+cont = getCont(t1, dropped_indices)
 X_clean['datetime'] = cont.index
 X_clean.set_index('datetime', inplace=True)
 
-runFeatureImportance(X_clean)
+runFeatureImportance(X_clean, 'dropNA')
 
 # -------------------------X--------------------------X------------------------X----------------- #
 
@@ -102,8 +97,8 @@ print('Number of rows with NaN records: ', X.isna().any(axis=1).sum())
 X.fillna(1e6, inplace=True)
 print('Number of NaN records after filling NaN values: ', X.isna().any(axis=1).sum())
 
-cont = getCont(stacked_data)
+cont = getCont(t1)
 X['datetime'] = cont.index
 X.set_index('datetime', inplace=True)
 
-runFeatureImportance(X)
+runFeatureImportance(X, 'fillNA')

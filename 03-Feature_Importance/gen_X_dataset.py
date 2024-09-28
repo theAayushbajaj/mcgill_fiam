@@ -51,9 +51,6 @@ result = grouped.apply(apply_last_stock_ticker)
 #%%
 # Add the 'target' column to each stock CSV file
 
-# set the current working directory
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
-
 # Set the directory containing your stock CSV files
 stocks_data_dir = '../stocks_data'
 
@@ -201,16 +198,6 @@ for file_name in csv_files:
     # Save the updated DataFrame back to the CSV file
     df.to_csv(file_path)#%%
 
-# Add the 'target' column to each stock CSV file
-
-# set the current working directory
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
-
-# Set the directory containing your stock CSV files
-stocks_data_dir = '../stocks_data'
-
-# Get a list of all CSV files in the directory
-csv_files = [f for f in os.listdir(stocks_data_dir) if f.endswith('.csv')]
 
 #%%
 
@@ -234,6 +221,8 @@ stacked_data = pd.concat(dfs, ignore_index=True)
 stacked_data = stacked_data.sort_values(by='datetime')
 
 stacked_data
+# save the stacked data as pickle
+stacked_data.to_pickle('../objects/stacked_data.pkl')
 # %%
 
 # features
@@ -248,8 +237,6 @@ X_dataset = stacked_data[features_list]
 X_dataset.to_pickle('../objects/X_dataset.pkl')
 y_dataset = stacked_data['target']
 # %%
-stacked_data
-# save the stacked data as pickle
-stacked_data.to_pickle('../objects/stacked_data.pkl')
+
 
 # %%

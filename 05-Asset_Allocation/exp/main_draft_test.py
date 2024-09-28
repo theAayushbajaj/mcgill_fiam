@@ -23,7 +23,14 @@ def asset_allocator():
 path = '../objects/prices.pkl'
 
 prices = pd.read_pickle(path)
-prices
+
+#%%
+# step 0
+# IF THERE ARE NO PREDICTIONS, RUN THIS, ELSE SKIPPPPPP
+if input('Do you want to add predictions to the stock data? (y/n)') == 'y':
+    import tmp_simualate_pred
+
+
 # %%
 
 # Step 1) Gather the returns

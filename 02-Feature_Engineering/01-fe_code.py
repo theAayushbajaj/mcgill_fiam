@@ -49,21 +49,45 @@ for file_name in csv_files:
 
 # Create t1 object, save it in \objects folder as t1.pkl
 
-# APPL stock has all the datetime rows
-path = '../stocks_data/AAPL.csv'
-df = pd.read_csv(path)
-t1 = pd.Series()
-tmp = df['datetime'].shift(-1).dropna()
-tmp = pd.to_datetime(tmp)
-# last date
-result = tmp.iloc[-1] + pd.DateOffset(days=5) + pd.tseries.offsets.BMonthEnd(1)
-tmp = pd.concat([tmp, pd.Series([result])], ignore_index=True)
-t1 = tmp
-# index as first business day of the following month
-t1.index = pd.to_datetime(df['datetime']) + pd.DateOffset(days=5) - pd.tseries.offsets.BMonthBegin(1)
-# save t1
-with open('../objects/t1.pkl', 'wb') as f:
-    pickle.dump(t1, f)
+# # APPL stock has all the datetime rows
+# path = '../stocks_data/AAPL.csv'
+# df = pd.read_csv(path)
+# t1 = pd.Series()
+# tmp = df['datetime'].shift(-1).dropna()
+# tmp = pd.to_datetime(tmp)
+# # last date
+# result = tmp.iloc[-1] + pd.DateOffset(days=5) + pd.tseries.offsets.BMonthEnd(1)
+# tmp = pd.concat([tmp, pd.Series([result])], ignore_index=True)
+# t1 = tmp
+# # index as first business day of the following month
+# t1.index = pd.to_datetime(df['datetime']) + pd.DateOffset(days=5) - pd.tseries.offsets.BMonthBegin(1)
+# # save t1
+# with open('../objects/t1.pkl', 'wb') as f:
+#     pickle.dump(t1, f)
+    
+    
+#%%
+
+# Add two columns
+# 't1_index' which is the first business day of the current month
+# 't1' which is the last business day of the current month
+
+# Loop through each CSV file
+for file_name in csv_files:
+    file_path = os.path.join(stocks_data_dir, file_name)
+    
+    # Read the CSV file into a DataFrame
+    df = pd.read_csv(file_path, index_col='datetime', parse_dates=True)
+    
+    df['t1']=df.index
+    
+    # 't1_index' which is the first business day of the current month
+    df['t1_index'] = df.index - pd.tseries.offsets.BMonthBegin(1)
+    
+    df.to_csv(file_path)
+
+    
+
     
 #%%
 
@@ -96,28 +120,28 @@ for file_name in csv_files:
 
 # %%
 
-# Create a dataframe of prices for all stocks
-# Save it in \objects folder as prices.pkl
+# # Create a dataframe of prices for all stocks
+# # Save it in \objects folder as prices.pkl
 
-# start with APPL since it has all the datetime rows
-path = '../stocks_data/AAPL.csv'
-df = pd.read_csv(path)
-prices = pd.DataFrame()
-prices.index = pd.to_datetime(df['datetime'])
+# # start with APPL since it has all the datetime rows
+# path = '../stocks_data/AAPL.csv'
+# df = pd.read_csv(path)
+# prices = pd.DataFrame()
+# prices.index = pd.to_datetime(df['datetime'])
 
-# Loop through each CSV file
-for file_name in tqdm(csv_files):
-    file_path = os.path.join(stocks_data_dir, file_name)
+# # Loop through each CSV file
+# for file_name in tqdm(csv_files):
+#     file_path = os.path.join(stocks_data_dir, file_name)
     
-    # Read the CSV file into a DataFrame
-    df = pd.read_csv(file_path, index_col='datetime', parse_dates=True)
+#     # Read the CSV file into a DataFrame
+#     df = pd.read_csv(file_path, index_col='datetime', parse_dates=True)
     
-    # Add the 'adj_price' column to the prices DataFrame
-    prices[file_name] = df['adj_price']
+#     # Add the 'adj_price' column to the prices DataFrame
+#     prices[file_name] = df['adj_price']
     
-# Save the prices DataFrame
-with open('../objects/prices.pkl', 'wb') as f:
-    pickle.dump(prices, f)
+# # Save the prices DataFrame
+# with open('../objects/prices.pkl', 'wb') as f:
+#     pickle.dump(prices, f)
 
 
 
@@ -149,6 +173,28 @@ for file_name in csv_files:
     # Save the updated DataFrame back to the CSV file (or to a new file)
     df.to_csv(file_path)
 # %%
+
+
+#%%
+# Add the 'target' predictions column to each stock CSV file
+# WILL BE OVERWITTEN BY 04-PREDICTOR
+
+# Loop through each CSV file
+for file_name in csv_files:
+    file_path = os.path.join(stocks_data_dir, file_name)
+    
+    # Read the CSV file into a DataFrame
+    df = pd.read_csv(file_path)
+    
+    # ['prediction', 'probability']
+    # add column, prediction, random number from -1, 1
+    df['prediction'] = np.random.uniform(-1, 1, df.shape[0])
+    df['probability'] = np.abs(df['prediction'])
+    df['prediction'] = np.sign(df['prediction'])
+    
+    df.to_csv(file_path, index=False)
+    
+#%%
 
 # Fractionally Differentiated Price as a Feature
 
@@ -220,23 +266,7 @@ for file_name in tqdm(csv_files):
     df['frac_diff'] = df['frac_diff'].fillna(0)
     df.to_csv(file_path)
     
-# %%
 
-# Missing Values
-# Fill missing values with the previous value
-# Loop through each CSV file
-
-for file_name in csv_files:
-    file_path = os.path.join(stocks_data_dir, file_name)
-    
-    # Read the CSV file into a DataFrame
-    df = pd.read_csv(file_path, index_col='datetime', parse_dates=True)
-    
-    # Fill missing values with the previous value
-    df.fillna(method='ffill', axis=0, inplace=True)
-    
-    # Save the updated DataFrame back to the CSV file
-    df.to_csv(file_path)
 # %%
 
 # Structural Breaks
@@ -350,5 +380,71 @@ for file_name in tqdm(csv_files):
     df_with_sadf = df.join(sadf.set_index('date'), on='datetime')
     df_with_sadf['sadf'] = df_with_sadf['sadf'].fillna(0)
     df_with_sadf.to_csv(file_path)
+
+# %%
+
+# Missing Values
+# Fill missing values with the previous value
+# Loop through each CSV file
+
+for file_name in csv_files:
+    file_path = os.path.join(stocks_data_dir, file_name)
+    
+    # Read the CSV file into a DataFrame
+    df = pd.read_csv(file_path, index_col='datetime', parse_dates=True)
+    
+    # Fill missing values with the previous value
+    df.fillna(method='ffill', axis=0, inplace=True)
+    
+    # Save the updated DataFrame back to the CSV file
+    df.to_csv(file_path)
+# %%
+
+# Stack all the CSV files into one DataFrame
+
+# Create an empty list to store the DataFrames
+dfs = []
+
+# Loop through each CSV file
+for file_name in tqdm(csv_files):
+    file_path = os.path.join(stocks_data_dir, file_name)
+    
+    # Read the CSV file into a DataFrame
+    df = pd.read_csv(file_path)
+    
+    # Append the DataFrame to the list
+    dfs.append(df)
+    
+# Concatenate all the DataFrames in the list
+FULL_stacked_data = pd.concat(dfs, ignore_index=True)
+FULL_stacked_data = FULL_stacked_data.sort_values(by='datetime')
+
+# features
+path = '../raw_data/factor_char_list.csv'
+features = pd.read_csv(path)
+features_list = features.values.ravel().tolist()
+
+# Added features
+added_features = ['log_diff', 'frac_diff', 'sadf']
+
+# FOR MOOSA
+causal_dataset = FULL_stacked_data[features_list + ['stock_exret']]
+# save the data as pickle
+causal_dataset.to_pickle('../objects/causal_dataset.pkl')
+
+# FOR PREDICTION TASK
+
+X_DATASET = FULL_stacked_data[features_list + added_features]
+relevant_targets = ['stock_exret', 'target', 'prediction', 'probability', 't1', 't1_index', 'weight_attr']
+Y_DATASET = FULL_stacked_data[relevant_targets]
+WEIGHT_SAMPLING = FULL_stacked_data['weight_attr']
+
+# to pickle
+X_DATASET.to_pickle('../objects/X_DATASET.pkl')
+Y_DATASET.to_pickle('../objects/Y_DATASET.pkl')
+WEIGHT_SAMPLING.to_pickle('../objects/WEIGHT_SAMPLING.pkl')
+# save the stacked data as pickle
+FULL_stacked_data.to_pickle('../objects/FULL_stacked_data.pkl')
+
 
 # %%

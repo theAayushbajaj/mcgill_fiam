@@ -41,8 +41,8 @@ for file_name in csv_files:
     
 # %%
 
-path = '../stocks_data/AAPL_03783310_14593.csv'
-df_appl = pd.read_csv(path)
-df_appl[['stock_exret', 'probability']]
+# path = '../stocks_data/AAPL_03783310_14593.csv'
+# df_appl = pd.read_csv(path)
+# df_appl[['stock_exret', 'probability']]
 
 # %%
