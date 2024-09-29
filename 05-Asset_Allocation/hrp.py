@@ -1,3 +1,4 @@
+#%%
 import sys
 import os
 
@@ -21,6 +22,14 @@ def getClusterVar(cov,cItems):
     w_=getIVP(cov_).reshape(-1,1)
     cVar=np.dot(np.dot(w_.T,cov_),w_)[0,0]
     return cVar
+
+def getClusterMean(mu, cItems):
+    # Compute expected return per cluster
+    mu_ = mu.loc[cItems]
+    w_ = np.ones(len(mu_)) / len(mu_)  # Equal weights within the cluster
+    cMean = np.dot(w_, mu_)
+    return cMean
+
 #———————————————————————————————————————
 def getQuasiDiag(link):
     # Sort clustered items by distance
@@ -38,7 +47,26 @@ def getQuasiDiag(link):
         sortIx.index = range(sortIx.shape[0])  # re-index
     return sortIx.tolist()
 #———————————————————————————————————————
-def getRecBipart(cov, sortIx):
+# def getRecBipart(cov, sortIx):
+#     # Compute HRP alloc
+#     w = pd.Series(1, index=sortIx)
+#     cItems = [sortIx]  # initialize all items in one cluster
+#     while len(cItems) > 0:
+#         cItems = [i[j:k] for i in cItems for j, k in ((0, len(i) // 2), (len(i) // 2, len(i))) if len(i) > 1]  # bi-section
+#         for i in range(0, len(cItems), 2):  # parse in pairs
+#             cItems0 = cItems[i]  # cluster 1
+#             cItems1 = cItems[i + 1]  # cluster 2
+#             cVar0 = getClusterVar(cov, cItems0)
+#             cVar1 = getClusterVar(cov, cItems1)
+#             alpha = 1 - cVar0 / (cVar0 + cVar1)
+#             alpha = 2 * alpha - 1
+
+#             w[cItems0] *= alpha  # weight 1
+#             w[cItems1] *= 1 - alpha if alpha >= 0 else -1 - alpha  # weight 2
+#     # w/=w.abs().sum()
+#     return w
+
+def getRecBipart(cov, sortIx, mu):
     # Compute HRP alloc
     w = pd.Series(1, index=sortIx)
     cItems = [sortIx]  # initialize all items in one cluster
@@ -47,15 +75,22 @@ def getRecBipart(cov, sortIx):
         for i in range(0, len(cItems), 2):  # parse in pairs
             cItems0 = cItems[i]  # cluster 1
             cItems1 = cItems[i + 1]  # cluster 2
+            # Calculate cluster variances and expected returns
             cVar0 = getClusterVar(cov, cItems0)
             cVar1 = getClusterVar(cov, cItems1)
-            alpha = 1 - cVar0 / (cVar0 + cVar1)
-            alpha = 2 * alpha - 1
-
-            w[cItems0] *= alpha  # weight 1
-            w[cItems1] *= 1 - alpha if alpha >= 0 else -1 - alpha  # weight 2
-    w/=w.abs().sum()
+            cMean0 = getClusterMean(mu, cItems0)
+            cMean1 = getClusterMean(mu, cItems1)
+            # Calculate Sharpe ratios for clusters
+            sr0 = cMean0 /np.sqrt(cVar0) if cVar0 > 0 else 0
+            sr1 = cMean1 / np.sqrt(cVar1) if cVar1 > 0 else 0
+            
+            denom = abs(sr0) + abs(sr1)
+            # Allocate weights proportional to Sharpe ratios
+            alpha = sr1 / denom if denom != 0 else 0.5
+            w[cItems0] *= sr0/ denom
+            w[cItems1] *= sr1 / denom
     return w
+
 #———————————————————————————————————————
 def correlDist(corr):
     # A distance matrix based on correlation, where 0<=d[i,j]<=1

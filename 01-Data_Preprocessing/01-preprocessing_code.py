@@ -16,7 +16,7 @@ data = pd.read_csv("../raw_data/hackathon_sample_v2.csv")
 data["t1"] = pd.to_datetime(data["date"], format="%Y%m%d")
 
 # Define the minimum number of records required
-min_records = 180
+min_records = 120
 
 # Group by 'cusip' and 'permno', and order each group by 'year' and 'month'
 grouped = data.groupby(["cusip", "permno"], group_keys=False)

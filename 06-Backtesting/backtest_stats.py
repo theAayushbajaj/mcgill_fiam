@@ -146,28 +146,103 @@ def Performance_Benchmark(trading_log, benchmark):
 def Compute_Stats(returns):
     """
     Inputs : 
-    - pd.DataFrame with index as datetime64[ns], one column of returns
-    
+    - returns : pd.Series with index as datetime64[ns], one column of returns
+
     Outputs :
     - stats : dict : dictionary of statistics
-    
+
     """
     stats = {}
+    returns = returns.dropna()
     time_delta = returns.index[1] - returns.index[0]
-    # time_delta in year
+    # time_delta in years
     time_delta = time_delta.days / 365.25
-    
+
     # Cumulative return
     stats['Cumulative Return'] = (1 + returns).cumprod()
-    
-    
+    # Total return
+    stats['Total Return'] = stats['Cumulative Return'].iloc[-1] - 1
+    # Total periods
+    total_periods = len(returns)
+    # Total time in years
+    total_time = time_delta * total_periods
+    # Annualized Return
+    stats['Annualized Return'] = stats['Cumulative Return'].iloc[-1] ** (1 / total_time) - 1
+    # Annualized Volatility
+    # Assuming returns are periodic and annualized volatility is sqrt(number of periods per year) * std dev
+    # Number of periods per year
+    periods_per_year = 1 / time_delta
+    stats['Annualized Volatility'] = returns.std() * np.sqrt(periods_per_year)
+    # Sharpe Ratio
+    # Assuming risk-free rate is zero (since we are working with excess returns)
+    stats['Sharpe Ratio'] = stats['Annualized Return'] / stats['Annualized Volatility']
+    # Max Drawdown
+    # Compute drawdowns
+    cumulative = stats['Cumulative Return']
+    running_max = cumulative.cummax()
+    drawdown = (cumulative - running_max) / running_max
+    stats['Max Drawdown'] = drawdown.min()
+    # Calmar Ratio
+    stats['Calmar Ratio'] = stats['Annualized Return'] / abs(stats['Max Drawdown'])
+    return stats
 
 def Compute_IR(returns, benchmark):
-    pass
+    """
+    Computes the Information Ratio between returns and benchmark.
+    Inputs:
+    - returns : pd.Series : portfolio returns
+    - benchmark : pd.Series : benchmark returns
+    Output:
+    - Information Ratio : float
+    """
+    # Active return
+    active_return = returns - benchmark
+    # Mean of active return
+    mean_active_return = active_return.mean()
+    # Tracking error
+    tracking_error = active_return.std()
+    # Number of periods per year
+    time_delta = returns.index[1] - returns.index[0]
+    time_delta = time_delta.days / 365.25
+    periods_per_year = 1 / time_delta
+    # Annualized active return and tracking error
+    mean_active_return_annualized = mean_active_return * periods_per_year
+    tracking_error_annualized = tracking_error * np.sqrt(periods_per_year)
+    # Information Ratio
+    information_ratio = mean_active_return_annualized / tracking_error_annualized
+    return information_ratio
 
-def Compute_PSR(returns, benchmark):
-    pass
+def Compute_PSR(returns, benchmark=None):
+    """
+    Computes the Probabilistic Sharpe Ratio for the returns.
+    Inputs:
+    - returns : pd.Series : portfolio returns
+    - benchmark : not used
+    Output:
+    - PSR : float : Probabilistic Sharpe Ratio
+    """
+    from scipy.stats import norm
 
-def Plot_Cumulative(portfolio, benchmark):
-    pass
-    
+    returns = returns.dropna()
+    N = len(returns)
+    # Observed Sharpe Ratio
+    SR_obs = returns.mean() / returns.std()
+    # PSR assuming the reference Sharpe Ratio is zero
+    PSR = norm.cdf(SR_obs * np.sqrt(N))
+    return PSR
+
+def Plot_Cumulative(portfolio_cumulative, benchmark_cumulative):
+    """
+    Plots the cumulative returns of portfolio and benchmark.
+    Inputs:
+    - portfolio_cumulative : pd.Series : cumulative returns of the portfolio
+    - benchmark_cumulative : pd.Series : cumulative returns of the benchmark
+    """
+    plt.figure(figsize=(12,6))
+    plt.plot(portfolio_cumulative.index, portfolio_cumulative.values, label='Portfolio')
+    plt.plot(benchmark_cumulative.index, benchmark_cumulative.values, label='Benchmark')
+    plt.xlabel('Date')
+    plt.ylabel('Cumulative Return')
+    plt.title('Cumulative Return Comparison')
+    plt.legend()
+    plt.show()

@@ -2,6 +2,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from tqdm import tqdm
 
 import pickle
 from tqdm import tqdm
@@ -84,8 +85,8 @@ def backtest(
             for i in range(start_month_pred, len(excess_returns), rebalance_period)
         ]
 
-        # As each future completes, update the weights dataframe
-        for future in as_completed(futures):
+        # As each future completes, update the weights dataframe with a progress bar
+        for future in tqdm(as_completed(futures), total=len(futures), desc="Backtesting"):
             i, weights = future.result()
             weights_df.iloc[i] = weights
 
@@ -124,15 +125,18 @@ if __name__ == "__main__":
     benchmark_df['t1'] = pd.to_datetime(benchmark_df['t1'])
     benchmark_df['t1_index'] = pd.to_datetime(benchmark_df['t1_index'])
     kwargs = {
-        "lambda_": 1.0,
-        "tau": 1.0,
+        "pred_vol_scale": 0.5,
+        "tau": 0.5, # the higher tau, the more weight is given to predictions
         "prices": prices,
         "signals": signals,
         "market_caps_df": market_caps_df,
+        "BL": True,
+        "LW": True,
+        "N_Stocks":100,
     }
     rebalance_period = 1
     strategy = strat.asset_allocator
-    start_month_pred = 200
+    start_month_pred = 100
     #%%
 
     weights = backtest(
@@ -145,8 +149,10 @@ if __name__ == "__main__":
     # Number of non 0 columns per row in weights
     print(weights.astype(bool).sum(axis=1).value_counts())
     #%%
-    weights
+    # weights
     # %%
     weights = weights.iloc[start_month_pred:]
     excess_returns = excess_returns.iloc[start_month_pred:]
-    Trading_Stats, TradingLog_Stats = stats(weights, excess_returns)
+    Trading_Stats, TradingLog_Stats = stats(weights, excess_returns, benchmark_df)
+
+# %%
