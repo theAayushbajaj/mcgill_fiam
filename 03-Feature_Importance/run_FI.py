@@ -92,6 +92,7 @@ dropped_indices = X.index.difference(X_clean.index)
 cont = getCont(t1, dropped_indices)
 X_clean['datetime'] = cont.index
 X_clean.set_index('datetime', inplace=True)
+#%%
 
 runFeatureImportance(X_clean, 'dropNA')
 #%%

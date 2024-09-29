@@ -77,7 +77,7 @@ for file_name in csv_files:
     file_path = os.path.join(stocks_data_dir, file_name)
     
     # Read the CSV file into a DataFrame
-    df = pd.read_csv(file_path, index_col='datetime', parse_dates=True)
+    df = pd.read_csv(file_path, index_col='t1', parse_dates=True)
     
     df['t1']=df.index
     
@@ -100,7 +100,7 @@ for file_name in csv_files:
     file_path = os.path.join(stocks_data_dir, file_name)
     
     # Read the CSV file into a DataFrame
-    df = pd.read_csv(file_path, index_col='datetime', parse_dates=True)
+    df = pd.read_csv(file_path, index_col='t1', parse_dates=True)
     
     # Calculate the total return
     df['total_return'] = df['stock_exret'] + df['rf']
@@ -159,7 +159,7 @@ for file_name in csv_files:
     file_path = os.path.join(stocks_data_dir, file_name)
     
     # Read the CSV file into a DataFrame
-    df = pd.read_csv(file_path, index_col='datetime', parse_dates=True)
+    df = pd.read_csv(file_path, index_col='t1', parse_dates=True)
     df['log_price'] = df['adj_price'].apply(lambda x: 0 if x == 0 else np.log(x))
     
     # Calculate the log-diff column
@@ -258,7 +258,7 @@ def findMinFFD(df, col_name = 'adj_price'):
 for file_name in tqdm(csv_files):
     file_path = os.path.join(stocks_data_dir, file_name)
     
-    df = pd.read_csv(file_path, index_col='datetime', parse_dates=True)
+    df = pd.read_csv(file_path, index_col='t1', parse_dates=True)
     d_frac = findMinFFD(df)
     col = 'log_price'
     frac_diff = fracDiff_FFD(df[[col]], d=d_frac, thres=0.01)
@@ -371,13 +371,13 @@ def get_sadf(logP, minSL, constant, lags):
 for file_name in tqdm(csv_files):
     file_path = os.path.join(stocks_data_dir, file_name)
     
-    df = pd.read_csv(file_path, index_col='datetime', parse_dates=True)
+    df = pd.read_csv(file_path, index_col='t1', parse_dates=True)
     col = 'log_price'
     sadf = get_sadf(df[col], 20, 'ct', 1)
     
     # Merge SADF values with the original DataFrame
     # Assuming 'sadf_result' is a DataFrame with 'Date' as the index
-    df_with_sadf = df.join(sadf.set_index('date'), on='datetime')
+    df_with_sadf = df.join(sadf.set_index('date'), on='t1')
     df_with_sadf['sadf'] = df_with_sadf['sadf'].fillna(0)
     df_with_sadf.to_csv(file_path)
 
@@ -391,7 +391,7 @@ for file_name in csv_files:
     file_path = os.path.join(stocks_data_dir, file_name)
     
     # Read the CSV file into a DataFrame
-    df = pd.read_csv(file_path, index_col='datetime', parse_dates=True)
+    df = pd.read_csv(file_path, index_col='t1', parse_dates=True)
     
     # Fill missing values with the previous value
     df.fillna(method='ffill', axis=0, inplace=True)
@@ -417,7 +417,7 @@ for file_name in tqdm(csv_files):
     
 # Concatenate all the DataFrames in the list
 FULL_stacked_data = pd.concat(dfs, ignore_index=True)
-FULL_stacked_data = FULL_stacked_data.sort_values(by='datetime')
+FULL_stacked_data = FULL_stacked_data.sort_values(by='t1')
 
 # features
 path = '../raw_data/factor_char_list.csv'
