@@ -1,4 +1,5 @@
 ## Requires - pip install avici
+## pip install networkx
 
 import avici
 import pandas as pd
@@ -10,7 +11,7 @@ from pgmpy.models import BayesianNetwork
 
 model = avici.load_pretrained(download="scm-v0")
 
-df = pd.read_pickle('../object/causa_dataset.pkl')
+df = pd.read_pickle('../object/causal_dataset.pkl')
 df = df.dropna()
 x = df.to_numpy().astype(np.float32)
 
@@ -67,6 +68,9 @@ for feature in variables:
         print(f"Feature '{feature}' may have a spurious correlation with '{target_variable}' due to backdoor paths.")
     elif not causal_paths and not backdoor_paths:
         print(f"No paths found between '{feature}' and '{target_variable}'. They may be independent.")
+
+#save g_prob
+np.save('../objects/g_prob.npy', g_prob)
 
 # for var in variables:
 #     cond_set = [v for v in variables if v != var]
