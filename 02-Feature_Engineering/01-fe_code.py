@@ -428,7 +428,7 @@ features_list = features.values.ravel().tolist()
 added_features = ['log_diff', 'frac_diff', 'sadf']
 
 # FOR MOOSA
-causal_dataset = FULL_stacked_data[features_list + ['stock_exret']]
+causal_dataset = FULL_stacked_data[features_list + ['target']]
 # save the data as pickle
 causal_dataset.to_pickle('../objects/causal_dataset.pkl')
 
