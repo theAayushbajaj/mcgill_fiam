@@ -125,8 +125,8 @@ if __name__ == "__main__":
     benchmark_df['t1'] = pd.to_datetime(benchmark_df['t1'])
     benchmark_df['t1_index'] = pd.to_datetime(benchmark_df['t1_index'])
     kwargs = {
-        "pred_vol_scale": 0.5,
-        "tau": 0.5, # the higher tau, the more weight is given to predictions
+        "pred_vol_scale": 0.50,
+        "tau": 0.50, # the higher tau, the more weight is given to predictions
         "prices": prices,
         "signals": signals,
         "market_caps_df": market_caps_df,
@@ -136,7 +136,7 @@ if __name__ == "__main__":
     }
     rebalance_period = 1
     strategy = strat.asset_allocator
-    start_month_pred = 100
+    start_month_pred = 200
     #%%
 
     weights = backtest(

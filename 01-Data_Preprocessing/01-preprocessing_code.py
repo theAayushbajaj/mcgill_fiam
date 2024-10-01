@@ -51,8 +51,7 @@ mkt_ind["t1"] = pd.to_datetime(
     mkt_ind[["year", "month"]].assign(day=1), format="%Y%m%d"
 ) + pd.tseries.offsets.BMonthEnd(1)
 mkt_ind["t1_index"]  = mkt_ind["t1"] - pd.tseries.offsets.BMonthBegin(1)
-mkt_ind
-#%%
+
 
 # Save the DataFrame as a CSV file
 mkt_ind.to_csv("../objects/mkt_ind.csv", index=False)

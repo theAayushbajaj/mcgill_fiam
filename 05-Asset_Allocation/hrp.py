@@ -47,26 +47,7 @@ def getQuasiDiag(link):
         sortIx.index = range(sortIx.shape[0])  # re-index
     return sortIx.tolist()
 #———————————————————————————————————————
-# def getRecBipart(cov, sortIx):
-#     # Compute HRP alloc
-#     w = pd.Series(1, index=sortIx)
-#     cItems = [sortIx]  # initialize all items in one cluster
-#     while len(cItems) > 0:
-#         cItems = [i[j:k] for i in cItems for j, k in ((0, len(i) // 2), (len(i) // 2, len(i))) if len(i) > 1]  # bi-section
-#         for i in range(0, len(cItems), 2):  # parse in pairs
-#             cItems0 = cItems[i]  # cluster 1
-#             cItems1 = cItems[i + 1]  # cluster 2
-#             cVar0 = getClusterVar(cov, cItems0)
-#             cVar1 = getClusterVar(cov, cItems1)
-#             alpha = 1 - cVar0 / (cVar0 + cVar1)
-#             alpha = 2 * alpha - 1
-
-#             w[cItems0] *= alpha  # weight 1
-#             w[cItems1] *= 1 - alpha if alpha >= 0 else -1 - alpha  # weight 2
-#     # w/=w.abs().sum()
-#     return w
-
-def getRecBipart(cov, sortIx, mu):
+def getRecBipart(cov, sortIx, mu, risk_Averse=2):
     # Compute HRP alloc
     w = pd.Series(1, index=sortIx)
     cItems = [sortIx]  # initialize all items in one cluster
@@ -81,8 +62,8 @@ def getRecBipart(cov, sortIx, mu):
             cMean0 = getClusterMean(mu, cItems0)
             cMean1 = getClusterMean(mu, cItems1)
             # Calculate Sharpe ratios for clusters
-            sr0 = cMean0 /np.sqrt(cVar0) if cVar0 > 0 else 0
-            sr1 = cMean1 / np.sqrt(cVar1) if cVar1 > 0 else 0
+            sr0 = cMean0 /(np.sqrt(cVar0)) if cVar0 > 0 else 0
+            sr1 = cMean1 / (np.sqrt(cVar1)) if cVar1 > 0 else 0
             
             denom = abs(sr0) + abs(sr1)
             # Allocate weights proportional to Sharpe ratios
@@ -109,18 +90,6 @@ def plotCorrMatrix(path,corr,labels=None):
     mpl.saveﬁg(path)
     mpl.clf();mpl.close() # reset pylab
     return
-#———————————————————————————————————————
-# def generateData(nObs,size0,size1,sigma1):
-#     # Time series of correlated variables
-#     #1) generating some uncorrelated data
-#     np.random.seed(seed=12345);random.seed(12345)
-#     x=np.random.normal(0,1,size=(nObs,size0)) # each row is a variable
-#     #2) creating correlation between the variables
-#     cols=[random.randint(0,size0–1) for i in xrange(size1)]
-#     y=x[:,cols]+np.random.normal(0,sigma1,size=(nObs,len(cols)))
-#     x=np.append(x,y,axis=1)
-#     x=pd.DataFrame(x,columns=range(1,x.shape[1]+1))
-#     return x,cols
 #———————————————————————————————————————
 def main():
     # LOAD /Users/paulkelendji/Desktop/GitHub_paul/mcgill_fiam/objects/prices.pkl

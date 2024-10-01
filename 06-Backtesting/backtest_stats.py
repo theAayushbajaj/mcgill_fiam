@@ -139,6 +139,7 @@ def Performance_Benchmark(trading_log, benchmark):
     print()
     print('Portfolio Stats :')
     print(Trading_Stats['Portfolio'])
+    print('Correlation between Portfolio and Benchmark :', Trading_Stats['Correlation'])
     
     return Trading_Stats
     

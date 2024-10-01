@@ -193,8 +193,8 @@ for file_name in csv_files:
     df['prediction'] = np.sign(df['prediction'])
     
     # BEST CASE SCENARIO
-    df['prediction'] = df['target']
-    df['probability'] = np.abs(df['target']) * 0.99
+    # df['prediction'] = df['target']
+    # df['probability'] = np.abs(df['target']) * 0.99
     
     df.to_csv(file_path, index=False)
     
@@ -430,6 +430,7 @@ features_list = features.values.ravel().tolist()
 
 # Added features
 added_features = ['log_diff', 'frac_diff', 'sadf']
+added_features = []
 
 # FOR MOOSA
 causal_dataset = FULL_stacked_data[features_list + ['target']]

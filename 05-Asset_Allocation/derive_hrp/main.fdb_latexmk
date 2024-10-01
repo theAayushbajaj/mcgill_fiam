@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1727625654.5487 "/Users/paulkelendji/Desktop/GitHub_paul/mcgill_fiam/05-Asset_Allocation/derive_hrp/main.tex" "main.pdf" "main" 1727625654.98917 0
-  "/Users/paulkelendji/Desktop/GitHub_paul/mcgill_fiam/05-Asset_Allocation/derive_hrp/main.tex" 1727625654.31052 9944 4907daed24824c938400f1bb3f2a4244 ""
+["pdflatex"] 1727744918.01897 "/Users/paulkelendji/Desktop/GitHub_paul/mcgill_fiam/05-Asset_Allocation/derive_hrp/main.tex" "main.pdf" "main" 1727744918.4471 0
+  "/Users/paulkelendji/Desktop/GitHub_paul/mcgill_fiam/05-Asset_Allocation/derive_hrp/main.tex" 1727744917.80793 9955 3e2762dd47da54e0830d6b47d14f5da1 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1246382020 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
@@ -55,8 +55,8 @@
   "/usr/local/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1727284097.41375 5467645 128b85b7cde5f5edc5cb7f1dd7ff8736 ""
   "/usr/local/texlive/2024/texmf-var/web2c/pdftex/pdflatex.fmt" 1727284013 8221426 a93726c4e7efea68059055f12c012e30 ""
   "/usr/local/texlive/2024/texmf.cnf" 1710266656 577 e590dabc9e28c5b61546e15f63eebcdf ""
-  "main.aux" 1727625654.94339 32 ab05033ccbb38b00a31b200ccedf8001 "pdflatex"
-  "main.tex" 1727625654.31052 9944 4907daed24824c938400f1bb3f2a4244 ""
+  "main.aux" 1727744918.40011 32 ab05033ccbb38b00a31b200ccedf8001 "pdflatex"
+  "main.tex" 1727744917.80793 9955 3e2762dd47da54e0830d6b47d14f5da1 ""
   (generated)
   "main.aux"
   "main.log"
