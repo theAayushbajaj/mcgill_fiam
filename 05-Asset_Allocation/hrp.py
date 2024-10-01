@@ -127,7 +127,7 @@ def main():
     #4) Capital allocation
     hrp=getRecBipart(cov,sortIx)
     print('Showing weights asociated with each ticker: ')
-    print(hrp)
+    # print(hrp)
     print('Market exposure : ', hrp.sum())
     print('Sum of absolute values of weights: ', hrp.abs().sum())
 #———————————————————————————————————————

@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+import statsmodels.formula.api as sm
+
 def get_trading_log(excess_returns, weights):
     """
     Inputs :
@@ -110,37 +112,54 @@ def get_TL_Stats(trading_log, weights):
     return Hit_Miss_Stats
     
     
-def Performance_Benchmark(trading_log, benchmark):
+def Performance_Benchmark(trading_log, benchmark, weights_df):
     Trading_Stats = {}
     portfolio_rets = trading_log.sum(axis=1)
     portfolio_rets = pd.DataFrame(portfolio_rets)
     portfolio_rets.reset_index(inplace=True)
-    
-    benchmark['exc_return'] = benchmark['sp_ret']-benchmark['rf']
+
+    benchmark['exc_return'] = benchmark['sp_ret'] - benchmark['rf']
     benchmark = benchmark[['t1', 'exc_return']]
     # create df as merge of portfolio_rets and benchmark with t1, t1 as index
     df = pd.merge(portfolio_rets, benchmark, on='t1')
     df.columns = ['t1', 'Portfolio', 'Benchmark']
     # set t1 as index
     df.set_index('t1', inplace=True)
-    
+
     # Now we have returns of each trade and benchmark, we can compute the stats
     Trading_Stats['Portfolio'] = Compute_Stats(df['Portfolio'])
     Trading_Stats['Benchmark'] = Compute_Stats(df['Benchmark'])
     Trading_Stats['Correlation'] = df['Portfolio'].corr(df['Benchmark'])
-    
-    Trading_Stats['Portfolio']['PSR'] = Compute_PSR(df['Portfolio'], df['Portfolio'])
+
+    Trading_Stats['Portfolio']['PSR'] = Compute_PSR(df['Portfolio'])
     Trading_Stats['Portfolio']['Information Ratio'] = Compute_IR(df['Portfolio'], df['Benchmark'])
+
+    # Compute Portfolio Turnover
+    Portfolio_Turnover = Compute_Portfolio_Turnover(weights_df)
+    Trading_Stats['Portfolio']['Portfolio Turnover'] = Portfolio_Turnover
     
+    # Compute Portfolio Alpha
+    Alpha = Compute_Portfolio_Alpha(df['Portfolio'], df['Benchmark'])
+    Trading_Stats['Portfolio']['Alpha'] = Alpha
+
     Plot_Cumulative(Trading_Stats['Portfolio']['Cumulative Return'], Trading_Stats['Benchmark']['Cumulative Return'])
-    
+
+    # Print Benchmark Stats
     print('Benchmark Stats :')
-    print(Trading_Stats['Benchmark'])
+    benchmark_stats = {k: v for k, v in Trading_Stats['Benchmark'].items() if k != 'Cumulative Return'}
+    for k, v in benchmark_stats.items():
+        print(f"{k}: {v:.4f}")
     print()
+
+    # Print Portfolio Stats
     print('Portfolio Stats :')
-    print(Trading_Stats['Portfolio'])
-    print('Correlation between Portfolio and Benchmark :', Trading_Stats['Correlation'])
+    portfolio_stats = {k: v for k, v in Trading_Stats['Portfolio'].items() if k != 'Cumulative Return'}
+    for k, v in portfolio_stats.items():
+        print(f"{k}: {v:.4f}")
     
+    # Print Correlation
+    print(f"Correlation between Portfolio and Benchmark: {Trading_Stats['Correlation']:.4f}")
+
     return Trading_Stats
     
     
@@ -155,9 +174,7 @@ def Compute_Stats(returns):
     """
     stats = {}
     returns = returns.dropna()
-    time_delta = returns.index[1] - returns.index[0]
-    # time_delta in years
-    time_delta = time_delta.days / 365.25
+    time_delta = 1/12  # Assuming monthly data
 
     # Cumulative return
     stats['Cumulative Return'] = (1 + returns).cumprod()
@@ -170,9 +187,8 @@ def Compute_Stats(returns):
     # Annualized Return
     stats['Annualized Return'] = stats['Cumulative Return'].iloc[-1] ** (1 / total_time) - 1
     # Annualized Volatility
-    # Assuming returns are periodic and annualized volatility is sqrt(number of periods per year) * std dev
     # Number of periods per year
-    periods_per_year = 1 / time_delta
+    periods_per_year = 1 / time_delta  # = 12
     stats['Annualized Volatility'] = returns.std() * np.sqrt(periods_per_year)
     # Sharpe Ratio
     # Assuming risk-free rate is zero (since we are working with excess returns)
@@ -185,6 +201,10 @@ def Compute_Stats(returns):
     stats['Max Drawdown'] = drawdown.min()
     # Calmar Ratio
     stats['Calmar Ratio'] = stats['Annualized Return'] / abs(stats['Max Drawdown'])
+    # Time Under Water
+    stats['Time Under Water'] = (drawdown < 0).sum() / len(drawdown)
+    # Maximum One-Month Loss
+    stats['Maximum One-Month Loss'] = returns.min()
     return stats
 
 def Compute_IR(returns, benchmark):
@@ -203,8 +223,7 @@ def Compute_IR(returns, benchmark):
     # Tracking error
     tracking_error = active_return.std()
     # Number of periods per year
-    time_delta = returns.index[1] - returns.index[0]
-    time_delta = time_delta.days / 365.25
+    time_delta = 1/12  # Assuming monthly data
     periods_per_year = 1 / time_delta
     # Annualized active return and tracking error
     mean_active_return_annualized = mean_active_return * periods_per_year
@@ -232,6 +251,25 @@ def Compute_PSR(returns, benchmark=None):
     PSR = norm.cdf(SR_obs * np.sqrt(N))
     return PSR
 
+def Compute_Portfolio_Turnover(weights_df):
+    """
+    Computes the Portfolio Turnover.
+    Inputs:
+    - weights_df : pd.DataFrame : portfolio weights over time
+    Output:
+    - turnover : float : annualized portfolio turnover
+    """
+    delta_weights = weights_df.diff()
+    # For each period, compute turnover as sum of absolute value of weight changes
+    turnover_per_period = delta_weights.abs().sum(axis=1)
+    # Average turnover per period
+    average_turnover = turnover_per_period.mean()
+    # Assuming periods are monthly
+    periods_per_year = 12
+    # Annualize turnover
+    annualized_turnover = average_turnover * periods_per_year
+    return annualized_turnover
+
 def Plot_Cumulative(portfolio_cumulative, benchmark_cumulative):
     """
     Plots the cumulative returns of portfolio and benchmark.
@@ -247,3 +285,19 @@ def Plot_Cumulative(portfolio_cumulative, benchmark_cumulative):
     plt.title('Cumulative Return Comparison')
     plt.legend()
     plt.show()
+
+def Compute_Portfolio_Alpha(returns, benchmark):
+    """
+    Computes the Portfolio Alpha.
+    Inputs:
+    - returns : pd.Series : portfolio excess returns
+    - benchmark : pd.Series : benchmark excess returns
+    Output:
+    - alpha : float : portfolio alpha
+    """
+    # Regression
+    model = sm.ols(formula='returns ~ benchmark', data=pd.DataFrame({'returns': returns, 'benchmark': benchmark}))
+    results = model.fit()
+    # Alpha
+    alpha = results.params['Intercept']
+    return alpha
