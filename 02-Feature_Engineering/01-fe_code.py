@@ -5,7 +5,8 @@ import os
 from tqdm import tqdm
 
 import pickle
-
+import warnings
+warnings.filterwarnings('ignore')
 
 
 #%%
@@ -33,7 +34,7 @@ for file_name in csv_files:
     # Check if 'stock_exret' column exists
     if 'stock_exret' in df.columns:
         # Create the 'target' column as the sign of 'stock_exret'
-        df['target'] = df['stock_exret'].apply(lambda x: 1 if x > 0 else (-1 if x < 0 else 0))
+        df['target'] = df['stock_exret'].apply(lambda x: 1 if x >= 0 else -1)
         
         # Save the updated DataFrame back to the CSV file (or to a new file)
         df.to_csv(file_path, index=False)
@@ -433,7 +434,7 @@ features_list = features.values.ravel().tolist()
 
 # Added features
 added_features = ['log_diff', 'frac_diff', 'sadf']
-added_features = []
+# added_features = []
 
 # FOR MOOSA
 causal_dataset = FULL_stacked_data[features_list + ['target']]
@@ -443,7 +444,7 @@ causal_dataset.to_pickle('../objects/causal_dataset.pkl')
 # FOR PREDICTION TASK
 
 X_DATASET = FULL_stacked_data[features_list + added_features]
-relevant_targets = ['stock_exret', 'target', 'prediction', 'probability', 't1', 't1_index', 'weight_attr']
+relevant_targets = ['stock_ticker', 'stock_exret', 'target', 'prediction', 'probability', 't1', 't1_index', 'weight_attr']
 Y_DATASET = FULL_stacked_data[relevant_targets]
 WEIGHT_SAMPLING = FULL_stacked_data['weight_attr']
 
