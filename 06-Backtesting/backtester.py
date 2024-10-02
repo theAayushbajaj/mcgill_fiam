@@ -2,6 +2,8 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from tqdm import tqdm
+
 
 import pickle
 from tqdm import tqdm
@@ -84,8 +86,10 @@ def backtest(
             for i in range(start_month_pred, len(excess_returns), rebalance_period)
         ]
 
-        # As each future completes, update the weights dataframe
-        for future in as_completed(futures):
+        # As each future completes, update the weights dataframe with a progress bar
+        for future in tqdm(
+            as_completed(futures), total=len(futures), desc="Backtesting"
+        ):
             i, weights = future.result()
             weights_df.iloc[i] = weights
 
@@ -97,13 +101,20 @@ def backtest(
     return weights_df
 
 
-def stats(weights_df, excess_returns_df, start_month_pred=100):
+def stats(weights_df, excess_returns_df, benchmark, start_month_pred=100):
     """
     Compute the backtest statistics, compare with S&P 500, and plot cumulative return over time.
     """
     trading_log = get_trading_log(excess_returns_df, weights_df)
-#%%
 
+    TradingLog_Stats = get_TL_Stats(trading_log, weights_df)
+
+    Trading_Stats = Performance_Benchmark(trading_log, benchmark, weights_df)
+
+    return Trading_Stats, TradingLog_Stats
+
+
+# %%
 
 
 if __name__ == "__main__":
@@ -112,17 +123,23 @@ if __name__ == "__main__":
     signals = pd.read_pickle("../objects/signals.pkl")
     market_caps_df = pd.read_pickle("../objects/market_caps.pkl")
     excess_returns = pd.read_pickle("../objects/stockexret.pkl")
+    benchmark_df = pd.read_csv("../objects/mkt_ind.csv")
+    benchmark_df["t1"] = pd.to_datetime(benchmark_df["t1"])
+    benchmark_df["t1_index"] = pd.to_datetime(benchmark_df["t1_index"])
     kwargs = {
-        "lambda_": 1.0,
-        "tau": 1.0,
+        "pred_vol_scale": 0.50,
+        "tau": 0.50,  # the higher tau, the more weight is given to predictions
         "prices": prices,
         "signals": signals,
         "market_caps_df": market_caps_df,
+        "BL": True,
+        "LW": True,
+        "N_Stocks": 100,
     }
     rebalance_period = 1
     strategy = strat.asset_allocator
-    start_month_pred = 200
-    #%%
+    start_month_pred = 100
+    # %%
 
     weights = backtest(
         excess_returns,
@@ -134,4 +151,19 @@ if __name__ == "__main__":
     # Number of non 0 columns per row in weights
     print(weights.astype(bool).sum(axis=1).value_counts())
     # %%
-    stats(weights, excess_returns)
+    # weights
+    # %%
+    weights = weights.iloc[start_month_pred:]
+    excess_returns = excess_returns.iloc[start_month_pred:]
+    Trading_Stats, TradingLog_Stats = stats(
+        weights, excess_returns, benchmark_df
+    )
+    
+    #%%
+    # Present your top 10 holdings on average over OOS testing period, 
+    # 01/2010 to 12/2023
+    print()
+    print("Top 10 Holdings on Average Over OOS Testing Period")
+    print(TradingLog_Stats['Stock']['Total'].sort_values(ascending = False).iloc[:10])
+
+# %%

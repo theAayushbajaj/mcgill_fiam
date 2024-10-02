@@ -1,0 +1,308 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+
+\title{HRP with Expected Returns}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{HRP}
+
+Stage 3 $Y_{\max}$ (see Section 16.4.3) splits a weight in inverse proportion to the subset’s variance. We now prove that such allocation is optimal when the covariance matrix is diagonal. Consider the standard quadratic optimization problem of size $N$,
+
+\[
+\min_{\omega} \omega' V \omega
+\]
+\[
+\text{s.t.} \ \omega' a = 1
+\]
+
+with solution $\omega = \frac{V^{-1} a}{a' V^{-1} a}$. For the characteristic vector $a = 1_N$, the solution is the minimum variance portfolio. If $V$ is diagonal, $\omega_n = \frac{V^{-1}_{n,n}}{\sum_{i=1}^{N} V^{-1}_{i,i}}$. In the particular case of $N = 2$,
+
+\[
+\omega_1 = \frac{1}{V_{1,1}} \left( \frac{1}{V_{1,1}} + \frac{1}{V_{2,2}} \right)^{-1} = 1 - \frac{V_{1,1}}{V_{1,1} + V_{2,2}},
+\]
+
+which is how stage 3 splits a weight between two bisections of a subset.
+
+\textbf{Proof.}
+
+We consider the optimization problem:
+
+\[
+\min_{\omega} \omega' V \omega
+\]
+\[
+\text{s.t.} \ \omega' a = 1
+\]
+
+where \( V \) is a symmetric positive-definite covariance matrix of size \( N \times N \), \( \omega \) is the vector of portfolio weights, and \( a = 1_N \) is a vector of ones.
+
+We can express the objective function as a \textit{Lagrangian}:
+
+$$
+\mathcal{L}(\omega, \lambda) = \omega' V \omega - \lambda (\omega' a - 1)
+$$
+
+where \( \lambda \) is the Lagrange multiplier. Let's solve for $w$:
+
+
+\begin{align*}
+\frac{\partial \mathcal{L}}{\partial \omega} 
+&= 0\\
+2V \omega - \lambda a &= 0\\
+V \omega &= \frac{\lambda}{2} a\\
+\omega &= \frac{1}{2} V^{-1} a \lambda && V \text{ is invertible}
+\end{align*}
+
+We apply the constraint \( \omega' a = 1 \) to solve for \( \lambda \):
+
+\begin{align*}
+\omega' a &= 1\\
+\left( \frac{1}{2} V^{-1} a \lambda \right)' a &= 1\\
+\frac{1}{2} \lambda a' V^{-1} a &= 1\\
+\lambda &= \frac{2}{a' V^{-1} a}
+\end{align*}
+
+Substitute \( \lambda \) back into the expression for \( \omega \):
+
+\begin{align*}
+\omega &= \frac{1}{2} V^{-1} a \frac{2}{a' V^{-1} a}\\
+&= \frac{V^{-1} a}{a' V^{-1} a}
+\end{align*}
+
+\smallskip
+
+\textbf{Special Case: Diagonal Covariance Matrix \( V \)}:
+
+   If \( V \) is diagonal, then \( V^{-1} \) is also diagonal with entries \( V^{-1}_{n,n} = \frac{1}{V_{n,n}} \). Therefore:
+
+   \[
+   V^{-1} a = \begin{pmatrix} \frac{1}{V_{1,1}} \\ \frac{1}{V_{2,2}} \\ \vdots \\ \frac{1}{V_{N,N}} \end{pmatrix}
+   \]
+
+   The denominator becomes:
+
+   \[
+   a' V^{-1} a = \sum_{i=1}^{N} \frac{1}{V_{i,i}}
+   \]
+
+   Hence, the optimal weights are:
+
+   \[
+   \omega_n = \frac{\frac{1}{V_{n,n}}}{\sum_{i=1}^{N} \frac{1}{V_{i,i}}}
+   \]
+
+   This shows that each weight \( \omega_n \) is inversely proportional to its variance \( V_{n,n} \).
+
+\textbf{Particular Case: \( N = 2 \):}
+
+   For \( N = 2 \), we have:
+
+   \[
+   \omega_1 = \frac{\frac{1}{V_{1,1}}}{\frac{1}{V_{1,1}} + \frac{1}{V_{2,2}}} = \frac{V_{2,2}}{V_{1,1} + V_{2,2}} = 1 - \frac{V_{1,1}}{V_{1,1} + V_{2,2}}
+   \]
+
+   Similarly,
+
+   \[
+   \omega_2 = \frac{\frac{1}{V_{2,2}}}{\frac{1}{V_{1,1}} + \frac{1}{V_{2,2}}} = \frac{V_{1,1}}{V_{1,1} + V_{2,2}}
+   \]
+
+   This demonstrates that when the covariance matrix is diagonal, the weight allocated to each asset is inversely proportional to its variance.
+
+\section*{HRP with Expected Returns, Long-Short, No Leverage}
+
+Now we want to solve the following optimization problem:
+
+\begin{align*}
+\max_{\omega} & \ \omega' \mu - \frac{\gamma}{2} \omega' V \omega\\
+\text{s.t.} & \ |\omega'| 1_N = 1, \
+\end{align*}
+
+where \( \mu \) is the vector of expected returns, and \( \gamma \) is the risk aversion parameter. The solution is given by:
+
+We can express the objective function as a \textit{Lagrangian}:
+
+$$
+\mathcal{L}(\omega, \lambda) = \omega' \mu - \frac{\gamma}{2} \omega' V \omega - \lambda (|\omega'| 1_N - 1)\\
+$$
+
+, let's solve for $w$:
+
+\begin{align*}
+\frac{\partial \mathcal{L}}{\partial \omega}
+&= 0\\
+\mu - \gamma V \omega - \text{sign}(\omega) \lambda &= 0 
+&& \text{where } \text{sign}(\omega) \text{ is a } Nx1 \text{vector of signs of } \omega\\
+\omega &= \frac{1}{\gamma} V^{-1} (\mu - \text{sign}(\omega) \lambda)
+\end{align*}
+
+
+
+\end{document}
+
+
+% \documentclass[12pt]{article}
+% \usepackage{amsmath}
+% \usepackage{amssymb}
+% \usepackage{amsfonts}
+% \usepackage{geometry}
+% \geometry{a4paper, margin=1in}
+
+% \title{HRP with Expected Returns}
+% \date{\today}
+
+% \begin{document}
+
+% \maketitle
+
+% Stage 3 (see Section 16.4.3) splits a weight in inverse proportion to the subset’s variance. We now prove that such allocation is optimal when the covariance matrix is diagonal. Consider the standard quadratic optimization problem of size $N$,
+
+% \[
+% \min_{\omega} \omega' V \omega
+% \]
+% \[
+% \text{s.t.} \ \omega' a = 1
+% \]
+
+% with solution $\omega = \frac{V^{-1} a}{a' V^{-1} a}$. For the characteristic vector $a = 1_N$, the solution is the minimum variance portfolio. If $V$ is diagonal, $\omega_n = \frac{V^{-1}_{n,n}}{\sum_{i=1}^{N} V^{-1}_{i,i}}$. In the particular case of $N = 2$,
+
+% \[
+% \omega_1 = \frac{1}{V_{1,1}} \left( \frac{1}{V_{1,1}} + \frac{1}{V_{2,2}} \right)^{-1} = 1 - \frac{V_{1,1}}{V_{1,1} + V_{2,2}},
+% \]
+
+% which is how stage 3 splits a weight between two bisections of a subset.
+
+% \textbf{Proof.}
+
+% We consider the optimization problem:
+
+% \[
+% \min_{\omega} \omega' V \omega
+% \]
+% \[
+% \text{s.t.} \ \omega' a = 1
+% \]
+
+% where \( V \) is a symmetric positive-definite covariance matrix of size \( N \times N \), \( \omega \) is the vector of portfolio weights, and \( a = 1_N \) is a vector of ones.
+
+% 1. **Set Up the Lagrangian:**
+
+%    The Lagrangian function for this constrained optimization problem is:
+
+%    \[
+%    \mathcal{L}(\omega, \lambda) = \omega' V \omega - \lambda (\omega' a - 1)
+%    \]
+
+% 2. **First-Order Conditions:**
+
+%    To find the minimum, we take the derivative of the Lagrangian with respect to \( \omega \) and set it to zero:
+
+%    \[
+%    \frac{\partial \mathcal{L}}{\partial \omega} = 2 V \omega - \lambda a = 0
+%    \]
+%    \[
+%    \Rightarrow V \omega = \frac{\lambda}{2} a
+%    \]
+
+% 3. **Solve for \( \omega \):**
+
+%    Multiplying both sides by \( V^{-1} \):
+
+%    \[
+%    \omega = \frac{\lambda}{2} V^{-1} a
+%    \]
+
+% 4. **Apply the Constraint to Find \( \lambda \):**
+
+%    Using the constraint \( \omega' a = 1 \):
+
+%    \[
+%    \omega' a = \left( \frac{\lambda}{2} V^{-1} a \right)' a = \frac{\lambda}{2} a' V^{-1} a = 1
+%    \]
+%    \[
+%    \Rightarrow \lambda = \frac{2}{a' V^{-1} a}
+%    \]
+
+% 5. **Express the Optimal Weights:**
+
+%    Substituting \( \lambda \) back into the expression for \( \omega \):
+
+%    \[
+%    \omega = \frac{V^{-1} a}{a' V^{-1} a}
+%    \]
+
+%    This is the general solution for the minimum variance portfolio, valid for any positive-definite covariance matrix \( V \).
+
+% 6. **Special Case: Diagonal Covariance Matrix \( V \):**
+
+%    If \( V \) is diagonal, then \( V^{-1} \) is also diagonal with entries \( V^{-1}_{n,n} = \frac{1}{V_{n,n}} \). Therefore:
+
+%    \[
+%    V^{-1} a = \begin{pmatrix} \frac{1}{V_{1,1}} \\ \frac{1}{V_{2,2}} \\ \vdots \\ \frac{1}{V_{N,N}} \end{pmatrix}
+%    \]
+
+%    The denominator becomes:
+
+%    \[
+%    a' V^{-1} a = \sum_{i=1}^{N} \frac{1}{V_{i,i}}
+%    \]
+
+%    Hence, the optimal weights are:
+
+%    \[
+%    \omega_n = \frac{\frac{1}{V_{n,n}}}{\sum_{i=1}^{N} \frac{1}{V_{i,i}}}
+%    \]
+
+%    This shows that each weight \( \omega_n \) is inversely proportional to its variance \( V_{n,n} \).
+
+% 7. **Particular Case: \( N = 2 \):**
+
+%    For \( N = 2 \), we have:
+
+%    \[
+%    \omega_1 = \frac{\frac{1}{V_{1,1}}}{\frac{1}{V_{1,1}} + \frac{1}{V_{2,2}}} = \frac{V_{2,2}}{V_{1,1} + V_{2,2}} = 1 - \frac{V_{1,1}}{V_{1,1} + V_{2,2}}
+%    \]
+
+%    Similarly,
+
+%    \[
+%    \omega_2 = \frac{\frac{1}{V_{2,2}}}{\frac{1}{V_{1,1}} + \frac{1}{V_{2,2}}} = \frac{V_{1,1}}{V_{1,1} + V_{2,2}}
+%    \]
+
+%    This demonstrates that when the covariance matrix is diagonal, the weight allocated to each asset is inversely proportional to its variance.
+
+% 8. **Interpretation in the Context of HRP:**
+
+%    In Stage 3 of the Hierarchical Risk Parity (HRP) algorithm, weights are split between two subsets (or bisections) in inverse proportion to their variances. This means that the subset with a lower variance receives a higher weight.
+
+%    The result from the optimization problem confirms that this allocation is optimal when the covariance matrix is diagonal, as the weights derived are inversely proportional to the variances of the assets (or subsets).
+
+% 9. **Generalization Beyond Diagonal \( V \):**
+
+%    While the proof above specifically addresses the case where \( V \) is diagonal, it's important to note that in the general case where \( V \) is a full covariance matrix (symmetric and positive-definite), the optimal weights are given by:
+
+%    \[
+%    \omega = \frac{V^{-1} a}{a' V^{-1} a}
+%    \]
+
+%    This solution accounts for both variances and covariances between assets. However, when off-diagonal elements (covariances) are zero, the inverse covariance matrix \( V^{-1} \) simplifies, and the optimal weights depend solely on the variances.
+
+% 10. **Conclusion:**
+
+%     The allocation of weights in inverse proportion to variances is optimal when the covariance matrix is diagonal. This aligns with the methodology in Stage 3 of HRP, confirming that splitting weights based on inverse variances minimizes portfolio variance under the unit-sum constraint.
+
+% ---
+
+% **Final Note:**
+
+% This proof demonstrates that when assets (or subsets) are uncorrelated (covariances are zero), allocating weights inversely proportional to their variances is the optimal strategy for minimizing portfolio variance. This provides theoretical justification for the weight splitting method used in Stage 3 of the HRP algorithm when the covariance matrix is diagonal.
+
+% \end{document}
