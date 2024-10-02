@@ -118,7 +118,7 @@ while (starting + pd.DateOffset(years=11 + counter)) <= pd.to_datetime("20240101
         'estimator__max_features': ['sqrt', 'log2'],
         'n_estimators': randint(10, 100),
         'max_samples': uniform(0.1, 1.0),
-        'max_features': uniform(0.1, 1.0)
+        'max_features': randint(1, X_train_val.shape[1] + 1)
     }
 
     # Define the optimizer
