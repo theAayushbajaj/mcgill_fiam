@@ -5,7 +5,8 @@ import os
 from tqdm import tqdm
 
 import pickle
-
+import warnings
+warnings.filterwarnings('ignore')
 
 
 #%%
