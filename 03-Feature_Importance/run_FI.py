@@ -62,6 +62,7 @@ def runFeatureImportance(data, case_tag):
     )
 
     methods = ['MDI', 'MDA', 'SFI']
+    fi_estimates = {method: {} for method in methods}
 
     n_estimators = 1000  # Number of trees in the random forest
     cv = 10  # Number of cross-validation folds
@@ -75,8 +76,13 @@ def runFeatureImportance(data, case_tag):
                                         max_samples=max_samples, numThreads=numThreads, 
                                         pctEmbargo=pctEmbargo, method=method)
         
+        fi_estimates[method]['imp'] = imp
+        fi_estimates[method]['oob'] = oob
+        fi_estimates[method]['oos'] = oos
         # Plot the feature importance using the provided function
         f_ch8.plotFeatImportance(pathOut='./', imp=imp, oob=oob, oos=oos, method=method, tag=case_tag, simNum=0)
+
+    return fi_estimates
 
 #%%
 # Remove NAs from X_dataset and run feature importance code
@@ -94,7 +100,7 @@ X_clean['datetime'] = cont.index
 X_clean.set_index('datetime', inplace=True)
 #%%
 
-runFeatureImportance(X_clean, 'dropNA')
+fi_estimates_dropna = runFeatureImportance(X_clean, 'dropNA')
 #%%
 
 # -------------------------X--------------------------X------------------------X----------------- #
@@ -109,4 +115,12 @@ cont = getCont(t1)
 X['datetime'] = cont.index
 X.set_index('datetime', inplace=True)
 
-runFeatureImportance(X, 'fillNA')
+fi_estimates_fillna = runFeatureImportance(X, 'fillNA')
+
+#%%
+# Save the fi_estimates to a pickle file
+with open('./fi_estimates_dropna.pkl', 'wb') as f:
+    pickle.dump(fi_estimates_dropna, f)
+
+with open('./fi_estimates_fillna.pkl', 'wb') as f:
+    pickle.dump(fi_estimates_fillna, f)
