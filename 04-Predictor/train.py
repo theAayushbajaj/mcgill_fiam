@@ -35,7 +35,8 @@ Y.set_index(['t1_index', 'index'], inplace=True)
 top_100_features = pd.read_json('../03-Feature_Importance/top_100_features.json')
 top_100_features['combined'].to_list()
 added_features = ['log_diff', 'frac_diff', 'sadf']
-stock_vars = top_100_features['combined'].to_list() + added_features
+# top 50 instead
+stock_vars = top_100_features['combined'].to_list()[:50] + added_features
 tgt_var = 'target'  # Target variable
 
 starting = pd.to_datetime("20000101", format="%Y%m%d")
@@ -165,3 +166,4 @@ while (starting + pd.DateOffset(years=11 + counter)) <= pd.to_datetime("20240101
 
 
     counter += 1
+# %%
