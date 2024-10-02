@@ -5,7 +5,8 @@ import os
 from tqdm import tqdm
 
 import pickle
-
+import warnings
+warnings.filterwarnings('ignore')
 
 
 #%%
@@ -433,7 +434,7 @@ features_list = features.values.ravel().tolist()
 
 # Added features
 added_features = ['log_diff', 'frac_diff', 'sadf']
-added_features = []
+#added_features = []
 
 # FOR MOOSA
 causal_dataset = FULL_stacked_data[features_list + ['target']]
