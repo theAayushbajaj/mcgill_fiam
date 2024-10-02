@@ -6,7 +6,7 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 import networkx as nx
 
-from pgmpy.models import BayesianNetwork
+#from pgmpy.models import BayesianNetwork
 
 model = avici.load_pretrained(download="scm-v0")
 
@@ -33,19 +33,19 @@ G = nx.relabel_nodes(G, mapping)
 
 # perform d seperation
 
-model_pgmpy = BayesianNetwork()
-model_pgmpy.add_nodes_from(variable_names)
-edges = list(G.edges())
-model_pgmpy.add_edges_from(edges)
+# model_pgmpy = BayesianNetwork()
+# model_pgmpy.add_nodes_from(variable_names)
+# edges = list(G.edges())
+# model_pgmpy.add_edges_from(edges)
 
-target_variable = 'price'
-variables = [var for var in variable_names if var != target_variable]
+# target_variable = 'price'
+# variables = [var for var in variable_names if var != target_variable]
 
-for var in variables:
-    cond_set = [v for v in variables if v != var]
-    d_separated = not model_pgmpy.is_dconnected(target_variable, var, observed=cond_set)
-    status = 'd-separated' if d_separated else 'd-connected'
-    print(f"Variables '{target_variable}' and '{var}' are {status} given {cond_set}")
+# for var in variables:
+#     cond_set = [v for v in variables if v != var]
+#     d_separated = not model_pgmpy.is_dconnected(target_variable, var, observed=cond_set)
+#     status = 'd-separated' if d_separated else 'd-connected'
+#     print(f"Variables '{target_variable}' and '{var}' are {status} given {cond_set}")
 
 
 # Compute and display graph metrics
