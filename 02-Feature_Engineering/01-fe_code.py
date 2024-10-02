@@ -33,7 +33,7 @@ for file_name in csv_files:
     # Check if 'stock_exret' column exists
     if 'stock_exret' in df.columns:
         # Create the 'target' column as the sign of 'stock_exret'
-        df['target'] = df['stock_exret'].apply(lambda x: 1 if x > 0 else (-1 if x < 0 else 0))
+        df['target'] = df['stock_exret'].apply(lambda x: 1 if x >= 0 else -1)
         
         # Save the updated DataFrame back to the CSV file (or to a new file)
         df.to_csv(file_path, index=False)
