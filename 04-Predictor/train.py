@@ -32,11 +32,10 @@ Y.set_index(['t1_index', 'index'], inplace=True)
 # we must fill for the investment perdiod (2008-) we our true probabilities and predictions.
 
 # %%
-top_100_features = pd.read_json('../03-Feature_Importance/top_100_features.json')
-top_100_features['combined'].to_list()
+filtered_features = pd.read_json('../0X-Causal_discovery/filtered_features.json')
+filtered_features['final'].to_list()
 added_features = ['log_diff', 'frac_diff', 'sadf']
-# top 50 instead
-stock_vars = top_100_features['combined'].to_list()[:50] + added_features
+stock_vars = filtered_features['final'].to_list() + added_features
 tgt_var = 'target'  # Target variable
 
 starting = pd.to_datetime("20000101", format="%Y%m%d")
