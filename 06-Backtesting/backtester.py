@@ -127,14 +127,14 @@ if __name__ == "__main__":
     benchmark_df["t1"] = pd.to_datetime(benchmark_df["t1"])
     benchmark_df["t1_index"] = pd.to_datetime(benchmark_df["t1_index"])
     kwargs = {
-        "pred_vol_scale": 0.50,
-        "tau": 0.50,  # the higher tau, the more weight is given to predictions
+        "pred_vol_scale": 1.00,
+        "tau": 1.00,  # the higher tau, the more weight is given to predictions
         "prices": prices,
         "signals": signals,
         "market_caps_df": market_caps_df,
         "BL": True,
         "LW": True,
-        "N_Stocks": 100,
+        "N_Stocks": 50,
     }
     rebalance_period = 1
     strategy = strat.asset_allocator
@@ -173,10 +173,11 @@ if __name__ == "__main__":
     print()
     print("Overall Stats :")
     TradingLog_Stats['Overall']
+    print(TradingLog_Stats['Overall'])
     
     print()
     print("Long vs Short Stats :")
-    TradingLog_Stats['Long_Short']
+    print(TradingLog_Stats['Long_Short'])
     
     # save in objects
     # Save Trading_Stats dictionary
