@@ -1,25 +1,29 @@
-# %%
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-from tqdm import tqdm
-
+"""
+This script runs the backtest on the results of the strategy.
+"""
 
 import pickle
-from tqdm import tqdm
-from concurrent.futures import ProcessPoolExecutor, as_completed
-import yfinance as yf
-
 import sys
 import os
+from backtest_stats import get_tl_stats, get_trading_log, performance_benchmark
+from concurrent.futures import ProcessPoolExecutor, as_completed
+import pandas as pd
+from tqdm import tqdm
 
 sys.path.append("../05-Asset_Allocation")
 import strategy as strat
 
-from backtest_stats import *
-
 
 def compute_weights_for_period(i, strategy, **kwargs):
+    """
+    Inputs:
+    - i: End Date
+    - strategy: Function that calls the strategy
+
+    Outputs:
+    - i: End Date
+    - Weights calculated by the strategy for the current period
+    """
     # Call the strategy to get the weights for the current period
     weights = strategy(
         start_date=0,
@@ -107,18 +111,13 @@ def stats(weights_df, excess_returns_df, benchmark, start_month_pred=100):
     """
     trading_log = get_trading_log(excess_returns_df, weights_df)
 
-    TradingLog_Stats = get_TL_Stats(trading_log, weights_df)
+    trading_log_stats = get_tl_stats(trading_log, weights_df)
 
-    Trading_Stats = Performance_Benchmark(trading_log, benchmark, weights_df)
+    trading_stats = performance_benchmark(trading_log, benchmark, weights_df)
 
-    return Trading_Stats, TradingLog_Stats
-
-
-# %%
-
+    return trading_stats, trading_log_stats
 
 if __name__ == "__main__":
-    # %%
     prices = pd.read_pickle("../objects/prices.pkl")
     signals = pd.read_pickle("../objects/signals.pkl")
     market_caps_df = pd.read_pickle("../objects/market_caps.pkl")
@@ -132,35 +131,34 @@ if __name__ == "__main__":
         "prices": prices,
         "signals": signals,
         "market_caps_df": market_caps_df,
-        "BL": True,
-        "LW": True,
-        "N_Stocks": 100,
+        "bl": True,
+        "lw": True,
+        "n_Stocks": 100,
     }
-    rebalance_period = 1
+    REBALANCE_PERIOD = 1
     strategy = strat.asset_allocator
-    start_month_pred = 120
-    # %%
+    START_MONTH_PRED = 120
 
     weights = backtest(
         excess_returns,
         strategy,
-        rebalance_period,
-        start_month_pred,
+        REBALANCE_PERIOD,
+        START_MONTH_PRED,
         **kwargs,
     )
+
     # Number of non 0 columns per row in weights
     print(weights.astype(bool).sum(axis=1).value_counts())
-    # %%
+
     # weights
-    # %%
-    weights = weights.iloc[start_month_pred:]
-    excess_returns = excess_returns.iloc[start_month_pred:]
+    weights = weights.iloc[START_MONTH_PRED:]
+    excess_returns = excess_returns.iloc[START_MONTH_PRED:]
     Trading_Stats, TradingLog_Stats = stats(
         weights, excess_returns, benchmark_df
     )
-    
-    #%%
-    # Present your top 10 holdings on average over OOS testing period, 
+
+
+    # Present your top 10 holdings on average over OOS testing period,
     # 01/2010 to 12/2023
     print()
     print("Top 10 Holdings on Average Over OOS Testing Period")
@@ -168,16 +166,13 @@ if __name__ == "__main__":
     weight_stock = weights.sum(axis=0)
     weight_stock = weight_stock / weights.shape[0]
     print(weight_stock.sort_values(ascending=False).iloc[:10])
-    #%%
-    
+
     print()
-    print("Overall Stats :")
-    TradingLog_Stats['Overall']
-    
+    print("Overall Stats :", TradingLog_Stats['Overall'])
+
     print()
-    print("Long vs Short Stats :")
-    TradingLog_Stats['Long_Short']
-    
+    print("Long vs Short Stats :", TradingLog_Stats['Long_Short'])
+
     # save in objects
     # Save Trading_Stats dictionary
     with open("../objects/Trading_Stats.pkl", "wb") as f:
@@ -186,5 +181,3 @@ if __name__ == "__main__":
     # Save TradingLog_Stats dictionary
     with open("../objects/TradingLog_Stats.pkl", "wb") as f:
         pickle.dump(TradingLog_Stats, f)
-
-# %%
