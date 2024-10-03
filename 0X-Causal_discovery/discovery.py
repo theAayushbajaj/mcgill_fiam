@@ -1,3 +1,6 @@
+"""
+This script runs causal discovery on the given financial data to find correlated features.
+"""
 ## Requires - pip install avici
 ## pip install networkx
 
@@ -21,9 +24,9 @@ x= scaler.fit_transform(x)
 g_prob = model(x=x)
 
 
-threshold = 0.5
+THRESHOLD = 0.5
 
-adj_matrix = (g_prob > threshold).astype(int)
+adj_matrix = (g_prob > THRESHOLD).astype(int)
 
 G = nx.DiGraph(adj_matrix)
 
@@ -39,44 +42,51 @@ G = nx.relabel_nodes(G, mapping)
 # edges = list(G.edges())
 # model_pgmpy.add_edges_from(edges)
 
-target_variable = 'target'
-variables = [var for var in variable_names if var != target_variable]
+TGT_VAR = 'target'
+variables = [var for var in variable_names if var != TGT_VAR]
 
 for feature in variables:
     # Find all simple paths from the feature to the target
-    paths = list(nx.all_simple_paths(G, source=feature, target=target_variable))
+    paths = list(nx.all_simple_paths(G, source=feature, target=TGT_VAR))
     causal_paths = []
     backdoor_paths = []
-    
+
     for path in paths:
         # Check the direction of edges along the path
-        is_causal = True
+        IS_CAUSAL = True
         for i in range(len(path) - 1):
             if not G.has_edge(path[i], path[i+1]):
-                is_causal = False
+                IS_CAUSAL = False
                 break
-        if is_causal:
+        if IS_CAUSAL:
             causal_paths.append(path)
         else:
             backdoor_paths.append(path)
-    
+
     if causal_paths:
-        print(f"Feature '{feature}' has causal paths to '{target_variable}': {causal_paths}")
+        print(f"Feature '{feature}' has causal paths to \
+              '{TGT_VAR}': {causal_paths}")
+
     if backdoor_paths:
-        print(f"Feature '{feature}' has backdoor paths to '{target_variable}': {backdoor_paths}")
+        print(f"Feature '{feature}' has backdoor paths to \
+              '{TGT_VAR}': {backdoor_paths}")
+
     if not causal_paths and backdoor_paths:
-        print(f"Feature '{feature}' may have a spurious correlation with '{target_variable}' due to backdoor paths.")
+        print(f"Feature '{feature}' may have a spurious correlation with \
+              '{TGT_VAR}' due to backdoor paths.")
+
     elif not causal_paths and not backdoor_paths:
-        print(f"No paths found between '{feature}' and '{target_variable}'. They may be independent.")
+        print(f"No paths found between '{feature}' and \
+              '{TGT_VAR}'. They may be independent.")
 
 #save g_prob
 np.save('../objects/g_prob.npy', g_prob)
 
 # for var in variables:
 #     cond_set = [v for v in variables if v != var]
-#     d_separated = not model_pgmpy.is_dconnected(target_variable, var, observed=cond_set)
+#     d_separated = not model_pgmpy.is_dconnected(TGT_VAR, var, observed=cond_set)
 #     status = 'd-separated' if d_separated else 'd-connected'
-#     print(f"Variables '{target_variable}' and '{var}' are {status} given {cond_set}")
+#     print(f"Variables '{TGT_VAR}' and '{var}' are {status} given {cond_set}")
 
 
 # # Compute and display graph metrics
@@ -84,7 +94,8 @@ np.save('../objects/g_prob.npy', g_prob)
 # num_edges = G.number_of_edges()
 # average_degree = sum(dict(G.degree()).values()) / num_nodes
 # density = nx.density(G)
-# print(f"Graph has {num_nodes} nodes, {num_edges} edges, average degree {average_degree:.2f}, and density {density:.4f}")
+# print(f"Graph has {num_nodes} nodes, {num_edges} edges, \
+# average degree {average_degree:.2f}, and density {density:.4f}")
 
 # # Calculate the strongly connected components
 # strongly_connected = list(nx.strongly_connected_components(G))
