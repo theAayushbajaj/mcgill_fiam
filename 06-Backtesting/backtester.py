@@ -138,7 +138,7 @@ if __name__ == "__main__":
     }
     rebalance_period = 1
     strategy = strat.asset_allocator
-    start_month_pred = 100
+    start_month_pred = 120
     # %%
 
     weights = backtest(
@@ -164,6 +164,27 @@ if __name__ == "__main__":
     # 01/2010 to 12/2023
     print()
     print("Top 10 Holdings on Average Over OOS Testing Period")
-    print(TradingLog_Stats['Stock']['Total'].sort_values(ascending = False).iloc[:10])
+    # print(TradingLog_Stats['Stock']['Total'].sort_values(ascending = False).iloc[:10])
+    weight_stock = weights.sum(axis=0)
+    weight_stock = weight_stock / weights.shape[0]
+    print(weight_stock.sort_values(ascending=False).iloc[:10])
+    #%%
+    
+    print()
+    print("Overall Stats :")
+    TradingLog_Stats['Overall']
+    
+    print()
+    print("Long vs Short Stats :")
+    TradingLog_Stats['Long_Short']
+    
+    # save in objects
+    # Save Trading_Stats dictionary
+    with open("../objects/Trading_Stats.pkl", "wb") as f:
+        pickle.dump(Trading_Stats, f)
+
+    # Save TradingLog_Stats dictionary
+    with open("../objects/TradingLog_Stats.pkl", "wb") as f:
+        pickle.dump(TradingLog_Stats, f)
 
 # %%
