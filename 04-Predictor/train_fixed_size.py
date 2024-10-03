@@ -1,16 +1,46 @@
-# %%
+"""
+Stock Prediction Model using Random Forest and Bagging
+
+This script implements a stock prediction model utilizing Random Forest and
+Bagging classifiers to predict stock returns based on feature engineering and
+causal discovery techniques. The model leverages historical data to train
+and validate its predictions using an expanding window approach.
+
+The script follows these primary steps:
+1. Load processed datasets for features (X) and target variables (Y) from serialized files.
+2. Set up MultiIndex for time-series data to facilitate indexing.
+3. Perform model training and evaluation through a ROLLING window technique:
+   - Split the dataset into training, validation, and testing sets based on defined cutoffs.
+   - Adjust sample weights to balance the training process.
+   - Train a Bagging classifier with a base Random Forest estimator using
+     Randomized Search for hyperparameter optimization.
+   - Predict the target variable probabilities and evaluate model performance using log loss.
+4. Store the predictions and probabilities in the appropriate output formats.
+5. Compile stock data from multiple CSV files and merge it with predictions,
+   allowing for individual stock analysis.
+6. Save the results to CSV files grouped by stock ticker.
+
+Usage:
+------
+- Ensure that preprocessing_code.py and feature_engineering.py are
+  executed prior to running this script.
+- Ensure that the preprocessing and feature engineering scripts are executed prior
+  to running this script to generate the required input files (`X_DATASET.pkl` and `Y_DATASET.pkl`).
+- The output predictions will be stored in `predictions.csv`, and individual
+  stock prediction files will be saved in the specified stocks data directory.
+"""
+
 import numpy as np
 import pandas as pd
-import pickle
 from sklearn.ensemble import RandomForestClassifier, BaggingClassifier
-from sklearn.metrics import log_loss, accuracy_score
+from sklearn.metrics import log_loss
 from sklearn.model_selection import PredefinedSplit, RandomizedSearchCV
 from scipy.stats import randint, uniform
 
 # Load your data
 X = pd.read_pickle('../objects/X_DATASET.pkl')
 Y = pd.read_pickle('../objects/Y_DATASET.pkl')
-#%%
+
 
 # Prepare the data
 X['t1_index'] = Y['t1_index']
@@ -25,7 +55,7 @@ filtered_features = pd.read_json('../0X-Causal_discovery/filtered_features.json'
 filtered_features['final'].to_list()
 added_features = ['log_diff', 'frac_diff', 'sadf']
 stock_vars = filtered_features['final'].to_list() + added_features
-tgt_var = 'target'  # Target variable
+TGT_VAR = 'target'  # Target variable
 
 # Ensure the index is datetime
 X.index = pd.MultiIndex.from_tuples(
@@ -43,13 +73,13 @@ test_window = pd.DateOffset(years=1)
 step_size = pd.DateOffset(years=1)
 end_date = pd.to_datetime("2024-01-01")
 
-counter = 0
+COUNTER = 0
 pred_out = pd.DataFrame()
-#%%
+
 
 while True:
     # Calculate start and end dates for each window
-    train_start = starting + counter * step_size
+    train_start = starting + COUNTER * step_size
     train_end = train_start + training_window
 
     val_start = train_end
@@ -65,15 +95,21 @@ while True:
     print(f"Train Start: {train_start}, Train End: {train_end}, "
           f"Val Start: {val_start}, Val End: {val_end}, "
           f"Test Start: {test_start}, Test End: {test_end}")
-    
-    # Cut the sample into training, validation, and testing sets
-    X_train = X[(X.index.get_level_values(0) >= train_start) & (X.index.get_level_values(0) < train_end)]
-    X_validate = X[(X.index.get_level_values(0) >= val_start) & (X.index.get_level_values(0) < val_end)]
-    X_test = X[(X.index.get_level_values(0) >= test_start) & (X.index.get_level_values(0) < test_end)]
 
-    Y_train = Y[(Y.index.get_level_values(0) >= train_start) & (Y.index.get_level_values(0) < train_end)]
-    Y_validate = Y[(Y.index.get_level_values(0) >= val_start) & (Y.index.get_level_values(0) < val_end)]
-    Y_test = Y[(Y.index.get_level_values(0) >= test_start) & (Y.index.get_level_values(0) < test_end)]
+    # Cut the sample into training, validation, and testing sets
+    X_train = X[(X.index.get_level_values(0) >= train_start) &
+                (X.index.get_level_values(0) < train_end)]
+    X_validate = X[(X.index.get_level_values(0) >= val_start) &
+                   (X.index.get_level_values(0) < val_end)]
+    X_test = X[(X.index.get_level_values(0) >= test_start) &
+               (X.index.get_level_values(0) < test_end)]
+
+    Y_train = Y[(Y.index.get_level_values(0) >= train_start) &
+                (Y.index.get_level_values(0) < train_end)]
+    Y_validate = Y[(Y.index.get_level_values(0) >= val_start) &
+                   (Y.index.get_level_values(0) < val_end)]
+    Y_test = Y[(Y.index.get_level_values(0) >= test_start) &
+               (Y.index.get_level_values(0) < test_end)]
 
     # Adjust sample weights (if necessary)
     Y_train['weight_attr'] *= Y_train.shape[0] / Y_train['weight_attr'].sum()
@@ -135,7 +171,7 @@ while True:
     # Fit the optimizer
     optimizer.fit(
         X_train_val,
-        Y_train_val[tgt_var].values,
+        Y_train_val[TGT_VAR].values,
         sample_weight=Y_train_val['weight_attr'].values
     )
 
@@ -147,13 +183,14 @@ while True:
     # Fit the best estimator
     best_estimator.fit(
         X_train_val,
-        Y_train_val[tgt_var].values,
+        Y_train_val[TGT_VAR].values,
         sample_weight=Y_train_val['weight_attr'].values
     )
 
     # Predict on test set
     prob = best_estimator.predict_proba(X_test_vals)
-    score_ = -log_loss(Y_test[tgt_var].values, prob, sample_weight=Y_test["weight_attr"].values, labels=best_estimator.classes_)
+    score_ = -log_loss(Y_test[TGT_VAR].values, prob,
+                       sample_weight=Y_test["weight_attr"].values, labels=best_estimator.classes_)
     print("Log Loss on Test Set:", score_)
 
     # Store predictions in Y_test
@@ -163,5 +200,4 @@ while True:
     pred_out = pred_out.append(Y_test[['prediction', 'probability']])
     pred_out.to_csv("../objects/predictions.csv")
 
-    counter += 1
-# %%
+    COUNTER += 1

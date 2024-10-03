@@ -9,7 +9,7 @@ and validate its predictions using an expanding window approach.
 The script follows these primary steps:
 1. Load processed datasets for features (X) and target variables (Y) from serialized files.
 2. Set up MultiIndex for time-series data to facilitate indexing.
-3. Perform model training and evaluation through an expanding window technique:
+3. Perform model training and evaluation through an EXPANDING window technique:
    - Split the dataset into training, validation, and testing sets based on defined cutoffs.
    - Adjust sample weights to balance the training process.
    - Train a Bagging classifier with a base Random Forest estimator using
