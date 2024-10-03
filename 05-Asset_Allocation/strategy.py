@@ -100,7 +100,7 @@ def asset_allocator(
         # Add a small value to the diagonal if necessary
         min_eigenvalue = np.min(np.linalg.eigvals(posterior_cov))
         if min_eigenvalue < 0:
-            print("Adding small value to diagonal of posterior covariance matrix.")
+            # print("Adding small value to diagonal of posterior covariance matrix.")
             posterior_cov += np.eye(len(posterior_cov)) * (-min_eigenvalue + 1e-6)
             
     else:
@@ -126,7 +126,7 @@ def asset_allocator(
 
     # Check for NaNs in the distance matrix
     if np.isnan(dist.to_numpy()).any():
-        print("NaNs detected in distance matrix.")
+        # print("NaNs detected in distance matrix.")
         dist = np.nan_to_num(dist, nan=1e6)
 
     dist = pd.DataFrame(dist, index=selected_stocks, columns=selected_stocks)
@@ -156,9 +156,9 @@ def asset_allocator(
 
     # Assign the weights to the output DataFrame
     weights.loc[hrp_weights.index, "Weight"] = hrp_weights
-    print("Final Weights Sum:")
-    print(weights.abs().sum())
-    print(weights.sum())
+    # print("Final Weights Sum:")
+    # print(weights.abs().sum())
+    # print(weights.sum())
 
     return weights
 
