@@ -1,11 +1,15 @@
 # %%
 import numpy as np
 import pandas as pd
-import pickle
 from sklearn.ensemble import RandomForestClassifier, BaggingClassifier
 from sklearn.metrics import log_loss,accuracy_score
 from sklearn.model_selection import PredefinedSplit, RandomizedSearchCV
 from scipy.stats import randint, uniform
+
+import os
+from tqdm import tqdm
+import warnings
+warnings.filterwarnings('ignore')
 
 # MUST RUN 01-Data_Preprocessing/01-preprocessing_code.py AND 02-Feature_Engineering/01-fe_code.py BEFORE
 # %%
@@ -165,3 +169,65 @@ while (starting + pd.DateOffset(years=11 + counter)) <= pd.to_datetime("20240101
 
     counter += 1
 # %%
+temp_pred = pd.read_csv('../objects/predictions.csv')
+temp_pred.set_index(['Unnamed: 0', 'Unnamed: 1'], inplace=True)
+temp_pred.index.names = ['t1_index', None]
+temp_pred.head()
+
+#%%
+# set the current working directory
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
+# Set the directory containing your stock CSV files
+stocks_data_dir = '../stocks_data'
+
+# Get a list of all CSV files in the directory
+csv_files = [f for f in os.listdir(stocks_data_dir) if f.endswith('.csv')]
+
+dfs = []
+
+# Loop through each CSV file
+for file_name in tqdm(csv_files):
+    file_path = os.path.join(stocks_data_dir, file_name)
+    
+    # Read the CSV file into a DataFrame
+    df = pd.read_csv(file_path)
+    
+    # Append the DataFrame to the list
+    dfs.append(df)
+FULL_stacked_data = pd.concat(dfs, ignore_index=True)
+FULL_stacked_data = FULL_stacked_data.sort_values(by='t1')
+FULL_stacked_data.drop(columns=['Unnamed: 0'], inplace=True)
+FULL_stacked_data
+
+#%%
+# Set the 't1_index' to the first level
+FULL_stacked_data.set_index('t1_index', inplace=True, append=True)
+FULL_stacked_data = FULL_stacked_data.swaplevel(i=-1, j=0)  # Swap the last level (t1_index) to be the first level
+FULL_stacked_data.head()
+
+FULL_stacked_data['prediction'] = temp_pred['prediction']
+FULL_stacked_data['probability'] = temp_pred['probability']
+
+#%%
+# FULL_stacked_data['prediction'].head()
+filter = FULL_stacked_data[FULL_stacked_data.index.get_level_values(0) >= '2009-11-31 00:00:00']
+filter[['prediction', 'probability', 'stock_ticker']].head()
+
+# %%
+FULL_stacked_data.reset_index(level=0, inplace=True)
+
+# %%
+FULL_stacked_data[['probability','prediction','stock_ticker']]
+# %%
+# Assuming 'stock_ticker' is one of the columns in FULL_stacked_data
+# Split the FULL_stacked_data by 'stock_ticker'
+grouped_data = FULL_stacked_data.groupby('stock_ticker')
+
+# Loop through each group and save to CSV
+for stock_ticker, group in tqdm(grouped_data):
+    # Define the file path for each stock ticker
+    file_path = os.path.join(stocks_data_dir, f'{stock_ticker}.csv')
+    
+    # Save the group DataFrame to a CSV file, overwriting if it exists
+    group.to_csv(file_path, index=True)  # Set index=True to keep 'row_index' as index
