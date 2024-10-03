@@ -110,18 +110,17 @@ while (starting + pd.DateOffset(years=11 + counter)) <= pd.to_datetime("20240101
     bagging_clf = BaggingClassifier(
         estimator=base_rf,
         oob_score=True,
-        n_jobs=-1
+        n_jobs=16
     )
 
  
     param_distributions = {
-        'estimator__n_estimators': randint(10, 1000),
-        'estimator__max_depth': randint(5, 50),
-        'estimator__min_samples_split': randint(2, 10),
-        'estimator__min_samples_leaf': randint(1, 5),
-        'estimator__max_features': ['sqrt', 'log2'],
-        'n_estimators': randint(10, 100),
-        'max_samples': uniform(0.1, 1.0),
+        'estimator__n_estimators': randint(100, 500),
+        'estimator__max_depth': randint(40, 50),
+        'estimator__min_samples_split': randint(5, 10),
+        'estimator__min_samples_leaf': randint(3, 5),
+        'n_estimators': randint(50, 100),
+        #'max_samples': uniform(0.1, 1.0),
         'max_features': randint(1, X_train_val.shape[1] + 1)
     }
 
@@ -131,7 +130,7 @@ while (starting + pd.DateOffset(years=11 + counter)) <= pd.to_datetime("20240101
         param_distributions=param_distributions,
         n_iter=100,  
         cv=ps,      # Use predefined split
-        n_jobs=-1,
+        n_jobs=1,
         verbose=2,
         random_state=42,
         scoring='neg_log_loss'
