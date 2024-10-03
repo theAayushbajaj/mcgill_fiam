@@ -7,10 +7,6 @@ three distinct methods:
 
     2. Mean Decrease Accuracy (MDA): Assesses the importance of a feature by measuring the impact
                                      on model accuracy when the feature's values are shuffled.
-
-    3. Single Feature Importance (SFI): Evaluates the importance of each feature individually by
-                                        training the model using one feature at a time and
-                                        observing its effect on model performance.
 """
 
 import warnings
@@ -82,7 +78,7 @@ def get_cont(input_df, drop_index=None):
 def run_feature_importance(data, case_tag):
     """
     Performs feature importance analysis using three different methods
-    (MDI, MDA, SFI) on the given dataset.
+    (MDI, MDA) on the given dataset.
     The method utilizes a Bagging Classifier built on a RandomForestClassifier
     with entropy criterion, balanced subsampling, and no bootstrap aggregation.
     Feature importance results are computed for each method and visualized through plots.
@@ -98,7 +94,7 @@ def run_feature_importance(data, case_tag):
     Returns:
     dict
         A dictionary `fi_estimates` containing feature importance estimates
-        for each method ('MDI', 'MDA', 'SFI').
+        for each method ('MDI', 'MDA').
         For each method, the dictionary contains:
         - 'imp' : Importance scores for each feature.
         - 'oob' : Out-of-bag feature importance.
@@ -108,7 +104,7 @@ def run_feature_importance(data, case_tag):
     them in the specified output path.
     """
 
-    methods = ['MDI', 'MDA', 'SFI']
+    methods = ['MDI', 'MDA']
     fi_estimates = {method: {} for method in methods}
 
     n_estimators = 1000  # Number of trees in the random forest
