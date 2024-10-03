@@ -21,10 +21,11 @@ Y = Y.reset_index()
 Y.set_index(['t1_index', 'index'], inplace=True)
 
 # Feature variables and target variable
-top_100_features = pd.read_json('../03-Feature_Importance/top_100_features.json')
+filtered_features = pd.read_json('../0X-Causal_discovery/filtered_features.json')
+filtered_features['final'].to_list()
 added_features = ['log_diff', 'frac_diff', 'sadf']
-stock_vars = top_100_features['combined'].to_list()[:50] + added_features
-tgt_var = 'target'
+stock_vars = filtered_features['final'].to_list() + added_features
+tgt_var = 'target'  # Target variable
 
 # Ensure the index is datetime
 X.index = pd.MultiIndex.from_tuples(
