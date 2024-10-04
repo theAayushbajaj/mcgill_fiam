@@ -17,6 +17,10 @@ This repository contains a series of scripts for data preprocessing, feature eng
    ```
    pip install -r requirements.txt
    ```
+2. Create a new directory `raw_data` and add the following files to it:
+   - `factor_char_list.csv`
+   - `hackathon_sample_v2.csv`
+   - `mkt_ind.csv`
 
 ## Running the Analysis
 
@@ -74,7 +78,6 @@ The feature importance scores from MDI and MDA are:
 
 ![MDI Feature Importance](03-Feature_Importance/featImportance_0MDI.png)
 ![MDA Feature Importance](03-Feature_Importance/featImportance_0MDA.png)
-
 
 
 ## Additional Information
