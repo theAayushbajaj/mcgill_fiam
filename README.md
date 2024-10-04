@@ -68,7 +68,14 @@ After running all the scripts, you'll find the following output:
 - `objects/X_DATASET.pkl`                   
 - `objects/Y_DATASET.pkl`          
 - `objects/predictions_0.csv to predictions_13.csv`
-- `objects/predictions.csv` -- Final predictions on the test dataset      
+- `objects/predictions.csv` -- Final predictions on the test dataset
+
+The feature importance scores from MDI and MDA are:
+
+![MDI Feature Importance](03-Feature_Importance/featImportance_0MDI.png)
+![MDA Feature Importance](03-Feature_Importance/featImportance_0MDA.png)
+
+
 
 ## Additional Information
 
