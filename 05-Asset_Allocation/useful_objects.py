@@ -40,11 +40,11 @@ csv_files = [f for f in os.listdir(STOCKS_DATA_DIR) if f.endswith('.csv')]
 
 # Load AAPL.csv since it has all the datetime indices
 PATH = '../stocks_data/AAPL.csv'
-df = pd.read_csv(PATH)
+aapl_df = pd.read_csv(PATH)
 
 # Initialize the datetime indices for `prices` dataframe from AAPL.csv
 prices = pd.DataFrame()
-prices.index = pd.to_datetime(df['t1'])
+prices.index = pd.to_datetime(aapl_df['t1'])
 
 for file_name in tqdm(csv_files):
     file_path = os.path.join(STOCKS_DATA_DIR, file_name)
@@ -65,7 +65,7 @@ with open('../objects/prices.pkl', 'wb') as f:
 
 # Initialize the datetime indices for `signals` dataframe from AAPL.csv
 signals = pd.DataFrame()
-signals.index = pd.to_datetime(df['t1'])
+signals.index = pd.to_datetime(aapl_df['t1'])
 
 for file_name in tqdm(csv_files):
     file_path = os.path.join(STOCKS_DATA_DIR, file_name)
@@ -86,7 +86,7 @@ with open('../objects/signals.pkl', 'wb') as f:
 
 # Initialize the datetime indices for `market_caps` dataframe from AAPL.csv
 market_caps = pd.DataFrame()
-market_caps.index = pd.to_datetime(df['t1'])
+market_caps.index = pd.to_datetime(aapl_df['t1'])
 
 for file_name in tqdm(csv_files):
     file_path = os.path.join(STOCKS_DATA_DIR, file_name)
@@ -107,7 +107,7 @@ with open('../objects/market_caps.pkl', 'wb') as f:
 
 # Initialize the datetime indices for `stock_exret` dataframe from AAPL.csv
 stockexret = pd.DataFrame()
-stockexret.index = pd.to_datetime(df['t1'])
+stockexret.index = pd.to_datetime(aapl_df['t1'])
 
 for file_name in tqdm(csv_files):
     file_path = os.path.join(STOCKS_DATA_DIR, file_name)
