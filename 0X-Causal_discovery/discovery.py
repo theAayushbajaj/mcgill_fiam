@@ -33,7 +33,7 @@ adj_matrix = (g_prob > THRESHOLD).astype(int)
 G = nx.DiGraph(adj_matrix)
 
 # map nodes to variable names
-variable_names = x.columns.tolist()
+variable_names = df.columns.tolist()
 mapping = {i: var_name for i, var_name in enumerate(variable_names)}
 G = nx.relabel_nodes(G, mapping)
 
