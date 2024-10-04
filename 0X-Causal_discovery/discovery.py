@@ -14,7 +14,7 @@ TGT_VAR = 'target'
 top_100_features = pd.read_json('../0X-Causal_discovery/top_100_features.json')
 top_100_features = top_100_features['combined'].to_list()
 # pick the 50 first features
-top_50_features = top_100_features[:50] + ['target']
+top_50_features = top_100_features[:50] + ['target'] # Due to compute constraints
 
 x = pd.read_pickle('../objects/causal_dataset.pkl')
 
