@@ -36,6 +36,9 @@ from tqdm import tqdm
 
 warnings.filterwarnings('ignore')
 
+# Set the current working directory
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
 # Load your data
 X = pd.read_pickle('../objects/X_DATASET.pkl')
 Y = pd.read_pickle('../objects/Y_DATASET.pkl')
@@ -244,7 +247,6 @@ while True:
 
 prediction_files = glob.glob('../objects/predictions_*.csv')
 pred_out = pd.concat((pd.read_csv(f, index_col=[0, 1]) for f in prediction_files))
-# pred_out.to_csv("../objects/predictions.csv", index=True)
 pred_out.to_csv("../objects/predictions.csv")
 
 
@@ -277,7 +279,6 @@ for file_name in tqdm(csv_files):
 
 stacked_data = pd.concat(dfs, ignore_index=True)
 stacked_data = stacked_data.sort_values(by='t1')
-stacked_data.drop(columns=['Unnamed: 0'], inplace=True)
 
 # Set the 't1_index' to the first level
 stacked_data.set_index('t1_index', inplace=True, append=True)

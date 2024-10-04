@@ -10,6 +10,9 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 import pandas as pd
 from tqdm import tqdm
 
+# Set the current working directory
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
 sys.path.append("../05-Asset_Allocation")
 import strategy as strat
 
@@ -133,7 +136,7 @@ if __name__ == "__main__":
         "market_caps_df": market_caps_df,
         "bl": True,
         "lw": True,
-        "n_Stocks": 50,
+        "n_stocks": 50,
     }
     REBALANCE_PERIOD = 1
     strategy = strat.asset_allocator
