@@ -1,35 +1,26 @@
-# %%
-import sys
-import os
+"""
+This script combines Black-Litterman along with the HRP algorithm.
+"""
+
 import numpy as np
-import pandas as pd
-import matplotlib.pyplot as mpl
-import scipy.cluster.hierarchy as sch
-from sklearn.covariance import LedoitWolf
 
 # Black-Litterman Imports
 from scipy.linalg import inv
 
-from hrp import *
-
-# %%
-
-# HRP Functions
-
-
 # Black-Litterman Functions
 
 
-def black_litterman(cov, market_implied_returns, P, Q, Omega, tau=0.05):
+def black_litterman(cov, market_implied_returns, p, q, omega, tau=0.05):
     """Black-Litterman model."""
     pi = market_implied_returns
     tau_cov = tau * cov
-    M_inverse = inv(tau_cov)
-    Omega_inv = inv(Omega)
+    m_inverse = inv(tau_cov)
+    omega_inv = inv(omega)
     # Compute posterior covariance
-    posterior_cov = inv(M_inverse + P.T @ Omega_inv @ P)
+    posterior_cov = inv(m_inverse + p.T @ omega_inv @ p)
     # Compute posterior mean
-    posterior_mean = posterior_cov @ (M_inverse @ pi + P.T @ Omega_inv @ Q)
+    posterior_mean = posterior_cov @ (m_inverse @ pi + p.T @ omega_inv @ q)
+
     return posterior_mean, posterior_cov
 
 
@@ -43,7 +34,7 @@ def get_market_implied_returns(cov, market_weights, lambda_=2.5):
 # Main function integrating Black-Litterman with HRP
 
 
-def BL_pipeline(
+def black_litterman_pipeline(
     cov, signals, market_caps, returns_vol, pred_vol_scale=1.0, tau=1.0, lambda_=2.5
 ):
     """
@@ -58,24 +49,15 @@ def BL_pipeline(
 
     # Scale the signals by the predicted volatility
     # UNCERTAINTY ON THE SIGNALS
-    Q = signals * returns_vol * pred_vol_scale
+    q = signals * returns_vol * pred_vol_scale
 
     # Define P (Identity matrix for individual asset views)
-    P = np.eye(len(signals))
+    p = np.eye(len(signals))
 
     # Covariance on views (diagonal matrix)
-    Class_probs = signals.abs()
-    Omega_values = Class_probs * (1 - Class_probs)
-    Omega = np.diag(Omega_values) * pred_vol_scale**2
+    class_probs = signals.abs()
+    omega_values = class_probs * (1 - class_probs)
+    omega = np.diag(omega_values) * pred_vol_scale**2
 
-    posterior_mean, posterior_cov = black_litterman(cov, pi, P, Q, Omega, tau=tau)
+    posterior_mean, posterior_cov = black_litterman(cov, pi, p, q, omega, tau=tau)
     return posterior_mean, posterior_cov
-
-
-# %%
-
-if __name__ == "__main__":
-    main()
-
-
-# %%

@@ -1,8 +1,12 @@
+"""
+This script computes the backtest statistics.
+"""
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-
 import statsmodels.formula.api as sm
+from scipy.stats import norm
 
 def get_trading_log(excess_returns, weights):
     """
@@ -21,7 +25,7 @@ def get_trading_log(excess_returns, weights):
 
 # ================== Trading Log Stats ==================
 
-def get_TL_Stats(trading_log, weights):
+def get_tl_stats(trading_log, weights):
     """
     Inputs :
     - trading_log : pd.DataFrame : trade returns for each stock
@@ -34,7 +38,7 @@ def get_TL_Stats(trading_log, weights):
     hit_miss_trade['Hit'] = (trading_log > 0).sum(axis=1)
     hit_miss_trade['Miss'] = (trading_log < 0).sum(axis=1)
     hit_miss_trade['Total'] = hit_miss_trade['Hit'] + hit_miss_trade['Miss']
-    
+
     # Averages
     # Average return per hit
     hit_miss_trade['Avg Hit Ret'] = trading_log[trading_log > 0].mean(axis=1)
@@ -42,21 +46,21 @@ def get_TL_Stats(trading_log, weights):
     hit_miss_trade['Avg Miss Ret'] = trading_log[trading_log < 0].mean(axis=1)
     # Average return per trade
     hit_miss_trade['Avg Trade Ret'] = trading_log[trading_log!=0].mean(axis=1)
-    
+
     # Hits minus Misses
     hit_miss_trade['Hits - Misses'] = hit_miss_trade['Hit'] - hit_miss_trade['Miss']
     # Hit ratio
     hit_miss_trade['Hit Ratio'] = hit_miss_trade['Hit'] / hit_miss_trade['Total']
     # Cumulative sum of hits - misses
     hit_miss_trade['Cumul Hits - Misses'] = hit_miss_trade['Hits - Misses'].cumsum()
-    
+
     # Now, per stock
     # Average return per hit
     hit_miss_stock = pd.DataFrame()
     hit_miss_stock['Hit'] = (trading_log > 0).sum(axis=0)
     hit_miss_stock['Miss'] = (trading_log < 0).sum(axis=0)
     hit_miss_stock['Total'] = hit_miss_stock['Hit'] + hit_miss_stock['Miss']
-    
+
     # Averages
     # Average return per hit
     hit_miss_stock['Avg Hit Ret'] = trading_log[trading_log > 0].mean(axis=0)
@@ -64,12 +68,12 @@ def get_TL_Stats(trading_log, weights):
     hit_miss_stock['Avg Miss Ret'] = trading_log[trading_log < 0].mean(axis=0)
     # Average return per trade
     hit_miss_stock['Avg Trade Ret'] = trading_log[trading_log!=0].mean(axis=0)
-    
+
     # Hits minus Misses
     hit_miss_stock['Hits - Misses'] = hit_miss_stock['Hit'] - hit_miss_stock['Miss']
     # Hit ratio
     hit_miss_stock['Hit Ratio'] = hit_miss_stock['Hit'] / hit_miss_stock['Total']
-    
+
     # Dataframe analysing hits/misses per long and short trades
     hit_miss_long_short = pd.DataFrame()
     hit_miss_long_short['Long Return'] = (trading_log[weights > 0]).sum(axis=1)
@@ -78,42 +82,54 @@ def get_TL_Stats(trading_log, weights):
     hit_miss_long_short['Num Short'] = (weights < 0).sum(axis=1)
     hit_miss_long_short['Long Avg Return'] = (trading_log[weights > 0]).mean(axis=1)
     hit_miss_long_short['Short Avg Return'] = (trading_log[weights < 0]).mean(axis=1)
-    
+
     # cumulative return
     hit_miss_long_short['Cumul Long Return'] = hit_miss_long_short['Long Return'].cumsum()
     hit_miss_long_short['Cumul Short Return'] = hit_miss_long_short['Short Return'].cumsum()
-    
+
 
     # Overview
     hit_miss_overall = {}
     hit_miss_overall['Hit'] = hit_miss_stock['Hit'].sum()
     hit_miss_overall['Miss'] = hit_miss_stock['Miss'].sum()
     hit_miss_overall['Total'] = hit_miss_overall['Hit'] + hit_miss_overall['Miss']
+
     # Averages
     # Average return per hit
     hit_miss_overall['Avg Hit Ret'] = (trading_log[trading_log > 0].sum().sum()) / hit_miss_overall['Hit']
+
     # Average return per miss
     hit_miss_overall['Avg Miss Ret'] = (trading_log[trading_log < 0].sum().sum()) / hit_miss_overall['Miss']
+
     # Average return per trade
     hit_miss_overall['Avg Trade Ret'] = (trading_log[trading_log!=0].sum().sum()) / hit_miss_overall['Total']
+
     # Hits minus Misses
     hit_miss_overall['Hits - Misses'] = hit_miss_overall['Hit'] - hit_miss_overall['Miss']
+
     # Hit ratio
     hit_miss_overall['Hit Ratio'] = hit_miss_overall['Hit'] / hit_miss_overall['Total']
     hit_miss_overall = pd.DataFrame(hit_miss_overall, index=['Overall'])
-    
-    Hit_Miss_Stats = {  
+
+    hit_miss_stats = {
         'Trade' : hit_miss_trade,
         'Stock' : hit_miss_stock,
         'Long_Short' : hit_miss_long_short,
         'Overall' : hit_miss_overall
     }
-    
-    return Hit_Miss_Stats
-    
-    
-def Performance_Benchmark(trading_log, benchmark, weights_df):
-    Trading_Stats = {}
+
+    return hit_miss_stats
+
+
+def performance_benchmark(trading_log, benchmark, weights_df):
+    """
+    Inputs :
+    - trading_log : pd.DataFrame : trade returns for each stock
+
+    Outputs :
+    - trading_stats : pd.DataFrame : trading stats
+    """
+    trading_stats = {}
     portfolio_rets = trading_log.sum(axis=1)
     portfolio_rets = pd.DataFrame(portfolio_rets)
     portfolio_rets.reset_index(inplace=True)
@@ -127,45 +143,47 @@ def Performance_Benchmark(trading_log, benchmark, weights_df):
     df.set_index('t1', inplace=True)
 
     # Now we have returns of each trade and benchmark, we can compute the stats
-    Trading_Stats['Portfolio'] = Compute_Stats(df['Portfolio'])
-    Trading_Stats['Benchmark'] = Compute_Stats(df['Benchmark'])
-    Trading_Stats['Correlation'] = df['Portfolio'].corr(df['Benchmark'])
+    trading_stats['Portfolio'] = compute_stats(df['Portfolio'])
+    trading_stats['Benchmark'] = compute_stats(df['Benchmark'])
+    trading_stats['Correlation'] = df['Portfolio'].corr(df['Benchmark'])
 
-    Trading_Stats['Portfolio']['PSR'] = Compute_PSR(df['Portfolio'])
-    Trading_Stats['Portfolio']['Information Ratio'] = Compute_IR(df['Portfolio'], df['Benchmark'])
+    trading_stats['Portfolio']['PSR'] = compute_psr(df['Portfolio'])
+    trading_stats['Portfolio']['Information Ratio'] = compute_ir(df['Portfolio'], df['Benchmark'])
 
     # Compute Portfolio Turnover
-    Portfolio_Turnover = Compute_Portfolio_Turnover(weights_df)
-    Trading_Stats['Portfolio']['Portfolio Turnover'] = Portfolio_Turnover
-    
-    # Compute Portfolio Alpha
-    Alpha = Compute_Portfolio_Alpha(df['Portfolio'], df['Benchmark'])
-    Trading_Stats['Portfolio']['Alpha'] = Alpha
+    portfolio_turnover = compute_portfolio_turnover(weights_df)
+    trading_stats['Portfolio']['Portfolio Turnover'] = portfolio_turnover
 
-    Plot_Cumulative(Trading_Stats['Portfolio']['Cumulative Return'], Trading_Stats['Benchmark']['Cumulative Return'])
+    # Compute Portfolio Alpha
+    alpha = compute_portfolio_alpha(df['Portfolio'], df['Benchmark'])
+    trading_stats['Portfolio']['Alpha'] = alpha
+
+    plot_cumulative(trading_stats['Portfolio']['Cumulative Return'],
+                    trading_stats['Benchmark']['Cumulative Return'])
 
     # Print Benchmark Stats
     print('Benchmark Stats :')
-    benchmark_stats = {k: v for k, v in Trading_Stats['Benchmark'].items() if k != 'Cumulative Return'}
+    benchmark_stats = {k: v for k, v in trading_stats['Benchmark'].items() if k != 'Cumulative Return'}
     for k, v in benchmark_stats.items():
         print(f"{k}: {v:.4f}")
     print()
 
     # Print Portfolio Stats
     print('Portfolio Stats :')
-    portfolio_stats = {k: v for k, v in Trading_Stats['Portfolio'].items() if k != 'Cumulative Return'}
+    portfolio_stats = {k: v for k, v in
+                       trading_stats['Portfolio'].items() if k != 'Cumulative Return'}
     for k, v in portfolio_stats.items():
         print(f"{k}: {v:.4f}")
-    
-    # Print Correlation
-    print(f"Correlation between Portfolio and Benchmark: {Trading_Stats['Correlation']:.4f}")
 
-    return Trading_Stats
-    
-    
-def Compute_Stats(returns):
+    # Print Correlation
+    print(f"Correlation between Portfolio and Benchmark: {trading_stats['Correlation']:.4f}")
+
+    return trading_stats
+
+
+def compute_stats(returns):
     """
-    Inputs : 
+    Inputs :
     - returns : pd.Series with index as datetime64[ns], one column of returns
 
     Outputs :
@@ -207,7 +225,7 @@ def Compute_Stats(returns):
     stats['Maximum One-Month Loss'] = returns.min()
     return stats
 
-def Compute_IR(returns, benchmark):
+def compute_ir(returns, benchmark):
     """
     Computes the Information Ratio between returns and benchmark.
     Inputs:
@@ -232,7 +250,7 @@ def Compute_IR(returns, benchmark):
     information_ratio = mean_active_return_annualized / tracking_error_annualized
     return information_ratio
 
-def Compute_PSR(returns, benchmark=None):
+def compute_psr(returns, benchmark=None):
     """
     Computes the Probabilistic Sharpe Ratio for the returns.
     Inputs:
@@ -241,17 +259,16 @@ def Compute_PSR(returns, benchmark=None):
     Output:
     - PSR : float : Probabilistic Sharpe Ratio
     """
-    from scipy.stats import norm
 
     returns = returns.dropna()
-    N = len(returns)
+    n = len(returns)
     # Observed Sharpe Ratio
-    SR_obs = returns.mean() / returns.std()
+    sr_obs = returns.mean() / returns.std()
     # PSR assuming the reference Sharpe Ratio is zero
-    PSR = norm.cdf(SR_obs * np.sqrt(N))
-    return PSR
+    psr = norm.cdf(sr_obs * np.sqrt(n))
+    return psr
 
-def Compute_Portfolio_Turnover(weights_df):
+def compute_portfolio_turnover(weights_df):
     """
     Computes the Portfolio Turnover.
     Inputs:
@@ -270,7 +287,7 @@ def Compute_Portfolio_Turnover(weights_df):
     annualized_turnover = average_turnover * periods_per_year
     return annualized_turnover
 
-def Plot_Cumulative(portfolio_cumulative, benchmark_cumulative):
+def plot_cumulative(portfolio_cumulative, benchmark_cumulative):
     """
     Plots the cumulative returns of portfolio and benchmark.
     Inputs:
@@ -286,7 +303,7 @@ def Plot_Cumulative(portfolio_cumulative, benchmark_cumulative):
     plt.legend()
     plt.show()
 
-def Compute_Portfolio_Alpha(returns, benchmark):
+def compute_portfolio_alpha(returns, benchmark):
     """
     Computes the Portfolio Alpha.
     Inputs:
@@ -296,7 +313,8 @@ def Compute_Portfolio_Alpha(returns, benchmark):
     - alpha : float : portfolio alpha
     """
     # Regression
-    model = sm.ols(formula='returns ~ benchmark', data=pd.DataFrame({'returns': returns, 'benchmark': benchmark}))
+    model = sm.ols(formula='returns ~ benchmark',
+                   data=pd.DataFrame({'returns': returns, 'benchmark': benchmark}))
     results = model.fit()
     # Alpha
     alpha = results.params['Intercept']

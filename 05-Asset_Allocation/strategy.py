@@ -1,10 +1,15 @@
+"""
+This script takes objects created in useful_objects.py and allocates a portion
+of the available capital to top N stocks.
+"""
+
 import numpy as np
 import pandas as pd
 
-from hrp import *
-from hrpBL import *
-
-from scipy.spatial.distance import squareform
+from hrp import correl_dist, get_quasi_diag, get_rec_bipart
+from hrp_black_litterman import black_litterman_pipeline
+from sklearn.covariance import LedoitWolf
+import scipy.cluster.hierarchy as sch
 
 def asset_allocator(
     start_date=0,
@@ -14,9 +19,9 @@ def asset_allocator(
     market_caps_df=None,
     pred_vol_scale=0.5,
     tau=1.0,
-    BL = True,
-    LW = True,
-    N_Stocks = 75
+    bl = True,
+    lw = True,
+    n_stocks = 75
 ):
     """
     Inputs :
@@ -54,7 +59,7 @@ def asset_allocator(
     # Select top 100 stocks based on absolute signal value
     abs_signals = signals_end.abs()
     abs_signals = abs_signals.sort_values(ascending=False)
-    selected_stocks = abs_signals.index[:N_Stocks].tolist()
+    selected_stocks = abs_signals.index[:n_stocks].tolist()
     signals_end = signals_end[selected_stocks]
 
     # Filter the data to only include the selected stocks
@@ -64,10 +69,10 @@ def asset_allocator(
     # Step 2) Compute the covariance matrix
     # Covariance matrix using Ledoit-Wolf shrinkage
     returns = prices.pct_change().dropna()
-    if LW:
-        
-        lw = LedoitWolf()
-        shrunk_cov_matrix = lw.fit(returns).covariance_
+    if lw:
+
+        l_wolf = LedoitWolf()
+        shrunk_cov_matrix = l_wolf.fit(returns).covariance_
         cov = pd.DataFrame(
             shrunk_cov_matrix, index=selected_stocks, columns=selected_stocks
         )
@@ -80,10 +85,10 @@ def asset_allocator(
     market_caps = market_caps_df.iloc[end_date]
 
         # Step 4) Incorporate views from signals
-    if BL:
+    if bl:
         # Step 5) Black-Litterman
         volatility = returns.std()
-        posterior_mean, posterior_cov = BL_pipeline(cov, 
+        posterior_mean, posterior_cov = black_litterman_pipeline(cov,
                                                     signals_end,
                                                     market_caps,
                                                     volatility,
@@ -102,7 +107,7 @@ def asset_allocator(
         if min_eigenvalue < 0:
             # print("Adding small value to diagonal of posterior covariance matrix.")
             posterior_cov += np.eye(len(posterior_cov)) * (-min_eigenvalue + 1e-6)
-            
+
     else:
         pi = pd.Series(pi, index=selected_stocks)
         # equally weighted returns
@@ -110,7 +115,7 @@ def asset_allocator(
         posterior_mean = pi
         posterior_cov = cov
 
-        
+
     # Step 6) Hierarchical Risk Parity (HRP)
     # Reconstruct the correlation matrix from the posterior covariance matrix
     std_devs = np.sqrt(np.diag(posterior_cov))
@@ -122,7 +127,7 @@ def asset_allocator(
     corr = pd.DataFrame(corr, index=selected_stocks, columns=selected_stocks)
 
     # Now compute the distance matrix
-    dist = correlDist(corr)
+    dist = correl_dist(corr)
 
     # Check for NaNs in the distance matrix
     if np.isnan(dist.to_numpy()).any():
@@ -136,18 +141,18 @@ def asset_allocator(
 
     # Cluster using hierarchical clustering
     link = sch.linkage(dist, method="single")
-    sortIx = getQuasiDiag(link)
-    sortIx = corr.index[sortIx].tolist()
+    sort_ix = get_quasi_diag(link)
+    sort_ix = corr.index[sort_ix].tolist()
 
     # Reorder covariance matrix for clustered stocks
-    cov_reordered = posterior_cov.loc[sortIx, sortIx]
-    corr_reordered = corr.loc[sortIx, sortIx]
+    cov_reordered = posterior_cov.loc[sort_ix, sort_ix]
+    # corr_reordered = corr.loc[sort_ix, sort_ix]
 
     # Plot reordered correlation matrix
     # plotCorrMatrix('HRP_BL_corr1.png', corr_reordered, labels=corr_reordered.columns)
 
     # Apply HRP with Black-Litterman posterior covariance
-    hrp_weights = getRecBipart(cov_reordered, sortIx, posterior_mean)
+    hrp_weights = get_rec_bipart(cov_reordered, sort_ix, posterior_mean)
 
     # print("HRP Weights:")
     # print(hrp_weights)
@@ -165,14 +170,14 @@ def asset_allocator(
 
 if __name__ == "__main__":
     # Load data
-    prices = pd.read_pickle("objects/prices.pkl")
-    signals = pd.read_pickle("objects/signals.pkl")
-    market_caps = pd.read_pickle("objects/market_caps.pkl")
-    start_date = 0
-    end_date = 100
+    prices_df = pd.read_pickle("objects/prices.pkl")
+    signals_df = pd.read_pickle("objects/signals.pkl")
+    market_caps_df = pd.read_pickle("objects/market_caps.pkl")
+    START_DATE = 0
+    END_DATE = 100
 
     # Run the asset allocator
-    weights = asset_allocator(start_date, end_date, prices, signals, market_caps)
+    weights = asset_allocator(START_DATE, END_DATE, prices_df, signals_df, market_caps_df)
     print("Market exposure (sum of weights): ", weights.sum())
     print("Sum of absolute values of weights: ", weights.abs().sum())
     print(weights)
