@@ -49,14 +49,14 @@ Follow these steps to run the complete analysis:
    ```
 4. Causal Discovery:
    ```
-   cd 0X-Causal_discovery   
+   cd 0X-Causal_discovery
    python discovery.py
    cd ..
    ```
 5. Predictor:
    ```
    cd 04-Predictor
-   python train_fixed_size_memory_optimized_pca.py
+   python train.py
    cd ..
    ```
 
@@ -64,13 +64,13 @@ Follow these steps to run the complete analysis:
 
 After running all the scripts, you'll find the following output:
 
-- `objects/FULL_stacked_data.pkl`   
-- `objects/causal_dataset.pkl`     
-- `objects/predictions_1.csv to predictions_13.csv`   
-- `objects/WEIGHT_SAMPLING.pkl`    
-- `objects/mkt_ind.csv`            
-- `objects/X_DATASET.pkl`                   
-- `objects/Y_DATASET.pkl`          
+- `objects/FULL_stacked_data.pkl`
+- `objects/causal_dataset.pkl`
+- `objects/predictions_1.csv to predictions_13.csv`
+- `objects/WEIGHT_SAMPLING.pkl`
+- `objects/mkt_ind.csv`
+- `objects/X_DATASET.pkl`
+- `objects/Y_DATASET.pkl`
 - `objects/predictions_0.csv to predictions_13.csv`
 - `objects/predictions.csv` -- Final predictions on the test dataset
 
