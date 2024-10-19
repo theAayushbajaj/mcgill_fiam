@@ -1,0 +1,13 @@
+raw_data/*
+!raw_data/.gitkeep
+
+stocks_data/*
+!stocks_data/.gitkeep
+
+# notebooks/*
+# !notebooks/.gitkeep
+
+objects/*
+!objects/.gitkeep
+papers/
+data/
