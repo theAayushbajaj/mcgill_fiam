@@ -9,3 +9,5 @@ stocks_data/*
 
 objects/*
 !objects/.gitkeep
+papers/
+data/
