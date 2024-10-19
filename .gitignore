@@ -11,3 +11,4 @@ objects/*
 !objects/.gitkeep
 papers/
 data/
+__pycache__/*
