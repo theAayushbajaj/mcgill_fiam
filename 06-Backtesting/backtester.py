@@ -8,16 +8,17 @@ import os
 from backtest_stats import get_tl_stats, get_trading_log, performance_benchmark
 from concurrent.futures import ProcessPoolExecutor, as_completed
 import pandas as pd
+import numpy as np
 from tqdm import tqdm
 
 # Set the current working directory
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 sys.path.append("../05-Asset_Allocation")
-import strategy_1.main as strat
+import strategy_5.main as strat
 
 
-def compute_weights_for_period(i, strategy, **kwargs):
+def compute_weights_for_period(i, prev_weight, strategy, **kwargs):
     """
     Inputs:
     - i: End Date
@@ -29,6 +30,7 @@ def compute_weights_for_period(i, strategy, **kwargs):
     """
     # Call the strategy to get the weights for the current period
     weights = strategy(
+        previous_weight=prev_weight,
         start_date=0,
         end_date=i,
         **kwargs,
@@ -61,48 +63,25 @@ def backtest(
 
     It should take the strategy, roll it forward, and compute the weights,
     trade by trade, from start date to end date
-
-
     """
 
-    # Set backtest_df as excess_returns, add '_excess' to the columns
-    # backtest_df = excess_returns.copy()
-    # backtest_df.columns = [col + '_excess' for col in excess_returns.columns]
-
-    # Add columns for the weights (all zeros, column with _weight suffix)
+    # Initialize the weights DataFrame with zeros
     weights_df = pd.DataFrame(
-        columns=excess_returns.columns, index=excess_returns.index
+        data=0, columns=excess_returns.columns, index=excess_returns.index
     )
-    # weights_df = weights_df.fillna(0.0)
-    # weights_df
+    # Compute weights for each period sequentially
+    for i in tqdm(
+        range(start_month_pred, len(excess_returns), rebalance_period),
+        desc="Backtesting",
+    ):
+        _, weights = compute_weights_for_period(
+            i, weights_df.iloc[i - 1], strategy, **kwargs
+        )
+        weights_df.iloc[i] = weights
 
-    # Get the maximum number of workers (equal to the number of available CPU cores)
-    max_workers = os.cpu_count()
-    print(f"Using {max_workers} workers.")
-
-    # Set up the parallel execution using ProcessPoolExecutor
-    with ProcessPoolExecutor(max_workers=max_workers) as executor:
-        # Submit tasks to the pool
-        futures = [
-            executor.submit(
-                compute_weights_for_period,
-                i,
-                strategy,
-                **kwargs,
-            )
-            for i in range(start_month_pred, len(excess_returns), rebalance_period)
-        ]
-
-        # As each future completes, update the weights dataframe with a progress bar
-        for future in tqdm(
-            as_completed(futures), total=len(futures), desc="Backtesting"
-        ):
-            i, weights = future.result()
-            weights_df.iloc[i] = weights
-
-    # ffil NAs
+    # ffill NAs
     weights_df = weights_df.ffill()
-    # fill the remaing NAs with 0
+    # fill the remaining NAs with 0
     weights_df = weights_df.fillna(0.0)
 
     return weights_df
@@ -119,6 +98,7 @@ def stats(weights_df, excess_returns_df, benchmark, start_month_pred=100):
     trading_stats = performance_benchmark(trading_log, benchmark, weights_df)
 
     return trading_stats, trading_log_stats
+
 
 if __name__ == "__main__":
     if input("Do you want to run useful objects? (y/n): ") == "y":
@@ -139,7 +119,10 @@ if __name__ == "__main__":
         "bl": True,
         "lw": True,
         "n_stocks": 100,
-        "long_only" : True,
+        "long_only": True,
+        "benchmark_df": benchmark_df,
+        "risk_aversion": 1.0,
+        "soft_risk": 0.01,
     }
     REBALANCE_PERIOD = 1
     strategy = strat.asset_allocator
@@ -159,10 +142,7 @@ if __name__ == "__main__":
     # weights
     weights = weights.iloc[START_MONTH_PRED:]
     excess_returns = excess_returns.iloc[START_MONTH_PRED:]
-    Trading_Stats, TradingLog_Stats = stats(
-        weights, excess_returns, benchmark_df
-    )
-
+    Trading_Stats, TradingLog_Stats = stats(weights, excess_returns, benchmark_df)
 
     # Present your top 10 holdings on average over OOS testing period,
     # 01/2010 to 12/2023
@@ -175,11 +155,20 @@ if __name__ == "__main__":
 
     print()
     print("Overall Stats :")
-    print(TradingLog_Stats['Overall'])
+    print(TradingLog_Stats["Overall"])
 
     print()
     print("Long vs Short Stats :")
-    print(TradingLog_Stats['Long_Short'])
+    print(TradingLog_Stats["Long_Short"])
+
+    print("Portfolio Exposure over time")
+    weight_sum = weights.sum(axis=1)
+    abs_weight_sum = np.abs(weights).sum(axis=1)
+    print("Weight sum")
+    print(weight_sum)
+    print()
+    print("Abs weight sum")
+    print(abs_weight_sum)
 
     # save in objects
     # Save Trading_Stats dictionary
@@ -189,3 +178,7 @@ if __name__ == "__main__":
     # Save TradingLog_Stats dictionary
     with open("../objects/TradingLog_Stats.pkl", "wb") as f:
         pickle.dump(TradingLog_Stats, f)
+
+    # Save weights
+    weights.to_pickle("../objects/weights.pkl")
+    print("Objects saved successfully.")

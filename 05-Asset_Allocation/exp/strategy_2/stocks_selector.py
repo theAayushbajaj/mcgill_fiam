@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 
-
 def main(signal, prices, portfolio_size, long_only=True, min_size=60):
     """
     Args:

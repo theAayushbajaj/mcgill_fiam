@@ -192,6 +192,8 @@ def performance_benchmark(trading_log, benchmark, weights_df):
         trading_stats["Portfolio"]["Cumulative Return"],
         trading_stats["Benchmark"]["Cumulative Return"],
     )
+    
+    plot_weights(weights_df)
 
     # Print Benchmark Stats
     print("Benchmark Stats :")
@@ -338,6 +340,49 @@ def plot_cumulative(portfolio_cumulative, benchmark_cumulative):
     plt.title("Cumulative Return Comparison")
     plt.legend()
     plt.show()
+    
+import matplotlib.pyplot as plt
+
+def plot_weights(weights_df):
+    """
+    To track how the weights are being allocated, plot the sum of the weights
+    and the sum of the absolute weights.
+    """
+    # Calculate sum of weights and sum of absolute weights
+    weights = weights_df.sum(axis=1)
+    abs_weights = weights_df.abs().sum(axis=1)
+    
+    # Round the sums to avoid floating-point errors
+    weights_rounded = weights.round(4)
+    abs_weights_rounded = abs_weights.round(4)
+    
+    # Create the plot
+    plt.figure(figsize=(12, 6))
+    
+    # Plot the sum of weights (solid line)
+    plt.plot(weights_rounded.index, weights_rounded.values, label="Sum of Weights")
+    
+    # Plot the sum of absolute weights (dotted line)
+    plt.plot(abs_weights_rounded.index, abs_weights_rounded.values, label="Sum of Absolute Weights", linestyle=':')
+    
+    # Set plot labels and title
+    plt.xlabel("Date")
+    plt.ylabel("Weights")
+    plt.title("Weights Allocation")
+    
+    # Add a legend
+    plt.legend()
+    
+    # Set y-axis limits to focus on small variations around 1.0
+    plt.ylim(0.99, 1.01)
+    
+    # Add grid lines for better readability
+    plt.grid(True)
+    
+    # Show the plot
+    plt.show()
+
+
 
 
 def compute_portfolio_alpha(returns, benchmark):
