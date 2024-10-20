@@ -7,6 +7,9 @@ import matplotlib.pyplot as mpl
 import numpy as np
 import pandas as pd
 
+import scipy.cluster.hierarchy as sch
+
+
 def get_ivp(cov):
     """
     Compute the inverse-variance portfolio (IVP) based on the covariance matrix.
@@ -24,12 +27,12 @@ def get_ivp(cov):
     numpy.ndarray: An array representing the weights of the assets in the
                    inverse-variance portfolio. The weights sum to 1.
     """
-    ivp = 1. / np.diag(cov)
+    ivp = 1.0 / np.diag(cov)
     ivp /= ivp.sum()
     return ivp
 
 
-def get_cluster_var(cov,c_items):
+def get_cluster_var(cov, c_items):
     """
     Compute the variance of a specified cluster based on its covariance matrix.
 
@@ -46,10 +49,11 @@ def get_cluster_var(cov,c_items):
     Returns:
     float: The variance of the specified cluster of assets.
     """
-    cov_=cov.loc[c_items,c_items]
-    w_=get_ivp(cov_).reshape(-1,1)
-    c_var=np.dot(np.dot(w_.T,cov_),w_)[0,0]
+    cov_ = cov.loc[c_items, c_items]
+    w_ = get_ivp(cov_).reshape(-1, 1)
+    c_var = np.dot(np.dot(w_.T, cov_), w_)[0, 0]
     return c_var
+
 
 def get_cluster_mean(mu, c_items):
     """
@@ -132,8 +136,12 @@ def get_rec_bipart(cov, sort_ix, mu, long_only=True):
     w = pd.Series(1, index=sort_ix)
     c_items = [sort_ix]  # initialize all items in one cluster
     while len(c_items) > 0:
-        c_items = [i[j:k] for i in c_items for j, k in
-                  ((0, len(i) // 2), (len(i) // 2, len(i))) if len(i) > 1]  # bi-section
+        c_items = [
+            i[j:k]
+            for i in c_items
+            for j, k in ((0, len(i) // 2), (len(i) // 2, len(i)))
+            if len(i) > 1
+        ]  # bi-section
         for i in range(0, len(c_items), 2):  # parse in pairs
             c_items_0 = c_items[i]  # cluster 1
             c_items_1 = c_items[i + 1]  # cluster 2
@@ -143,18 +151,18 @@ def get_rec_bipart(cov, sort_ix, mu, long_only=True):
             c_mean_0 = get_cluster_mean(mu, c_items_0)
             c_mean_1 = get_cluster_mean(mu, c_items_1)
             # Calculate Sharpe ratios for clusters
-            sr0 = c_mean_0 /(np.sqrt(c_var_0)) if c_var_0 > 0 else 0
+            sr0 = c_mean_0 / (np.sqrt(c_var_0)) if c_var_0 > 0 else 0
             sr1 = c_mean_1 / (np.sqrt(c_var_1)) if c_var_1 > 0 else 0
-            
+
             # Long Only
             if long_only:
-                sr0 = max(sr0,0)
-                sr1 = max(sr1,0)
+                sr0 = max(sr0, 0)
+                sr1 = max(sr1, 0)
 
             denom = abs(sr0) + abs(sr1) + 1e-6
             # Allocate weights proportional to Sharpe ratios
             alpha = sr1 / denom if denom != 0 else 0.5
-            w[c_items_0] *= sr0/ denom
+            w[c_items_0] *= sr0 / denom
             w[c_items_1] *= sr1 / denom
     return w
 
@@ -177,11 +185,11 @@ def correl_dist(corr):
                                  correlation matrix, where distances are
                                  in the range [0, 1].
     """
-    dist = ((1 - corr) / 2.)**.5  # distance matrix
+    dist = ((1 - corr) / 2.0) ** 0.5  # distance matrix
     return dist
 
 
-def plot_corr_matrix(path,corr,labels=None):
+def plot_corr_matrix(path, corr, labels=None):
     """
     Plot and save a heatmap of the correlation matrix.
 
@@ -201,11 +209,79 @@ def plot_corr_matrix(path,corr,labels=None):
           does not return any value.
     """
     if labels is None:
-        labels=[]
+        labels = []
     mpl.pcolor(corr)
     mpl.colorbar()
-    mpl.yticks(np.arange(.5,corr.shape[0]+.5),labels)
-    mpl.xticks(np.arange(.5,corr.shape[0]+.5),labels)
+    mpl.yticks(np.arange(0.5, corr.shape[0] + 0.5), labels)
+    mpl.xticks(np.arange(0.5, corr.shape[0] + 0.5), labels)
     mpl.saveﬁg(path)
     mpl.clf()
-    mpl.close() # reset pylab
+    mpl.close()  # reset pylab
+
+
+def main(
+    weights,
+    posterior_cov,
+    posterior_mean,
+    selected_stocks,
+    benchmark_df,
+    long_only=True,
+):
+    """
+    _summary_
+
+    Args:
+        weights (pd.DataFrame): DataFrame containing the weights of the asset,
+                                All possible stocks (not just selected ones)
+        posterior_cov (pd.DataFrame): Posterior covariance matrix of the selected stocks
+        posterior_mean (pd.Series): Posterior mean of the selected stocks
+        selected_stocks (list): List of selected stocks
+
+    Returns:
+        pd.DataFrame: DataFrame containing the weights of all the assets
+        (not selected stocks will have 0 weight)
+    """
+    # Reconstruct the correlation matrix from the posterior covariance matrix
+    std_devs = np.sqrt(np.diag(posterior_cov))
+    # Avoid division by zero
+    std_devs[std_devs == 0] = 1e-6
+    corr = posterior_cov / np.outer(std_devs, std_devs)
+    corr = np.clip(corr, -1, 1)
+    corr.values[range(corr.shape[0]), range(corr.shape[1])] = 1.0
+    corr = pd.DataFrame(corr, index=selected_stocks, columns=selected_stocks)
+
+    # Now compute the distance matrix
+    dist = correl_dist(corr)
+
+    # Check for NaNs in the distance matrix
+    if np.isnan(dist.to_numpy()).any():
+        # print("NaNs detected in distance matrix.")
+        dist = np.nan_to_num(dist, nan=1e6)
+
+    dist = pd.DataFrame(dist, index=selected_stocks, columns=selected_stocks)
+
+    # Plot correlation matrix
+    # plotCorrMatrix('HRP_BL_corr0.png', corr, labels=corr.columns)
+
+    # Cluster using hierarchical clustering
+    link = sch.linkage(dist, method="single")
+    sort_ix = get_quasi_diag(link)
+    sort_ix = corr.index[sort_ix].tolist()
+
+    # Reorder covariance matrix for clustered stocks
+    cov_reordered = posterior_cov.loc[sort_ix, sort_ix]
+    # corr_reordered = corr.loc[sort_ix, sort_ix]
+
+    # Plot reordered correlation matrix
+    # plotCorrMatrix('HRP_BL_corr1.png', corr_reordered, labels=corr_reordered.columns)
+
+    # Apply HRP with Black-Litterman posterior covariance
+    hrp_weights = get_rec_bipart(
+        cov_reordered, sort_ix, posterior_mean, long_only=long_only
+    )
+
+
+    # Assign the weights to the output DataFrame
+    weights.loc[hrp_weights.index, "Weight"] = hrp_weights
+
+    return weights
