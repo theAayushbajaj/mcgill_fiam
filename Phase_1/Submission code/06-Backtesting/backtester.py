@@ -14,7 +14,7 @@ from tqdm import tqdm
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 sys.path.append("../05-Asset_Allocation")
-import strategy_1.main as strat
+import strategy as strat
 
 
 def compute_weights_for_period(i, strategy, **kwargs):
@@ -121,8 +121,6 @@ def stats(weights_df, excess_returns_df, benchmark, start_month_pred=100):
     return trading_stats, trading_log_stats
 
 if __name__ == "__main__":
-    if input("Do you want to run useful objects? (y/n): ") == "y":
-        import useful_objects
     prices = pd.read_pickle("../objects/prices.pkl")
     signals = pd.read_pickle("../objects/signals.pkl")
     market_caps_df = pd.read_pickle("../objects/market_caps.pkl")
@@ -138,8 +136,7 @@ if __name__ == "__main__":
         "market_caps_df": market_caps_df,
         "bl": True,
         "lw": True,
-        "n_stocks": 100,
-        "long_only" : True,
+        "n_stocks": 50,
     }
     REBALANCE_PERIOD = 1
     strategy = strat.asset_allocator

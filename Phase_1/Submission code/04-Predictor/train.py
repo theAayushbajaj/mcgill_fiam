@@ -66,7 +66,7 @@ Y.index = pd.MultiIndex.from_tuples(
 )
 
 # Initialize parameters
-starting = pd.to_datetime("2003-01-01")
+starting = pd.to_datetime("2004-01-01")
 training_window = pd.DateOffset(years=5)
 validation_window = pd.DateOffset(years=2)
 test_window = pd.DateOffset(years=1)
