@@ -31,18 +31,25 @@ def main(
     benchmark_std = benchmark_df["sp_ret"].std()
 
     def objective(w):
-        return posterior_mean @ w - risk_aversion * 0.5 * w @ posterior_cov @ w
+        return posterior_mean @ w
 
     def constraint(w):
         eq_cons = []
         inequality_cons = []
 
-        inequality_cons.append(np.sum(w) - 1.0) # sum(w) <= 1.0
-        inequality_cons.append(0.80 - np.sum(w)) # sum(w) >= 0.75
+        # Sum of weights = 1
+        # eq_cons.append(np.sum(w) - 1)
 
         # Risk lower than benchmark
         inequality_cons.append(
             w @ posterior_cov @ w - (benchmark_std**2 + soft_risk) # w @ posterior_cov @ w <= benchmark_std**2 + soft_risk
+        )
+        
+        inequality_cons.append(
+            sum(w) - 1 # sum(w) <= 1
+        )
+        inequality_cons.append(
+            -sum(w) # sum(w) >= 0
         )
         
         # w <= 0.10 for each stock
