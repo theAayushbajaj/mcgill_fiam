@@ -162,6 +162,11 @@ def get_rec_bipart(cov, sort_ix, mu, long_only=True):
             denom = abs(sr0) + abs(sr1) + 1e-6
             # Allocate weights proportional to Sharpe ratios
             alpha = sr1 / denom if denom != 0 else 0.5
+            print('The stocks in cluster 0 are: ')
+            print(c_items_0)
+            print()
+            print('The stocks in cluster 1 are: ')
+            print(c_items_1)
             w[c_items_0] *= sr0 / denom
             w[c_items_1] *= sr1 / denom
     return w

@@ -2,20 +2,26 @@
 This script runs the backtest on the results of the strategy.
 """
 
+import warnings
 import pickle
 import sys
 import os
 from backtest_stats import get_tl_stats, get_trading_log, performance_benchmark
-from concurrent.futures import ProcessPoolExecutor, as_completed
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
+
+# Suppress warnings
+warnings.filterwarnings("ignore", category=UserWarning)
+warnings.filterwarnings("ignore", category=FutureWarning)
+warnings.filterwarnings("ignore", category=pd.errors.PerformanceWarning)
 
 # Set the current working directory
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 sys.path.append("../05-Asset_Allocation")
 import strategy_1.main as strat
+path_to_strategy = "../05-Asset_Allocation/strategy_1"
 
 
 def compute_weights_for_period(i, prev_weight, strategy, **kwargs):
@@ -122,7 +128,7 @@ if __name__ == "__main__":
         "long_only": True,
         "benchmark_df": benchmark_df,
         "risk_aversion": 10.0,
-        "soft_risk": 0.0,
+        "soft_risk": 0.02,
     }
     REBALANCE_PERIOD = 1
     strategy = strat.asset_allocator

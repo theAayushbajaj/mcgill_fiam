@@ -188,13 +188,17 @@ def performance_benchmark(trading_log, benchmark, weights_df):
         df["Portfolio"], df["Benchmark"]
     )
 
+    # Convert to DataFrame and save as CSV
+    stats_df = pd.DataFrame(trading_stats["Portfolio"], index=[0]).T
+    stats_df.to_csv("portfolio_stats.csv", float_format="%.4f")
+
     plot_cumulative(
         trading_stats["Portfolio"]["Cumulative Return"],
         trading_stats["Benchmark"]["Cumulative Return"],
     )
     
     plot_weights(weights_df)
-
+    
     # Print Benchmark Stats
     print("Benchmark Stats :")
     benchmark_stats = {
@@ -218,6 +222,7 @@ def performance_benchmark(trading_log, benchmark, weights_df):
     )
 
     return trading_stats
+
 
 
 def compute_stats(returns):
@@ -325,24 +330,53 @@ def compute_portfolio_turnover(weights_df):
     return average_turnover
 
 
+import matplotlib.pyplot as plt
+import matplotlib.ticker as mticker
+
 def plot_cumulative(portfolio_cumulative, benchmark_cumulative):
     """
-    Plots the cumulative returns of portfolio and benchmark.
+    Plots the cumulative returns of portfolio and benchmark in a professional style.
     Inputs:
     - portfolio_cumulative : pd.Series : cumulative returns of the portfolio
     - benchmark_cumulative : pd.Series : cumulative returns of the benchmark
     """
-    plt.figure(figsize=(12, 6))
-    plt.plot(portfolio_cumulative.index, portfolio_cumulative.values, label="Portfolio")
-    plt.plot(benchmark_cumulative.index, benchmark_cumulative.values, label="Benchmark")
-    plt.xlabel("Date")
-    plt.ylabel("Cumulative Return")
-    plt.title("Cumulative Return Comparison")
-    plt.legend()
-    plt.show()
-    
-import matplotlib.pyplot as plt
+    # Set a professional style
+    plt.style.use('seaborn-whitegrid')
 
+    # Create a figure and axis object
+    fig, ax = plt.subplots(figsize=(12, 6))
+    
+    # Plot cumulative returns of the portfolio and benchmark
+    ax.plot(portfolio_cumulative.index, portfolio_cumulative.values, label="Portfolio", linewidth=2, color='steelblue')
+    ax.plot(benchmark_cumulative.index, benchmark_cumulative.values, label="Benchmark", linewidth=2, color='darkorange')
+    
+    # Set axis labels with a larger font
+    ax.set_xlabel("Date", fontsize=14, labelpad=10)
+    ax.set_ylabel("Cumulative Return (%)", fontsize=14, labelpad=10)
+    
+    # Set title with a larger font
+    ax.set_title("Cumulative Return Comparison", fontsize=16, pad=20, weight='bold')
+    
+    # Format the y-axis to show percentages
+    ax.yaxis.set_major_formatter(mticker.PercentFormatter(1.0))
+    
+    # Add subtle gridlines
+    ax.grid(True, which='both', linestyle='--', linewidth=0.5, alpha=0.7)
+    
+    # Add a legend with larger font
+    ax.legend(loc="upper left", fontsize=12)
+
+    # Rotate the x-axis labels slightly for better readability
+    plt.xticks(rotation=45)
+    
+    # Save the plot to a file
+    plt.savefig("professional_cumulative_return_comparison.png", bbox_inches="tight")
+
+    # Close the plot to prevent display freezing
+    plt.close()
+
+
+    
 def plot_weights(weights_df):
     """
     To track how the weights are being allocated, plot the sum of the weights
@@ -374,14 +408,50 @@ def plot_weights(weights_df):
     plt.legend()
     
     # Set y-axis limits to focus on small variations around 1.0
-    plt.ylim(0.99, 1.01)
+    plt.ylim(0.80, 1.10)
     
     # Add grid lines for better readability
     plt.grid(True)
     
-    # Show the plot
-    plt.show()
+    # Save the plot to a file
+    plt.savefig("weights_allocation.png")
+    
+    # Do not show the plot to prevent freezing
+    plt.close()
 
+
+def plot_stats_table(stats_df):
+    """
+    Plots the stats table using matplotlib.
+    Inputs:
+    - stats_df : pd.DataFrame : DataFrame containing the portfolio stats
+    """
+    # Create a figure for the table with a larger size to accommodate the table
+    fig, ax = plt.subplots(figsize=(12, 6))  # Adjust the size as needed
+    ax.axis('off')  # Hide the axes
+
+    # Create the table with manual column widths and centered text
+    table = ax.table(
+        cellText=stats_df.values,
+        colLabels=stats_df.columns,
+        rowLabels=stats_df.index,
+        cellLoc='center',
+        loc='center'
+    )
+
+    # Adjust font size and scaling for better readability
+    table.auto_set_font_size(False)
+    table.set_fontsize(12)
+    table.scale(1.5, 1.5)  # Adjust scaling for readability
+
+    # Adjust column widths manually
+    for (i, j), cell in table.get_celld().items():
+        cell.set_text_props(ha="center", va="center")  # Align text center
+
+    # Save the table to a PNG file
+    plt.savefig("portfolio_stats_table.png", bbox_inches="tight")
+
+    plt.close()
 
 
 

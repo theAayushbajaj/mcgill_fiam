@@ -59,7 +59,7 @@ def asset_allocator(
         key: kwargs[key] for key in ["min_size", "long_only"] if key in kwargs
     }
     selected_stocks = stocks_selector.main(
-        signal_end, prices, portfolio_size, **stock_selector_kwargs
+        market_caps_df.iloc[end_date], prices, portfolio_size, **stock_selector_kwargs
     )
     # Filter the data to only include the selected stocks
     prices = prices[selected_stocks]
@@ -69,18 +69,16 @@ def asset_allocator(
     market_caps = market_caps_df.iloc[end_date]
 
     # Step 2) Compute the Covariance matrix and Expected Returns vector
-    mean_cov_kwargs = {
-        key: kwargs[key]
-        for key in ["pred_vol_scale", "tau", "lambda_"]
-        if key in kwargs
-    }
+    mean_cov_kwargs = {key: kwargs[key] for key in ["lambda_"] if key in kwargs}
     u_vector, cov_matrix = mean_cov_computer.main(
-        returns, signal_end, market_caps, selected_stocks, **mean_cov_kwargs
+        returns, market_caps, selected_stocks, **mean_cov_kwargs
     )
 
     # Step 3) Compute the optimal weights
     weight_optimizer_kwargs = {
-        key: kwargs[key] for key in ["long_only"] if key in kwargs
+        key: kwargs[key]
+        for key in ["long_only", "risk_aversion", "soft_risk"]
+        if key in kwargs
     }
     optimized_weights = weight_optimizer.main(
         weights,
@@ -121,9 +119,9 @@ if __name__ == "__main__":
     }
     start_date = 0
     end_date = 140
-    previous_weights = pd.DataFrame(data={"Weight": 0.0}, index=prices.columns)
+
     # Run the asset allocator
-    weights = asset_allocator(start_date=start_date, end_date=end_date, previous_weight = None, **kwargs)
+    weights = asset_allocator(start_date=start_date, end_date=end_date, **kwargs)
 
     print("Market exposure (sum of weights): ", weights.sum())
     print("Sum of absolute values of weights: ", weights.abs().sum())

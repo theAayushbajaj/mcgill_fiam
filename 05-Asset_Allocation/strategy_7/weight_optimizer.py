@@ -31,7 +31,7 @@ def main(
     benchmark_std = benchmark_df["sp_ret"].std()
 
     def objective(w):
-        return posterior_mean @ w - risk_aversion * 0.5 * w @ posterior_cov @ w
+        return posterior_mean @ w # - risk_aversion * 0.5 * w @ posterior_cov @ w
 
     def constraint(w):
         eq_cons = []

@@ -37,8 +37,8 @@ def main(
         eq_cons = []
         inequality_cons = []
 
-        # Sum of weights = 1
-        eq_cons.append(np.sum(w) - 1)
+        inequality_cons.append(np.sum(w) - 1.0) # sum(w) <= 1.0
+        inequality_cons.append(0.90 - np.sum(w)) # sum(w) >= 0.80
 
         # Risk lower than benchmark
         inequality_cons.append(
