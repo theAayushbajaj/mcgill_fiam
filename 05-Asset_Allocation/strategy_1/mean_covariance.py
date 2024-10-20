@@ -21,8 +21,10 @@ def black_litterman(cov, market_implied_returns, p, q, omega, tau=0.05):
     tau_cov = tau * cov
     m_inverse = inv(tau_cov)
     omega_inv = inv(omega)
+
     # Compute posterior covariance
     posterior_cov = inv(m_inverse + p.T @ omega_inv @ p)
+
     # Compute posterior mean
     posterior_mean = posterior_cov @ (m_inverse @ pi + p.T @ omega_inv @ q)
 
@@ -31,12 +33,13 @@ def black_litterman(cov, market_implied_returns, p, q, omega, tau=0.05):
 
 def get_market_implied_returns(cov, market_weights, lambda_=2.5):
     """Compute market-implied returns."""
+
     # pi = delta * cov * market_weights
     pi = lambda_ * cov @ market_weights
     return pi
 
 
-def main(
+def compute_mean_covariance(
     returns,
     signals,
     market_caps,

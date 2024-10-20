@@ -1,18 +1,38 @@
-import numpy as np
-import pandas as pd
+"""
+Module for signal-based stock selection with data sufficiency filtering.
 
+Key Features:
+- Selects stocks based on signal values.
+- Filters stocks with insufficient price history.
+- Supports long-only and long-short portfolios.
 
-def main(signal, prices, portfolio_size, long_only=True, min_size=60):
+Functions:
+- main(signal, prices, portfolio_size, long_only=True,
+  min_size=60): Stock selection based on signals.
+"""
+
+def select_stocks(signal, prices, portfolio_size, long_only=True, min_size=60):
     """
-    Args:
-        signal (pd.Series): signal for each stock at prediction time
-        prices (pd.DataFrame): prices dataframe, full data
-        portfolio_size (int): number of stocks to select
-        long_only (bool): whether to only long the stocks
-        min_size (int): minimum number of non-NA prices for a stock to be selected
-        
+    Selects stocks for a portfolio based on signal values, with optional long-short selection.
+
+    Parameters:
+    -----------
+    - signal : pd.Series
+        Signal values for stock selection (higher values indicate stronger preference).
+    - prices : pd.DataFrame
+        Historical price data for stocks.
+    - portfolio_size : int
+        Number of stocks to include in the portfolio.
+    - long_only : bool, optional (default=True)
+        If True, selects stocks with positive signals only;
+        If False, selects based on absolute signal values.
+    - min_size : int, optional (default=60)
+        Minimum number of non-NA price entries required to include a stock.
+
     Returns:
-        list: list of selected stocks
+    --------
+    - selected_stocks : list
+        List of stocks selected for the portfolio.
     """
 
     # Set signals to 0 for stocks with less than 60 non-NA price values
@@ -33,4 +53,4 @@ def main(signal, prices, portfolio_size, long_only=True, min_size=60):
         selected_stocks = sort_signals.index[:portfolio_size].tolist()
         signal = signal[selected_stocks]
 
-        return selected_stocks
+    return selected_stocks

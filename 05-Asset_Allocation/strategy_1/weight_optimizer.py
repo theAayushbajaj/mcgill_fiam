@@ -145,11 +145,13 @@ def get_rec_bipart(cov, sort_ix, mu, long_only=True):
         for i in range(0, len(c_items), 2):  # parse in pairs
             c_items_0 = c_items[i]  # cluster 1
             c_items_1 = c_items[i + 1]  # cluster 2
+
             # Calculate cluster variances and expected returns
             c_var_0 = get_cluster_var(cov, c_items_0)
             c_var_1 = get_cluster_var(cov, c_items_1)
             c_mean_0 = get_cluster_mean(mu, c_items_0)
             c_mean_1 = get_cluster_mean(mu, c_items_1)
+
             # Calculate Sharpe ratios for clusters
             sr0 = c_mean_0 / (np.sqrt(c_var_0)) if c_var_0 > 0 else 0
             sr1 = c_mean_1 / (np.sqrt(c_var_1)) if c_var_1 > 0 else 0
@@ -160,6 +162,7 @@ def get_rec_bipart(cov, sort_ix, mu, long_only=True):
                 sr1 = max(sr1, 0)
 
             denom = abs(sr0) + abs(sr1) + 1e-6
+
             # Allocate weights proportional to Sharpe ratios
             alpha = sr1 / denom if denom != 0 else 0.5
             w[c_items_0] *= sr0 / denom
@@ -218,15 +221,7 @@ def plot_corr_matrix(path, corr, labels=None):
     mpl.clf()
     mpl.close()  # reset pylab
 
-
-def main(
-    weights,
-    posterior_cov,
-    posterior_mean,
-    selected_stocks,
-    benchmark_df,
-    long_only=True,
-):
+def optimize_weights(weights, posterior_cov, posterior_mean, selected_stocks, long_only=True):
     """
     _summary_
 
@@ -241,8 +236,10 @@ def main(
         pd.DataFrame: DataFrame containing the weights of all the assets
         (not selected stocks will have 0 weight)
     """
+
     # Reconstruct the correlation matrix from the posterior covariance matrix
     std_devs = np.sqrt(np.diag(posterior_cov))
+
     # Avoid division by zero
     std_devs[std_devs == 0] = 1e-6
     corr = posterior_cov / np.outer(std_devs, std_devs)
