@@ -1,76 +1,65 @@
 import numpy as np
 import pandas as pd
-from scipy.optimize import minimize
+import cvxpy as cp
 
+def robust_optimize_portfolio(cov, mu, lambda_, benchmark_std, soft_risk=0.01):
+    n = len(mu)
+    w = cp.Variable(n)
 
+    # Define the uncertainty set for expected returns
+    # For simplicity, we'll assume the estimation error covariance is proportional to the asset covariances
+    Sigma_mu = cov.values * 0.1  # 10% of asset covariances
+    delta = 0.1  # Uncertainty level
+
+    # Robust objective: maximize worst-case expected return
+    robust_obj = mu.values @ w - lambda_ * 0.5 * cp.quad_form(w, cov.values)
+    robust_obj -= delta * cp.norm(Sigma_mu @ w, 2)
+
+    # Constraints
+    constraints = [
+        cp.sum(w) <= 1.0,
+        w >= 0,
+        w <= 0.10,
+        cp.quad_form(w, cov.values) <= (benchmark_std**2 + soft_risk**2)
+    ]
+
+    # Define and solve the problem
+    prob = cp.Problem(cp.Maximize(robust_obj), constraints)
+    prob.solve(solver=cp.SCS)
+
+    if prob.status not in ["optimal", "optimal_inaccurate"]:
+        raise ValueError("Optimization failed.")
+
+    optimized_weights = w.value
+    optimized_weights = pd.Series(optimized_weights, index=mu.index)
+    # optimized_weights /= optimized_weights.sum()  # Normalize weights
+
+    # Calculate the worst-case expected return
+    worst_case_return = mu.values @ optimized_weights.values - delta * np.linalg.norm(Sigma_mu @ optimized_weights.values)
+
+    return optimized_weights, worst_case_return
+
+# Usage example
 def main(
     weights,
     posterior_cov,
     posterior_mean,
     selected_stocks,
     benchmark_df,
-    risk_aversion=1.0,
-    long_only=True,
-    soft_risk=0.01
+    lambda_=3.07,
+    soft_risk=0.01,
 ):
-    """
-    Maximizes mu^T w - (1/2) * risk_aversion * w^T Sigma w subject to w >= 0
-    and 0<= sum(w) <= 1 and w^T Sigma w <= vol(benchmark)^2
-
-    Args:
-        weights (pd.DataFrame): DataFrame containing the weights of the asset,
-                                All possible stocks (not just selected ones)
-        posterior_cov (pd.DataFrame): Posterior covariance matrix of the selected stocks
-        posterior_mean (pd.Series): Posterior mean of the selected stocks
-        selected_stocks (list): List of selected stocks
-
-    Returns:
-        pd.DataFrame: DataFrame containing the weights of all the assets
-        (not selected stocks will have 0 weight)
-    """
+    # Prepare data
+    cov = posterior_cov.loc[selected_stocks, selected_stocks]
+    mu = posterior_mean.loc[selected_stocks]
     benchmark_std = benchmark_df["sp_ret"].std()
 
-    def objective(w):
-        return posterior_mean @ w - risk_aversion * 0.5 * w @ posterior_cov @ w
-
-    def constraint(w):
-        eq_cons = []
-        inequality_cons = []
-
-        inequality_cons.append(np.sum(w) - 1.0) # sum(w) <= 1.0
-        inequality_cons.append(0.90 - np.sum(w)) # sum(w) >= 0.80
-
-        # Risk lower than benchmark
-        inequality_cons.append(
-            w @ posterior_cov @ w - (benchmark_std**2 + soft_risk) # w @ posterior_cov @ w <= benchmark_std**2 + soft_risk
-        )
-        
-        # w <= 0.10 for each stock
-        inequality_cons.extend(w - 0.10)
-        
-
-        return np.array(eq_cons), np.array(inequality_cons)
-
-    weights_init = np.ones(len(selected_stocks)) / len(selected_stocks)
-
-    # bounds 0 <= w <= 1 for all w
-    bounds = [(0, 1)] * len(selected_stocks)
-
-    result = minimize(
-        fun=lambda w: -objective(w),
-        x0=weights_init,
-        method="SLSQP",
-        bounds=bounds,
-        constraints=[
-            {"type": "eq", "fun": lambda w: constraint(w)[0]},
-            {"type": "ineq", "fun": lambda w: -constraint(w)[1]},
-        ],
-        options={"disp": True, "maxiter": 1000, "ftol": 1e-6},
+    # Optimize portfolio
+    optimized_weights, worst_case_return = robust_optimize_portfolio(
+        cov, mu, lambda_, benchmark_std, soft_risk
     )
 
-    weights_opt = result.x
-
-    weights.loc[selected_stocks, "Weight"] = weights_opt
-
+    # Assign weights to the output DataFrame
+    weights.loc[optimized_weights.index, "Weight"] = optimized_weights
 
     return weights

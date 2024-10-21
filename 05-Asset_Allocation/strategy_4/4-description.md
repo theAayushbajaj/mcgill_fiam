@@ -1,0 +1,1 @@
+Like strat 3, but cluster of same size

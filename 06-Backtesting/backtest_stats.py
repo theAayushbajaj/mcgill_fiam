@@ -238,22 +238,23 @@ def compute_stats(returns):
     returns = returns.dropna()
 
     # Cumulative return
-    stats["Cumulative Return"] = (1 + returns).cumprod()
+    stats["Cumulative Return"] = (1 + returns).cumprod() - 1
     # Total return
-    stats["Total Return"] = stats["Cumulative Return"].iloc[-1] - 1
+    stats["Total Return"] = stats["Cumulative Return"].iloc[-1]
     # Total periods
     total_periods = len(returns)
     # Total time in years
     total_years = TIME_DELTA * total_periods
     # Annualized Return
     stats["Annualized Return"] = (
-        stats["Cumulative Return"].iloc[-1] ** (1 / total_years) - 1
+        (stats["Total Return"]+1) ** (1 / total_years) - 1
     )
+    stats['Average Annual Return'] = returns.mean() / TIME_DELTA
     # Annualized Volatility
     stats["Annualized Volatility"] = returns.std() / np.sqrt(TIME_DELTA)
     # Sharpe Ratio
     # Assuming risk-free rate is zero (since we are working with excess returns)
-    stats["Sharpe Ratio"] = stats["Annualized Return"] / stats["Annualized Volatility"]
+    stats["Sharpe Ratio"] = stats["Average Annual Return"] / stats["Annualized Volatility"]
     # Max Drawdown
     # Compute drawdowns
     cumulative = stats["Cumulative Return"]

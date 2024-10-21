@@ -33,4 +33,4 @@ def main(signal, prices, portfolio_size, long_only=True, min_size=60):
         selected_stocks = sort_signals.index[:portfolio_size].tolist()
         signal = signal[selected_stocks]
 
-        return selected_stocks
+    return selected_stocks

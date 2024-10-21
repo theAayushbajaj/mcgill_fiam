@@ -25,6 +25,7 @@ def get_market_implied_returns(cov, market_weights, lambda_=2.5):
 
 def main(
     returns,
+    signals,
     market_caps,
     selected_stocks,
     lambda_=2.5,

@@ -20,7 +20,7 @@ warnings.filterwarnings("ignore", category=pd.errors.PerformanceWarning)
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 sys.path.append("../05-Asset_Allocation")
-import strategy_1.main as strat
+import strategy_2.main as strat
 path_to_strategy = "../05-Asset_Allocation/strategy_1"
 
 
@@ -37,10 +37,11 @@ def compute_weights_for_period(i, prev_weight, strategy, **kwargs):
     # Call the strategy to get the weights for the current period
     weights = strategy(
         previous_weight=prev_weight,
-        start_date=0,
+        start_date=i-60,
         end_date=i,
         **kwargs,
     )
+    print(f'At date {i}, the total allocation in the portfolio is {weights["Weight"].values.sum()}')
     return i, weights["Weight"].values
 
 
@@ -118,7 +119,8 @@ if __name__ == "__main__":
     benchmark_df["t1_index"] = pd.to_datetime(benchmark_df["t1_index"])
     kwargs = {
         "pred_vol_scale": 1.00,
-        "tau": 1.00,  # the higher tau, the more weight is given to predictions
+        "tau": 1.0,  # the higher tau, the more weight is given to predictions
+        "lambda_": 3.07,
         "prices": prices,
         "signals": signals,
         "market_caps_df": market_caps_df,
@@ -128,7 +130,8 @@ if __name__ == "__main__":
         "long_only": True,
         "benchmark_df": benchmark_df,
         "risk_aversion": 10.0,
-        "soft_risk": 0.02,
+        "soft_risk": 0.01,
+        "link_method": "average",
     }
     REBALANCE_PERIOD = 1
     strategy = strat.asset_allocator
@@ -159,22 +162,22 @@ if __name__ == "__main__":
     weight_stock = weight_stock / weights.shape[0]
     print(weight_stock.sort_values(ascending=False).iloc[:10])
 
-    print()
-    print("Overall Stats :")
-    print(TradingLog_Stats["Overall"])
+    # print()
+    # print("Overall Stats :")
+    # print(TradingLog_Stats["Overall"])
 
-    print()
-    print("Long vs Short Stats :")
-    print(TradingLog_Stats["Long_Short"])
+    # print()
+    # print("Long vs Short Stats :")
+    # print(TradingLog_Stats["Long_Short"])
 
-    print("Portfolio Exposure over time")
-    weight_sum = weights.sum(axis=1)
-    abs_weight_sum = np.abs(weights).sum(axis=1)
-    print("Weight sum")
-    print(weight_sum)
-    print()
-    print("Abs weight sum")
-    print(abs_weight_sum)
+    # print("Portfolio Exposure over time")
+    # weight_sum = weights.sum(axis=1)
+    # abs_weight_sum = np.abs(weights).sum(axis=1)
+    # print("Weight sum")
+    # print(weight_sum)
+    # print()
+    # print("Abs weight sum")
+    # print(abs_weight_sum)
 
     # save in objects
     # Save Trading_Stats dictionary

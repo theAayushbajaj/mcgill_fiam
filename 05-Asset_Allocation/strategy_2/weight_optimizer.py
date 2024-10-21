@@ -162,11 +162,6 @@ def get_rec_bipart(cov, sort_ix, mu, long_only=True):
             denom = abs(sr0) + abs(sr1) + 1e-6
             # Allocate weights proportional to Sharpe ratios
             alpha = sr1 / denom if denom != 0 else 0.5
-            print('The stocks in cluster 0 are: ')
-            print(c_items_0)
-            print()
-            print('The stocks in cluster 1 are: ')
-            print(c_items_1)
             w[c_items_0] *= sr0 / denom
             w[c_items_1] *= sr1 / denom
     return w
@@ -231,6 +226,7 @@ def main(
     selected_stocks,
     benchmark_df,
     long_only=True,
+    link_method="single",
 ):
     """
     _summary_
@@ -269,7 +265,7 @@ def main(
     # plotCorrMatrix('HRP_BL_corr0.png', corr, labels=corr.columns)
 
     # Cluster using hierarchical clustering
-    link = sch.linkage(dist, method="single")
+    link = sch.linkage(dist, method=link_method)
     sort_ix = get_quasi_diag(link)
     sort_ix = corr.index[sort_ix].tolist()
 
@@ -285,15 +281,8 @@ def main(
         cov_reordered, sort_ix, posterior_mean, long_only=long_only
     )
 
-    # print("HRP Weights:")
-    # print(hrp_weights)
-    # print('Market exposure (sum of weights): ', hrp_weights.sum())
-    # print('Sum of absolute values of weights: ', hrp_weights.abs().sum())
 
     # Assign the weights to the output DataFrame
     weights.loc[hrp_weights.index, "Weight"] = hrp_weights
-    # print("Final Weights Sum:")
-    # print(weights.abs().sum())
-    # print(weights.sum())
 
     return weights

@@ -19,6 +19,8 @@ import stocks_selector
 import weight_optimizer
 
 
+
+
 def asset_allocator(
     start_date,
     end_date,
@@ -56,10 +58,12 @@ def asset_allocator(
     # Step 1) Stock Selection
     signal_end = signals.iloc[end_date]
     stock_selector_kwargs = {
-        key: kwargs[key] for key in ["min_size", "long_only"] if key in kwargs
+        "min_size": kwargs.get("min_size", 60),
+        "long_only": kwargs.get("long_only", True),
     }
+    signal_stockSelector = market_caps_df.iloc[end_date]
     selected_stocks = stocks_selector.main(
-        market_caps_df.iloc[end_date], prices, portfolio_size, **stock_selector_kwargs
+        signal_stockSelector, prices, portfolio_size, **stock_selector_kwargs
     )
     # Filter the data to only include the selected stocks
     prices = prices[selected_stocks]
@@ -69,16 +73,19 @@ def asset_allocator(
     market_caps = market_caps_df.iloc[end_date]
 
     # Step 2) Compute the Covariance matrix and Expected Returns vector
-    mean_cov_kwargs = {key: kwargs[key] for key in ["lambda_"] if key in kwargs}
+    mean_cov_kwargs = {
+        "tau": kwargs.get("tau", 1.0),
+        "lambda_": kwargs.get("lambda_", 3.07),
+    }
     u_vector, cov_matrix = mean_cov_computer.main(
-        returns, market_caps, selected_stocks, **mean_cov_kwargs
+        returns, signal_end, market_caps, selected_stocks, **mean_cov_kwargs
     )
 
     # Step 3) Compute the optimal weights
     weight_optimizer_kwargs = {
-        key: kwargs[key]
-        for key in ["long_only", "risk_aversion", "soft_risk"]
-        if key in kwargs
+        "lambda_": kwargs.get("lambda_", 3.07),
+        "soft_risk": kwargs.get("soft_risk", 0.01),
+        
     }
     optimized_weights = weight_optimizer.main(
         weights,
@@ -90,41 +97,5 @@ def asset_allocator(
     )
 
     return optimized_weights
-
-
-# %%
-
-if __name__ == "__main__":
-    # Set the current working directory
-    os.chdir(os.path.dirname(os.path.abspath(__file__)))
-
-    prices = pd.read_pickle("../../objects/prices.pkl")
-    signals = pd.read_pickle("../../objects/signals.pkl")
-    market_caps_df = pd.read_pickle("../../objects/market_caps.pkl")
-    excess_returns = pd.read_pickle("../../objects/stockexret.pkl")
-    benchmark_df = pd.read_csv("../../objects/mkt_ind.csv")
-    benchmark_df["t1"] = pd.to_datetime(benchmark_df["t1"])
-    benchmark_df["t1_index"] = pd.to_datetime(benchmark_df["t1_index"])
-    kwargs = {
-        "pred_vol_scale": 1.00,
-        "tau": 1.00,  # the higher tau, the more weight is given to predictions
-        "prices": prices,
-        "signals": signals,
-        "market_caps_df": market_caps_df,
-        "portfolio_size": 100,
-        "long_only": True,
-        "min_size": 60,
-        "lambda_": 2.5,
-        "benchmark_df": benchmark_df,
-    }
-    start_date = 0
-    end_date = 140
-
-    # Run the asset allocator
-    weights = asset_allocator(start_date=start_date, end_date=end_date, **kwargs)
-
-    print("Market exposure (sum of weights): ", weights.sum())
-    print("Sum of absolute values of weights: ", weights.abs().sum())
-    print(weights)
 
 # %%

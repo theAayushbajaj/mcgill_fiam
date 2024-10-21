@@ -12,21 +12,8 @@ from scipy.linalg import inv
 # Ledoit-Wolf Imports
 from sklearn.covariance import LedoitWolf
 
-# Black-Litterman Functions
-
-
-def black_litterman(cov, market_implied_returns, p, q, omega, tau=0.05):
-    """Black-Litterman model."""
-    pi = market_implied_returns
-    tau_cov = tau * cov
-    m_inverse = inv(tau_cov)
-    omega_inv = inv(omega)
-    # Compute posterior covariance
-    posterior_cov = inv(m_inverse + p.T @ omega_inv @ p)
-    # Compute posterior mean
-    posterior_mean = posterior_cov @ (m_inverse @ pi + p.T @ omega_inv @ q)
-
-    return posterior_mean, posterior_cov
+# PyPortfolioOpt Imports
+from pypfopt import risk_models, expected_returns, EfficientFrontier
 
 
 def get_market_implied_returns(cov, market_weights, lambda_=2.5):
@@ -41,8 +28,6 @@ def main(
     signals,
     market_caps,
     selected_stocks,
-    pred_vol_scale=1.0,
-    tau=1.0,
     lambda_=2.5,
 ):
     """
@@ -74,31 +59,5 @@ def main(
 
     # Implied Excess Equilibrium Return Vector (N x 1 column vector)
     pi = get_market_implied_returns(cov, market_weights, lambda_)
-
-    # Scale the signals by the predicted volatility
-    # UNCERTAINTY ON THE SIGNALS
-    returns_vol = returns.std()
-    q = signals * returns_vol * pred_vol_scale
-
-    # Define P (Identity matrix for individual asset views)
-    p = np.eye(len(signals))
-
-    # Covariance on views (diagonal matrix)
-    class_probs = signals.abs()
-    omega_values = class_probs * (1 - class_probs)
-    omega = np.diag(omega_values) * pred_vol_scale**2
-
-    posterior_mean, posterior_cov = black_litterman(cov, pi, p, q, omega, tau=tau)
-    posterior_mean = pd.Series(posterior_mean, index=selected_stocks)
-    posterior_cov = pd.DataFrame(
-        posterior_cov, index=selected_stocks, columns=selected_stocks
-    )
-
-    # Ensure posterior covariance matrix is positive definite
-    # Add a small value to the diagonal if necessary
-    min_eigenvalue = np.min(np.linalg.eigvals(posterior_cov))
-    if min_eigenvalue < 0:
-        # print("Adding small value to diagonal of posterior covariance matrix.")
-        posterior_cov += np.eye(len(posterior_cov)) * (-min_eigenvalue + 1e-6)
-
-    return posterior_mean, posterior_cov
+    
+    return pi, cov
