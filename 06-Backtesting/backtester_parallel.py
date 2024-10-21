@@ -21,7 +21,11 @@ warnings.filterwarnings("ignore", category=pd.errors.PerformanceWarning)
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 sys.path.append("../05-Asset_Allocation")
+<<<<<<< HEAD
 import strategy_12_causal_ledoit.main as strat
+=======
+import strategy_9.main as strat
+>>>>>>> 840ede1 (Let's go Moosa)
 path_to_strategy = "../05-Asset_Allocation/strategy_2"
 
 
@@ -36,8 +40,12 @@ def compute_weights_for_period(args):
     i, strategy, kwargs = args
     # Call the strategy to get the weights for the current period
     weights = strategy(
+<<<<<<< HEAD
         # start_date= i - 60,
         start_date= 0,
+=======
+        start_date= i - 60,
+>>>>>>> 840ede1 (Let's go Moosa)
         end_date=i,
         **kwargs,
     )
@@ -123,6 +131,7 @@ if __name__ == "__main__":
     benchmark_df = pd.read_csv("../objects/mkt_ind.csv")
     benchmark_df["t1"] = pd.to_datetime(benchmark_df["t1"])
     benchmark_df["t1_index"] = pd.to_datetime(benchmark_df["t1_index"])
+<<<<<<< HEAD
     WINDOW_SIZE = 50
     kwargs = {
         # Stock Selection
@@ -141,15 +150,34 @@ if __name__ == "__main__":
         "uncertainty_level": 0.05,
         "total_allocation": 1.0,
         "n_clusters": 6,
+=======
+    kwargs = {
+        # Stock Selection
+        "min_size": 60,
+        "long_only": True,
+        # Covariance Estimation, Black Litterman
+        "tau": 1.0,
+        "lambda_": 50,
+        # Weight Optimization
+        'soft_risk': 0.01,
+>>>>>>> 840ede1 (Let's go Moosa)
         # OBJECTS
         "prices": prices,
         "signals": signals,
         "market_caps_df": market_caps_df,
         "benchmark_df": benchmark_df,
+<<<<<<< HEAD
     }
     REBALANCE_PERIOD = 1
     strategy = strat.asset_allocator
     START_MONTH_PRED = 121
+=======
+        "n_stocks": 100,
+    }
+    REBALANCE_PERIOD = 1
+    strategy = strat.asset_allocator
+    START_MONTH_PRED = 120
+>>>>>>> 840ede1 (Let's go Moosa)
 
     weights = backtest(
         excess_returns,

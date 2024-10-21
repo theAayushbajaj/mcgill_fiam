@@ -249,16 +249,27 @@ def compute_stats(returns):
     # Total time in years
     total_years = TIME_DELTA * total_periods
     # Annualized Return
+<<<<<<< HEAD
     stats["Annualized Return"] = (stats["Total Return"] + 1) ** (1 / total_years) - 1
     stats["Average Annual Return"] = returns.mean() / TIME_DELTA
+=======
+    stats["Annualized Return"] = (
+        (stats["Total Return"]+1) ** (1 / total_years) - 1
+    )
+    stats['Average Annual Return'] = returns.mean() / TIME_DELTA
+>>>>>>> 840ede1 (Let's go Moosa)
     # Annualized Volatility
     stats["Annualized Volatility"] = returns.std() / np.sqrt(TIME_DELTA)
     stats["Average Monthly Volatility"] = returns.std()
     # Sharpe Ratio
     # Assuming risk-free rate is zero (since we are working with excess returns)
+<<<<<<< HEAD
     stats["Sharpe Ratio"] = (
         stats["Average Annual Return"] / stats["Annualized Volatility"]
     )
+=======
+    stats["Sharpe Ratio"] = stats["Average Annual Return"] / stats["Annualized Volatility"]
+>>>>>>> 840ede1 (Let's go Moosa)
     # Max Drawdown
     # Compute drawdowns
     cumulative = stats["Cumulative Return"]

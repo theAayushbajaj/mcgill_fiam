@@ -28,8 +28,11 @@ def main(
         (not selected stocks will have 0 weight)
     """
     benchmark_std = benchmark_df["sp_ret"].std()
+<<<<<<< HEAD
     # cumulative maximum std
     benchmark_std = benchmark_df.sp_ret.rolling(window=30).std().min()
+=======
+>>>>>>> 840ede1 (Let's go Moosa)
 
     def objective(w):
         return posterior_mean @ w - lambda_ * 0.5 * w @ posterior_cov @ w

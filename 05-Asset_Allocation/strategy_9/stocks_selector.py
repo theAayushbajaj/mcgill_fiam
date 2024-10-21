@@ -28,7 +28,11 @@ def main(signal, prices, portfolio_size, long_only=True, min_size=60):
         signal = signal[selected_stocks]
     else:
         # Select top 100 stocks based on signal value
+<<<<<<< HEAD
         sort_signals = signal.abs()
+=======
+        sort_signals = signal
+>>>>>>> 840ede1 (Let's go Moosa)
         sort_signals = sort_signals.sort_values(ascending=False)
         selected_stocks = sort_signals.index[:portfolio_size].tolist()
         signal = signal[selected_stocks]

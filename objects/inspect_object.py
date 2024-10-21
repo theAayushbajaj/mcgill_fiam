@@ -18,6 +18,7 @@ w = weights.iloc[-5]
 
 weights
 # %%
+<<<<<<< HEAD
 
 # load objects/mkt_ind.csv
 benchmark_df = pd.read_csv("mkt_ind.csv")
@@ -132,3 +133,5 @@ plt.show()
 
 
 # %%
+=======
+>>>>>>> 840ede1 (Let's go Moosa)
