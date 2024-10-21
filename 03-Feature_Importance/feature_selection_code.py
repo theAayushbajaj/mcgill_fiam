@@ -36,9 +36,13 @@ def get_top_features(imp_estimates, n_features=100):
     for method in ['MDA', 'MDI']:
         # Sort features by absolute importance (descending order)
         sorted_features = imp_estimates[method]['imp']['mean'].abs().sort_values(ascending=False)
+        
+        important_features = sorted_features.loc[:'random'].index[:-1]
+
 
         # Get top N features
-        top_features[method] = sorted_features.head(n_features).index.tolist()
+        # top_features[method] = important_features.head(n_features).index.tolist()
+        top_features[method] = important_features.tolist()
 
     # Get combined unique top features
     combined_features = list(set(top_features['MDA'] + top_features['MDI']))

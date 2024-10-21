@@ -34,7 +34,7 @@ with open(os.path.join(parent_dir, 'objects/Y_DATASET.pkl'), 'rb') as f:
 PATH = os.path.join(parent_dir, 'raw_data/factor_char_list.csv')
 features = pd.read_csv(PATH)
 features_list = features.values.ravel().tolist()
-
+features_list = features_list + ['random']
 
 # We do feature importance on given features
 X = X[features_list]

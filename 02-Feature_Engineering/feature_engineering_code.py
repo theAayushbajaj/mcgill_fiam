@@ -283,6 +283,25 @@ def get_sadf(log_p, min_sl, constant, lags):
     # Return a DataFrame with sadf values and corresponding time index
     return pd.DataFrame({'date': log_p.index[min_sl:], 'sadf': gsadf_values})
 
+
+def getTimeDecay(tW, clfLastW=1.):
+    # Apply piecewise-linear decay to observed uniqueness (tW)
+    # Newest observation gets weight=1, oldest observation gets weight=clfLastW
+    clfW = pd.Series(tW).sort_index().cumsum()
+    # len(clfW)
+    if clfLastW >= 0:
+        slope = (1. - clfLastW) / clfW.iloc[-1]
+    else:
+        slope = 1. / ((clfLastW + 1) * clfW.iloc[-1])
+    
+    const = 1. - slope * clfW.iloc[-1]
+    clfW = const + slope * clfW
+    clfW[clfW < 0] = 0
+
+    # print(const, slope)
+    return clfW
+
+
 total = len(csv_files)
 
 # ADDING TARGET COLUMN TO EACH CSV FILE
@@ -360,6 +379,9 @@ with tqdm(total=total) as pbar:
 print('\n')
 
 
+
+
+
 # Add log price and log-diff columns to each stock CSV file.
 # For the first row, the log-diff is set to 0.
 # Return attribution weight as the absolute value of the stock_exret.
@@ -407,22 +429,22 @@ print('\n')
 
 
 # Add structural breaks
-print("Adding 'sadf' column to each file...\n")
-with tqdm(total=total) as pbar:
-    for file_name in csv_files:
-        file_path = os.path.join(STOCKS_DATA_DIR, file_name)
+# print("Adding 'sadf' column to each file...\n")
+# with tqdm(total=total) as pbar:
+#     for file_name in csv_files:
+#         file_path = os.path.join(STOCKS_DATA_DIR, file_name)
 
-        df = pd.read_csv(file_path, index_col='t1', parse_dates=True)
-        sadf = get_sadf(df['log_price'], 20, 'ct', 1)
+#         df = pd.read_csv(file_path, index_col='t1', parse_dates=True)
+#         sadf = get_sadf(df['log_price'], 20, 'ct', 1)
 
-        # Merge SADF values with the original DataFrame
-        # Assuming 'sadf_result' is a DataFrame with 'Date' as the index
-        df_with_sadf = df.join(sadf.set_index('date'), on='t1')
-        df_with_sadf['sadf'] = df_with_sadf['sadf'].fillna(0)
-        df_with_sadf.to_csv(file_path)
+#         # Merge SADF values with the original DataFrame
+#         # Assuming 'sadf_result' is a DataFrame with 'Date' as the index
+#         df_with_sadf = df.join(sadf.set_index('date'), on='t1')
+#         df_with_sadf['sadf'] = df_with_sadf['sadf'].fillna(0)
+#         df_with_sadf.to_csv(file_path)
 
-        pbar.update(1)
-print('\n')
+#         pbar.update(1)
+# print('\n')
 
 
 # Fill missing values with the previous value
@@ -450,6 +472,51 @@ print('\n')
 
 # Generate final datasets with all added features
 # Stack all the CSV files into one DataFrame
+
+print("Adding 'random column of range 1 to 100' column to each file...\n")
+with tqdm(total=total) as pbar:
+    for file_name in csv_files:
+        file_path = os.path.join(STOCKS_DATA_DIR, file_name)
+
+        # Read the CSV file into a DataFrame
+        df = pd.read_csv(file_path, index_col='t1', parse_dates=True)
+
+        df['random'] = np.random.randint(1, 101, size=len(df))
+
+        # Save the updated DataFrame back to the CSV file
+        df.to_csv(file_path)
+
+        pbar.update(1)
+print('\n')
+
+
+
+print("Adding time decay to the ...\n")
+with tqdm(total=total) as pbar:
+    for file_name in csv_files:
+        file_path = os.path.join(STOCKS_DATA_DIR, file_name)
+
+        # Read the CSV file into a DataFrame
+        df = pd.read_csv(file_path, index_col='t1', parse_dates=True)
+
+
+
+        start_date = df.index.min()
+
+        # df['days_since_start'] = (df.index - start_date).days
+        time_window = (df.index - start_date).days
+        # print('Time window : ', time_window.tolist())
+        y = getTimeDecay(time_window.tolist(), clfLastW=0)
+
+        y.index = df.index
+        
+        df['clfw'] = y
+
+        # print(df['clfw'])
+        # Save the updated DataFrame back to the CSV file
+        df.to_csv(file_path)
+
+        pbar.update(1)
 
 dfs = []
 print('Saving datasets...\n')
