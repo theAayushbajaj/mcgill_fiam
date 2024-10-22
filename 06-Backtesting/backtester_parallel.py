@@ -21,7 +21,7 @@ warnings.filterwarnings("ignore", category=pd.errors.PerformanceWarning)
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 sys.path.append("../05-Asset_Allocation")
-import strategy_9.main as strat
+import strategy_12.main as strat
 path_to_strategy = "../05-Asset_Allocation/strategy_2"
 
 
@@ -127,16 +127,16 @@ if __name__ == "__main__":
         "min_size": 60,
         "long_only": True,
         # Covariance Estimation, Black Litterman
-        "tau": 1.0,
-        "lambda_": 50,
+        "tau": 5.0,
+        "lambda_": 100,
         # Weight Optimization
-        'soft_risk': 0.01,
+        'soft_risk': 0.0,
         # OBJECTS
         "prices": prices,
         "signals": signals,
         "market_caps_df": market_caps_df,
         "benchmark_df": benchmark_df,
-        "n_stocks": 100,
+        "portfolio_size": 100,
     }
     REBALANCE_PERIOD = 1
     strategy = strat.asset_allocator

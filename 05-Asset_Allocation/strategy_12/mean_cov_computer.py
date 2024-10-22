@@ -61,6 +61,14 @@ def main(
         pd.Series: posterior mean vector of expected returns for the selected stocks
         pd.DataFrame: posterior covariance matrix of the selected stocks
     """
+    
+    check = False
+    if not check:
+        print('Check for mean_cov_computer')
+        print(f'tau is {tau}')
+        print(f'lambda is {lambda_}')
+        check = True
+    
     # Compute Prior Covariance Matrix
     l_wolf = LedoitWolf()
     shrunk_cov_matrix = l_wolf.fit(returns).covariance_

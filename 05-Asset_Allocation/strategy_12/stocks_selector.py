@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 
-def main(signal, prices, portfolio_size, long_only=True, min_size=60):
+def main(signal, prices, portfolio_size=100, long_only=True, min_size=60):
     """
     Args:
         signal (pd.Series): signal for each stock at prediction time
@@ -14,6 +14,13 @@ def main(signal, prices, portfolio_size, long_only=True, min_size=60):
     Returns:
         list: list of selected stocks
     """
+    check = False
+    if not check:
+        print('Check for stocks_selector')
+        print(f'portfolio size is {portfolio_size}')
+        print(f'long only is {long_only}')
+        print(f'min size is {min_size}')
+        check = True
 
     # Set signals to 0 for stocks with less than 60 non-NA price values
     sufficient_data = prices.count() >= min_size

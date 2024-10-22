@@ -77,7 +77,7 @@ def main(
     # Scale the signals by the predicted volatility
     # UNCERTAINTY ON THE SIGNALS
     returns_mean = returns.mean(axis=0) + 1e-6
-    q = signals.abs() * returns_mean
+    q = signals * returns_mean
 
     # Define P (Identity matrix for individual asset views)
     p = np.eye(len(signals))

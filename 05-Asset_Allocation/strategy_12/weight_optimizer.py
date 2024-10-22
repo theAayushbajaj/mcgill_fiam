@@ -27,6 +27,13 @@ def main(
         pd.DataFrame: DataFrame containing the weights of all the assets
         (not selected stocks will have 0 weight)
     """
+    check = False
+    if not check:
+        print("Check for weight_optimizer")
+        print(f"lambda is {lambda_}")
+        print(f"soft risk is {soft_risk}")
+        check = True
+        
     benchmark_std = benchmark_df["sp_ret"].std()
     # cumulative maximum std
     benchmark_std = benchmark_df.sp_ret.rolling(window=30).std().min()
@@ -38,8 +45,8 @@ def main(
         eq_cons = []
         inequality_cons = []
 
-        inequality_cons.append(np.sum(w) - 1.0) # sum(w) <= 1.0
-        inequality_cons.append(0.90 - np.sum(w)) # sum(w) >= 0.90
+        # inequality_cons.append(np.sum(w) - 1.0) # sum(w) <= 1.0
+        # inequality_cons.append(0.90 - np.sum(w)) # sum(w) >= 0.90
 
         # Risk lower than benchmark
         inequality_cons.append(
@@ -49,10 +56,13 @@ def main(
         # w <= 0.10 for each stock
         inequality_cons.extend(w - 0.10)
         
+        eq_cons.append(np.sum(w) - 1.0)
+        
 
         return np.array(eq_cons), np.array(inequality_cons)
 
-    weights_init = np.ones(len(selected_stocks)) / len(selected_stocks)
+    # weights_init = np.ones(len(selected_stocks)) / len(selected_stocks)
+    weights_init = np.zeros(len(selected_stocks))
 
     # bounds 0 <= w <= 1 for all w
     bounds = [(0, 1)] * len(selected_stocks)
