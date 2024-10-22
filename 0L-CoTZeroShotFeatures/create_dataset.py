@@ -6,6 +6,7 @@ from glob import glob
 import pandas as pd
 from sec_cik_mapper import StockMapper
 import yfinance as yf
+from multiprocessing import Pool, cpu_count
 
 def clean_content(content):
     content = content.replace('\n', ' ').replace('\r', ' ')
@@ -139,37 +140,42 @@ def get_cagr_ratio(csi, filing_date):
         return 0
     return cagr_ratio
 
-def main():
-    # create a list of all the txt files in the datasets directory
-    base_path = "/Users/aayush/mcgill_fiam/datasets/"
-    filings_txt = glob(os.path.join(base_path, "**/*.txt"), recursive=True)
+def process_filing(filing):
+    # Read and process the content of the filing
+    with open(filing, "r") as file:
+        content = file.read()
+    content = clean_content(content)
+    filing_date = get_filed_as_of_date(content)
+    csi = get_central_index_key(content)
+    risk_factor = extract_risk_factors(content)
+    mdna = extract_mda(content)
     
-    filing_struct = []
+    # Placeholder for scores
+    risk_factor_score = 0
+    readability_score = 0
+    sentiment_score = 0
+    cagr_ratio = 0
 
-    for filing in tqdm(filings_txt):
-        content = open(filing, "r").read()
-        content = clean_content(content)
-        filing_date = get_filed_as_of_date(content)
-        csi = get_central_index_key(content)
-        #form_type = get_form_type(content)
-        risk_factor = extract_risk_factors(content)
-        risk_factor_score = 0 # NOTE: This will from CoT prompting
-        mdna = extract_mda(content)
-        readability_score = 0 # NOTE: This will from CoT prompting
-        sentiment_score = 0 # NOTE: This will from CoT prompting
-        cagr_ratio = 0
+    return {
+        "FILE_DATE": filing_date,
+        "CSI": csi,
+        "RISK_FACTOR": risk_factor,
+        "RISK_FACTOR_SCORE": risk_factor_score,
+        "READABILITY_SCORE": readability_score,
+        "MD&A": mdna,
+        "SENTIMENT_SCORE": sentiment_score,
+        "CAGR_RATIO": cagr_ratio
+    }
 
-        filing_struct.append({
-            "FILE_DATE": filing_date,
-            "CSI": csi,
-            #"FORM_TYPE": form_type,
-            "RISK_FACTOR": risk_factor,
-            "RISK_FACTOR_SCORE": risk_factor_score,
-            "READABILITY_SCORE": readability_score,
-            "MD&A": mdna,
-            "SENTIMENT_SCORE": sentiment_score,
-            "CAGR_RATIO": cagr_ratio
-        })
+def main():
+    base_path = "/teamspace/studios/this_studio/mcgill_fiam/datasets"
+    filings_txt = glob(os.path.join(base_path, "**/*.txt"), recursive=True)
+
+    print(f"Processing {len(filings_txt)} filings")
+
+    # Use multiprocessing to process filings in parallel
+    with Pool(cpu_count()) as pool:
+        filing_struct = list(tqdm(pool.imap(process_filing, filings_txt), total=len(filings_txt)))
 
     df_filing = pd.DataFrame(filing_struct)
 
@@ -181,8 +187,9 @@ def main():
         "SENTIMENT_SCORE": "first",
         "CAGR_RATIO": "first"
     }).reset_index()
-    # save to csv
+
     df_combined.to_csv("../datasets/10K-Stage2-parsed.csv", index=False)
+
 
 
 if __name__ == "__main__":
