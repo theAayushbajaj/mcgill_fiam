@@ -21,7 +21,7 @@ warnings.filterwarnings("ignore", category=pd.errors.PerformanceWarning)
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 sys.path.append("../05-Asset_Allocation")
-import strategy_12.main as strat
+import strategy_14.main as strat
 path_to_strategy = "../05-Asset_Allocation/strategy_2"
 
 
@@ -36,7 +36,8 @@ def compute_weights_for_period(args):
     i, strategy, kwargs = args
     # Call the strategy to get the weights for the current period
     weights = strategy(
-        start_date= i - 60,
+        # start_date= i - 60,
+        start_date= 0,
         end_date=i,
         **kwargs,
     )
@@ -122,21 +123,29 @@ if __name__ == "__main__":
     benchmark_df = pd.read_csv("../objects/mkt_ind.csv")
     benchmark_df["t1"] = pd.to_datetime(benchmark_df["t1"])
     benchmark_df["t1_index"] = pd.to_datetime(benchmark_df["t1_index"])
+    WINDOW_SIZE = 120
     kwargs = {
         # Stock Selection
-        "min_size": 60,
+        "min_size": WINDOW_SIZE,
         "long_only": True,
+        "portfolio_size": 100,
         # Covariance Estimation, Black Litterman
-        "tau": 5.0,
-        "lambda_": 100,
+        "tau": 1.0,
+        "lambda_": 2,
+        "use_ema": True,
+        "window": WINDOW_SIZE,
+        "span": WINDOW_SIZE,
         # Weight Optimization
-        'soft_risk': 0.0,
+        'soft_risk': 0.01,
+        "num_scenarios": 20,
+        "uncertainty_level": 0.05,
+        "total_allocation": 1.0,
+        "n_clusters": 6,
         # OBJECTS
         "prices": prices,
         "signals": signals,
         "market_caps_df": market_caps_df,
         "benchmark_df": benchmark_df,
-        "portfolio_size": 100,
     }
     REBALANCE_PERIOD = 1
     strategy = strat.asset_allocator

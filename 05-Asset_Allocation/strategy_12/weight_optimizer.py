@@ -2,6 +2,66 @@ import numpy as np
 import pandas as pd
 from scipy.optimize import minimize
 
+from hmmlearn.hmm import GaussianHMM
+
+
+
+
+def generate_scenarios(posterior_mean, posterior_cov, num_scenarios=10, uncertainty_level=0.05):
+    """
+    Generate different perturbations for mean and covariance based on uncertainty level.
+    Args:
+        posterior_mean (pd.Series): Mean returns.
+        posterior_cov (pd.DataFrame): Covariance matrix.
+        num_scenarios (int): Number of scenarios to generate.
+        uncertainty_level (float): The degree of uncertainty applied to the perturbations.
+    Returns:
+        scenarios_mu (list): List of perturbed mean return vectors.
+        scenarios_cov (list): List of perturbed covariance matrices.
+    """
+    np.random.seed(42)  # for reproducibility
+    scenarios_mu = []
+    scenarios_cov = []
+
+    for _ in range(num_scenarios):
+        # Apply random perturbation to mean
+        perturbed_mean = posterior_mean + uncertainty_level * np.random.randn(len(posterior_mean))
+
+        # Apply random perturbation to covariance (keeping symmetry)
+        perturbation = uncertainty_level * np.random.randn(*posterior_cov.shape)
+        perturbed_cov = posterior_cov + perturbation @ perturbation.T
+
+        # Ensure positive-definiteness of covariance
+        perturbed_cov = (perturbed_cov + perturbed_cov.T) / 2
+        min_eigenvalue = np.min(np.linalg.eigvals(perturbed_cov))
+        if min_eigenvalue < 0:
+            perturbed_cov += np.eye(posterior_cov.shape[0]) * (-min_eigenvalue + 1e-6)
+
+        scenarios_mu.append(perturbed_mean)
+        scenarios_cov.append(perturbed_cov)
+
+    return scenarios_mu, scenarios_cov
+
+def predict_volatility_state(benchmark_df):
+    
+    # Preprocess the volatility data to remove NaNs and infs
+    returns_or_volatility = benchmark_df["sp_ret"].ewm(span=12).std()
+    returns_or_volatility = returns_or_volatility.replace([np.inf, -np.inf], np.nan).dropna()
+
+    # Ensure that there are no NaN values left
+    returns_or_volatility = returns_or_volatility.fillna(method='ffill').fillna(method='bfill')
+
+    # Initialize and train HMM with adjusted number of components
+    hmm = GaussianHMM(n_components=3, covariance_type="diag", n_iter=1000)
+
+    # Fit the HMM and get the current hidden state
+    train_data = returns_or_volatility.values.reshape(-1, 1)
+    hmm.fit(train_data)
+    current_state = hmm.predict(train_data)[-1]  # Get the latest state
+    
+    return current_state
+    
+
 
 def main(
     weights,
@@ -10,78 +70,83 @@ def main(
     selected_stocks,
     benchmark_df,
     lambda_=1.0,
-    soft_risk=0.01
+    soft_risk=0.01,
+    num_scenarios=10,
+    uncertainty_level=0.05,
+    total_allocation = 1.0
 ):
     """
-    Maximizes mu^T w - (1/2) * risk_aversion * w^T Sigma w subject to w >= 0
-    and 0<= sum(w) <= 1 and w^T Sigma w <= vol(benchmark)^2
-
-    Args:
-        weights (pd.DataFrame): DataFrame containing the weights of the asset,
-                                All possible stocks (not just selected ones)
-        posterior_cov (pd.DataFrame): Posterior covariance matrix of the selected stocks
-        posterior_mean (pd.Series): Posterior mean of the selected stocks
-        selected_stocks (list): List of selected stocks
-
-    Returns:
-        pd.DataFrame: DataFrame containing the weights of all the assets
-        (not selected stocks will have 0 weight)
+    Robust portfolio optimization that accounts for multiple scenarios of the covariance matrix
+    and mean returns.
     """
-    check = False
-    if not check:
-        print("Check for weight_optimizer")
-        print(f"lambda is {lambda_}")
-        print(f"soft risk is {soft_risk}")
-        check = True
-        
+    # check = False
+    # if not check:
+    #     print("Check for weight_optimizer")
+    #     print(f"lambda is {lambda_}")
+    #     print(f"soft risk is {soft_risk}")
+    #     check = True
+
     benchmark_std = benchmark_df["sp_ret"].std()
-    # cumulative maximum std
-    benchmark_std = benchmark_df.sp_ret.rolling(window=30).std().min()
+    # Predict Volatility State
+    try:
+        current_state = predict_volatility_state(benchmark_df)
+    except:
+        current_state=1
+    
+    # benchmark_std as the min of the 
+    n = len(selected_stocks)
 
+    # Generate multiple scenarios for posterior_mean and posterior_cov
+    scenarios_mu, scenarios_cov = generate_scenarios(posterior_mean, posterior_cov, num_scenarios, uncertainty_level)
+
+    # Objective function: maximize the worst-case scenario's performance
     def objective(w):
-        return posterior_mean @ w - lambda_ * 0.5 * w @ posterior_cov @ w
+        worst_case_return = np.inf
+        for mu_scenario, cov_scenario in zip(scenarios_mu, scenarios_cov):
+            # Compute the return and risk for each scenario
+            scenario_return = mu_scenario @ w
+            scenario_risk = w @ cov_scenario @ w
 
-    def constraint(w):
-        eq_cons = []
-        inequality_cons = []
+            # Combine return and risk in a penalized objective
+            penalized_value = -scenario_return + lambda_**current_state * 0.5 * scenario_risk
+            worst_case_return = min(worst_case_return, penalized_value)
 
-        # inequality_cons.append(np.sum(w) - 1.0) # sum(w) <= 1.0
-        # inequality_cons.append(0.90 - np.sum(w)) # sum(w) >= 0.90
+        return worst_case_return
 
-        # Risk lower than benchmark
-        inequality_cons.append(
-            w @ posterior_cov @ w - (benchmark_std**2 + soft_risk**2) # w @ posterior_cov @ w <= benchmark_std**2 + soft_risk
-        )
-        
-        # w <= 0.10 for each stock
-        inequality_cons.extend(w - 0.10)
-        
-        eq_cons.append(np.sum(w) - 1.0)
-        
+    # Define the constraint functions
+    def constraint_eq(w):
+        # Sum of weights should equal 1
+        return np.sum(w) - total_allocation + 0.1*current_state # np.sum(w)= (1 - current_state)
 
-        return np.array(eq_cons), np.array(inequality_cons)
+    def constraint_ineq(w):
+        # Risk constraint: ensure portfolio variance is less than benchmark
+        return benchmark_std**2 + soft_risk - w @ posterior_cov.values @ w
 
-    # weights_init = np.ones(len(selected_stocks)) / len(selected_stocks)
-    weights_init = np.zeros(len(selected_stocks))
+    # Bounds for each weight: 0 <= w <= 0.10
+    bounds = [(0, 0.10)] * n
 
-    # bounds 0 <= w <= 1 for all w
-    bounds = [(0, 1)] * len(selected_stocks)
+    # Initial guess for weights (equally distributed)
+    w0 = np.ones(n) / n
 
+    # Solve the optimization problem using scipy.optimize.minimize
     result = minimize(
-        fun=lambda w: -objective(w),
-        x0=weights_init,
+        objective,
+        w0,
         method="SLSQP",
         bounds=bounds,
         constraints=[
-            {"type": "eq", "fun": lambda w: constraint(w)[0]},
-            {"type": "ineq", "fun": lambda w: -constraint(w)[1]},
+            {"type": "eq", "fun": constraint_eq},    # Equality constraint
+            # {"type": "ineq", "fun": constraint_ineq}  # Inequality (risk) constraint
         ],
-        options={"disp": False, "maxiter": 1000, "ftol": 1e-6},
+        options={"disp": False, "maxiter": 1000}
     )
+
+    if not result.success:
+        raise ValueError("Optimization failed:", result.message)
 
     weights_opt = result.x
 
+    # Update the weights dataframe
     weights.loc[selected_stocks, "Weight"] = weights_opt
-
 
     return weights

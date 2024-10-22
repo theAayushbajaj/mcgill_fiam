@@ -92,6 +92,7 @@ def asset_allocator(
         "num_scenarios": kwargs.get("num_scenarios", 10),
         "uncertainty_level": kwargs.get("uncertainty_level", 0.05),
         "total_allocation": kwargs.get("total_allocation", 1.0),
+        "n_clusters": kwargs.get("n_clusters", 4),
         
     }
     optimized_weights = weight_optimizer.main(
@@ -99,6 +100,7 @@ def asset_allocator(
         cov_matrix,
         u_vector,
         selected_stocks,
+        returns,
         benchmark_df,
         **weight_optimizer_kwargs
     )

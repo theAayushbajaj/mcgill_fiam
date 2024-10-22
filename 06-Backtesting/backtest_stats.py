@@ -184,7 +184,7 @@ def performance_benchmark(trading_log, benchmark, weights_df):
         - trading_stats["Benchmark"]["Annualized Volatility"]
     )
     trading_stats["Portfolio"]["Annualized Tracking Error"] = tracking_error
-    trading_stats["Portfolio"]["Per trade Tracking Error"] = compute_tracking_error(
+    trading_stats["Portfolio"]["Per trade Tracking Error"] = compute_tracking_error_count(
         df["Portfolio"], df["Benchmark"]
     )
 
@@ -252,6 +252,7 @@ def compute_stats(returns):
     stats['Average Annual Return'] = returns.mean() / TIME_DELTA
     # Annualized Volatility
     stats["Annualized Volatility"] = returns.std() / np.sqrt(TIME_DELTA)
+    stats['Average Monthly Volatility'] = returns.std()
     # Sharpe Ratio
     # Assuming risk-free rate is zero (since we are working with excess returns)
     stats["Sharpe Ratio"] = stats["Average Annual Return"] / stats["Annualized Volatility"]
@@ -478,19 +479,17 @@ def compute_portfolio_alpha(returns, benchmark):
     return alpha_annualized
 
 
-def compute_tracking_error(returns, benchmark):
+def compute_tracking_error_count(returns, benchmark):
     """
-    Computes the Tracking Error.
-    Inputs:
-    - returns : pd.Series : portfolio excess returns
-    - benchmark : pd.Series : benchmark excess returns
-    Output:
-    - tracking_error : float : tracking error
+    Counts the number of times the portfolio has a volatility higher than the
+    benchmark by more than 1%.
     """
-    # Portfolio volatility
-    portfolio_volatility = returns.std()
-    # Benchmark volatility
-    benchmark_volatility = benchmark.std()
-    # Period tracking error
-    tracking_error = portfolio_volatility - benchmark_volatility
-    return tracking_error
+    # compute rolling volatility
+    rolling_vol = returns.rolling(window=12).std()
+    benchmark_vol = benchmark.rolling(window=12).std()
+    # compute tracking error
+    tracking_error = rolling_vol - benchmark_vol
+    # count number of times tracking error is higher than 1%
+    ratio = (tracking_error > 0.01).sum()/len(tracking_error)
+    return ratio
+

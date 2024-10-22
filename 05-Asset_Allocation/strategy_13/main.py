@@ -51,7 +51,7 @@ def asset_allocator(
     # Step 0) Adjust the prices to the start and end date
     # Index in terms of months
     prices = prices[start_date : end_date + 1]
-    # print(f"Prices length: {len(prices)}")
+    print(f"Prices length: {len(prices)}")
 
     # =========================================================================
 
@@ -77,9 +77,6 @@ def asset_allocator(
     mean_cov_kwargs = {
         "tau": kwargs.get("tau", 1.0),
         "lambda_": kwargs.get("lambda_", 3.07),
-        "use_ema": kwargs.get("use_ema", True),
-        "window": kwargs.get("window", 60),
-        "span": kwargs.get("span", 60),
     }
     u_vector, cov_matrix = mean_cov_computer.main(
         returns, signal_end, market_caps, selected_stocks, **mean_cov_kwargs
@@ -89,15 +86,11 @@ def asset_allocator(
     weight_optimizer_kwargs = {
         "lambda_": kwargs.get("lambda_", 3.07),
         "soft_risk": kwargs.get("soft_risk", 0.01),
-        "num_scenarios": kwargs.get("num_scenarios", 10),
-        "uncertainty_level": kwargs.get("uncertainty_level", 0.05),
-        "total_allocation": kwargs.get("total_allocation", 1.0),
         
     }
     optimized_weights = weight_optimizer.main(
         weights,
-        cov_matrix,
-        u_vector,
+        returns,
         selected_stocks,
         benchmark_df,
         **weight_optimizer_kwargs
