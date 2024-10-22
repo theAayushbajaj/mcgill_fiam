@@ -12,3 +12,8 @@ objects/*
 papers/
 data/
 __pycache__/*
+datasets/10-*
+
+.DS_Store
+docs/FIAM-MCGILL_HACKATHON_RELEASE FORM.pdf
+datasets/cik_ticker_mapping.json
