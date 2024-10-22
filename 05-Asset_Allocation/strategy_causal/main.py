@@ -74,6 +74,7 @@ def asset_allocator(
     returns = prices.pct_change().dropna()
     g_prob = model(x=returns.to_numpy())
     normalized_matrix = g_prob / np.max(g_prob)
+    normalized_matrix = np.maximum(normalized_matrix, normalized_matrix.T)
     # print('returns', returns)
     market_caps_df = market_caps_df[selected_stocks]
     market_caps = market_caps_df.iloc[end_date]
