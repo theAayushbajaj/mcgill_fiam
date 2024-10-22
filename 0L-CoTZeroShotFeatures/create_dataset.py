@@ -81,39 +81,44 @@ def extract_mda(content):
 
     combined_sections = " ".join(sections)
     return combined_sections
-    
-def get_sector_average_cagr(csi, filing_date):
-    stock_mapper = StockMapper()
-    cik_to_ticker_map = stock_mapper.cik_to_tickers
-    
-    try:
-        ticker = cik_to_ticker_map[csi]
-    except KeyError:
+
+def calculate_cagr(ticker, filing_date):
+    start_date = pd.to_datetime(filing_date)
+    end_date = start_date + pd.DateOffset(weeks=52)
+    stock_data = yf.Ticker(ticker).history(start=start_date, end=end_date)
+    if len(stock_data) < 2:
         return 0
-    
+    start_price = stock_data['Close'].iloc[0]
+    end_price = stock_data['Close'].iloc[-1]
+    time_period = (end_date - start_date).days / 365.25
+    cagr = (end_price / start_price) ** (1 / time_period) - 1
+    return cagr
+
+
+def get_sector_average_cagr(ticker, filing_date, cik_to_ticker_map):
     # Get the sector for the given ticker
     try:
         sector = yf.Ticker(ticker).info['sector']
     except:
         return 0
     
-    # Get all tickers in the same sector
-    sector_tickers = [t for t, c in cik_to_ticker_map.items() if yf.Ticker(c).info.get('sector') == sector]
+    sector_tickers = []
+    for csi, ticker in cik_to_ticker_map.items():
+        ticker = ticker.pop()
+        if yf.Ticker(ticker).info.get('sector') == sector:
+            sector_tickers.append(ticker)
     
     # Calculate CAGR for each ticker in the sector
     sector_cagrs = []
-    for sector_csi in sector_tickers:
-        cagr = get_cagr_ratio(sector_csi, filing_date)
+    for sector_ticker in sector_tickers:
+        cagr = calculate_cagr(sector_ticker, filing_date)
         if cagr != 0:  # Only include non-zero CAGRs
             sector_cagrs.append(cagr)
     
-    # If there's only one stock in the sector, return its CAGR
     if len(sector_cagrs) == 1:
         return sector_cagrs[0]
-    # If there are no stocks with valid CAGR, return 0
     elif not sector_cagrs:
         return 0
-    # Otherwise, calculate and return the average CAGR for the sector
     else:
         return sum(sector_cagrs) / len(sector_cagrs)
 
@@ -121,33 +126,19 @@ def get_cagr_ratio(csi, filing_date):
     stock_mapper = StockMapper()
     cik_to_ticker_map = stock_mapper.cik_to_tickers
     try:
-        ticker = cik_to_ticker_map[csi]
-    except:
+        ticker = cik_to_ticker_map[csi].pop()
+    except KeyError:
         return 0
     
-    # Get the 52-week CAGR for the given stock ticker and filing date
-    end_date = pd.to_datetime(filing_date)
-    start_date = end_date - pd.DateOffset(weeks=52)
-    
+    cagr = calculate_cagr(ticker, filing_date)
+    sector_avg_cagr = get_sector_average_cagr(ticker, filing_date, cik_to_ticker_map)
+
     try:
-        # Fetch historical data
-        stock_data = yf.Ticker(ticker).history(start=start_date, end=end_date)
-        
-        if len(stock_data) < 2:
-            return 0
-        
-        # Calculate CAGR
-        start_price = stock_data['Close'].iloc[0]
-        end_price = stock_data['Close'].iloc[-1]
-        time_period = (end_date - start_date).days / 365.25  # Convert days to years
-        
-        cagr = (end_price / start_price) ** (1 / time_period) - 1
-        
-        return cagr
-    except Exception as e:
-        print(f"Error calculating CAGR for {ticker}: {str(e)}")
+        cagr_ratio = cagr / sector_avg_cagr
+    except ZeroDivisionError:
         return 0
-    
+    return cagr_ratio
+
 def main():
     # create a list of all the txt files in the datasets directory
     base_path = "/Users/aayush/mcgill_fiam/datasets/"
@@ -166,7 +157,7 @@ def main():
         mdna = extract_mda(content)
         readability_score = 0 # NOTE: This will from CoT prompting
         sentiment_score = 0 # NOTE: This will from CoT prompting
-        cagr_ratio = 0 # NOTE: This will from CoT prompting
+        cagr_ratio = 0
 
         filing_struct.append({
             "FILE_DATE": filing_date,
@@ -182,15 +173,13 @@ def main():
 
     df_filing = pd.DataFrame(filing_struct)
 
-    df_combined = df_filing.groupby("CSI").agg({
-        "FILE_DATE": "first",  # or another logic if needed
-        #"FORM_TYPE": "first",  # or another logic if needed
-        "RISK_FACTOR": " ".join,
-        "RISK_FACTOR_SCORE": "first",  # since those are dummy values
-        "READABILITY_SCORE": "first",  # since those are dummy values
-        "MD&A": " ".join,
-        "SENTIMENT_SCORE": "first",  # since those are dummy values
-        "CAGR_RATIO": "first"  # since those are dummy values
+    df_combined = df_filing.groupby(["CSI", "FILE_DATE"]).agg({
+        "RISK_FACTOR": lambda x: " ".join(filter(None, x)),
+        "RISK_FACTOR_SCORE": "first",
+        "READABILITY_SCORE": "first",
+        "MD&A": lambda x: " ".join(filter(None, x)),
+        "SENTIMENT_SCORE": "first",
+        "CAGR_RATIO": "first"
     }).reset_index()
     # save to csv
     df_combined.to_csv("../datasets/10K-Stage2-parsed.csv", index=False)
