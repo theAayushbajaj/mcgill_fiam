@@ -191,6 +191,8 @@ class FilingProcessor:
             filing_struct = list(tqdm(pool.imap(self.process_filing, filings_txt), total=len(filings_txt)))
 
         df_filing = pd.DataFrame(filing_struct)
+        # remove empty rows
+        df_filing = df_filing[df_filing["CSI"] != ""]
 
         df_combined = df_filing.groupby(["CSI", "FILE_DATE"]).agg({
             "RISK_FACTOR": lambda x: " ".join(filter(None, x)),
