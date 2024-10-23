@@ -4,193 +4,205 @@ import re
 import string
 from glob import glob
 import pandas as pd
-from sec_cik_mapper import StockMapper
 import yfinance as yf
+import json
 from multiprocessing import Pool, cpu_count
 
-def clean_content(content):
-    content = content.replace('\n', ' ').replace('\r', ' ')
-    content = content.translate(str.maketrans('', '', string.punctuation))
-    content = content.lower()
-    content = re.sub(r'\s+', ' ', content)
-    return content
+class FilingProcessor:
+    def __init__(self):
+        self.sector_ticker_map = {}
+        self.cik_to_ticker_map = {}
+        self._load_mappings()
 
-def get_filed_as_of_date(content):
-    # Use a regular expression to find the "filed as of date" with a specific date format
-    match = re.search(r"filed as of date\s+(\d{8})", content)
-    return match.group(1) if match else None
+    def _load_mappings(self):
+        if not os.path.exists('assets/sector_ticker_map.json'):
+            self._build_sector_ticker_map()
+        else:
+            with open('assets/sector_ticker_map.json', 'r') as f:
+                self.sector_ticker_map = json.load(f)
+        
+        with open('assets/cik_ticker_mapping.json', 'r') as f:
+            self.cik_to_ticker_map = json.load(f)
 
-def get_central_index_key(content):
-    # Use a regular expression to find the "central index key"
-    match = re.search(r"central index key\s+(\d+)", content)
-    return match.group(1).strip() if match else None
+    def _build_sector_ticker_map(self):
+        with open('assets/cik_ticker_mapping.json', 'r') as f:
+            cik_to_ticker_map = json.load(f)
+        sector_ticker_map = {}
+        for csi, ticker in tqdm(cik_to_ticker_map.items(), desc="Building Sector Ticker Map"):
+            try:
+                ticker = ticker.pop()
+                sector = yf.Ticker(ticker).info['sector']
+                sector_ticker_map[sector] = sector_ticker_map.get(sector, []) + [ticker]
+            except:
+                continue
+        
+        os.makedirs('assets', exist_ok=True)
+        with open('assets/sector_ticker_map.json', 'w') as f:
+            json.dump(sector_ticker_map, f)
+        self.sector_ticker_map = sector_ticker_map
 
-def get_form_type(content):
-    # Use a regular expression to find the "form type"
-    match = re.search(r"form type\s+(\w+)", content)
-    return match.group(1).strip() if match else None
+    def _clean_content(self, content):
+        content = content.replace('\n', ' ').replace('\r', ' ')
+        content = content.translate(str.maketrans('', '', string.punctuation))
+        content = content.lower()
+        content = re.sub(r'\s+', ' ', content)
+        return content
 
-def extract_risk_factors(content):
-    # Use regular expressions to find all instances of the "Item 1A. Risk Factors" section
-    start_pattern = re.compile(r"item\s+1a\s+risk\s+factors", re.IGNORECASE)
-    # Adjust the end pattern to look for the next item number
-    end_pattern = re.compile(r"item\s+\d+[a-z]?\s", re.IGNORECASE)
+    def _get_filed_as_of_date(self, content):
+        match = re.search(r"filed as of date\s+(\d{8})", content)
+        return match.group(1) if match else None
 
-    # Find all start matches
-    start_matches = list(start_pattern.finditer(content))
-    if not start_matches:
-        return None
+    def _get_central_index_key(self, content):
+        match = re.search(r"central index key\s+(\d+)", content)
+        return str(match.group(1).strip()) if match else None
 
-    # Initialize variables to track the longest section
-    longest_section = ""
-    longest_length = 0
+    def _get_form_type(self, content):
+        match = re.search(r"form type\s+(\w+)", content)
+        return match.group(1).strip() if match else None
 
-    # Iterate over each start match to find the corresponding end match
-    for start_match in start_matches:
-        end_match = end_pattern.search(content, start_match.end())
-        if end_match:
-            # Extract the section between the start and end matches
-            section = content[start_match.end():end_match.start()].strip()
-            # Update the longest section if this one is longer
-            if len(section) > longest_length:
-                longest_section = section
-                longest_length = len(section)
+    def _extract_risk_factors(self, content):
+        start_pattern = re.compile(r"item\s+1a\s+risk\s+factors", re.IGNORECASE)
+        end_pattern = re.compile(r"item\s+\d+[a-z]?\s", re.IGNORECASE)
 
-    return longest_section if longest_section else None
+        start_matches = list(start_pattern.finditer(content))
+        if not start_matches:
+            return None
 
-def extract_mda(content):
-    # Use regular expressions to find all instances of the MD&A section
-    start_pattern = re.compile(r"item\s+7\s+management\s+s\s+discussion\s+and\s+analysis\s+of\s+financial\s+condition\s+and\s+results\s+of\s+operations", re.IGNORECASE)
-    # Adjust the end pattern to look for the next item number
-    end_pattern = re.compile(r"item\s+\d+[a-z]?\s", re.IGNORECASE)
+        longest_section = ""
+        longest_length = 0
 
-    # Find all start matches
-    start_matches = list(start_pattern.finditer(content))
-    if not start_matches:
-        return []
+        for start_match in start_matches:
+            end_match = end_pattern.search(content, start_match.end())
+            if end_match:
+                section = content[start_match.end():end_match.start()].strip()
+                if len(section) > longest_length:
+                    longest_section = section
+                    longest_length = len(section)
 
-    # List to store all sections found
-    sections = []
+        return longest_section if longest_section else None
 
-    # Iterate over each start match to find the corresponding end match
-    for start_match in start_matches:
-        end_match = end_pattern.search(content, start_match.end())
-        if end_match:
-            # Extract the section between the start and end matches
-            section = content[start_match.end():end_match.start()].strip()
-            sections.append(section)
+    def _extract_mda(self, content):
+        start_pattern = re.compile(r"item\s+7\s+management\s+s\s+discussion\s+and\s+analysis\s+of\s+financial\s+condition\s+and\s+results\s+of\s+operations", re.IGNORECASE)
+        end_pattern = re.compile(r"item\s+\d+[a-z]?\s", re.IGNORECASE)
 
-    combined_sections = " ".join(sections)
-    return combined_sections
+        start_matches = list(start_pattern.finditer(content))
+        if not start_matches:
+            return []
 
-def calculate_cagr(ticker, filing_date):
-    start_date = pd.to_datetime(filing_date)
-    end_date = start_date + pd.DateOffset(weeks=52)
-    stock_data = yf.Ticker(ticker).history(start=start_date, end=end_date)
-    if len(stock_data) < 2:
-        return 0
-    start_price = stock_data['Close'].iloc[0]
-    end_price = stock_data['Close'].iloc[-1]
-    time_period = (end_date - start_date).days / 365.25
-    cagr = (end_price / start_price) ** (1 / time_period) - 1
-    return cagr
+        sections = []
 
+        for start_match in start_matches:
+            end_match = end_pattern.search(content, start_match.end())
+            if end_match:
+                section = content[start_match.end():end_match.start()].strip()
+                sections.append(section)
 
-def get_sector_average_cagr(ticker, filing_date, cik_to_ticker_map):
-    # Get the sector for the given ticker
-    try:
-        sector = yf.Ticker(ticker).info['sector']
-    except:
-        return 0
-    
-    sector_tickers = []
-    for csi, ticker in cik_to_ticker_map.items():
-        ticker = ticker.pop()
-        if yf.Ticker(ticker).info.get('sector') == sector:
-            sector_tickers.append(ticker)
-    
-    # Calculate CAGR for each ticker in the sector
-    sector_cagrs = []
-    for sector_ticker in sector_tickers:
-        cagr = calculate_cagr(sector_ticker, filing_date)
-        if cagr != 0:  # Only include non-zero CAGRs
-            sector_cagrs.append(cagr)
-    
-    if len(sector_cagrs) == 1:
-        return sector_cagrs[0]
-    elif not sector_cagrs:
-        return 0
-    else:
-        return sum(sector_cagrs) / len(sector_cagrs)
+        combined_sections = " ".join(sections)
+        return combined_sections
 
-def get_cagr_ratio(csi, filing_date):
-    stock_mapper = StockMapper()
-    cik_to_ticker_map = stock_mapper.cik_to_tickers
-    try:
-        ticker = cik_to_ticker_map[csi].pop()
-    except KeyError:
-        return 0
-    
-    cagr = calculate_cagr(ticker, filing_date)
-    sector_avg_cagr = get_sector_average_cagr(ticker, filing_date, cik_to_ticker_map)
+    def _calculate_cagr(self, ticker, filing_date):
+        start_date = pd.to_datetime(filing_date)
+        end_date = start_date + pd.DateOffset(weeks=52)
+        stock_data = yf.Ticker(ticker).history(start=start_date, end=end_date)
+        if len(stock_data) < 2:
+            return 0
+        start_price = stock_data['Close'].iloc[0]
+        end_price = stock_data['Close'].iloc[-1]
+        time_period = (end_date - start_date).days / 365.25
+        cagr = (end_price / start_price) ** (1 / time_period) - 1
+        return cagr
 
-    try:
-        cagr_ratio = cagr / sector_avg_cagr
-    except ZeroDivisionError:
-        return 0
-    return cagr_ratio
+    def _get_sector_average_cagr(self, ticker, filing_date):
+        try:
+            sector = yf.Ticker(ticker).info['sector']
+        except:
+            return 0
+        
+        sector_tickers = self.sector_ticker_map.get(sector, [])
+        
+        sector_cagrs = []
+        for sector_ticker in tqdm(sector_tickers, desc="Calculating CAGRs"):
+            cagr = self._calculate_cagr(sector_ticker, filing_date)
+            if cagr != 0:
+                sector_cagrs.append(cagr)
+        
+        if len(sector_cagrs) == 1:
+            return sector_cagrs[0]
+        elif not sector_cagrs:
+            return 0
+        else:
+            return sum(sector_cagrs) / len(sector_cagrs)
 
-def process_filing(filing):
-    # Read and process the content of the filing
-    with open(filing, "r") as file:
-        content = file.read()
-    content = clean_content(content)
-    filing_date = get_filed_as_of_date(content)
-    csi = get_central_index_key(content)
-    risk_factor = extract_risk_factors(content)
-    mdna = extract_mda(content)
-    
-    # Placeholder for scores
-    risk_factor_score = 0
-    readability_score = 0
-    sentiment_score = 0
-    cagr_ratio = 0
+    def _get_cagr_ratio(self, csi, filing_date):
+        try:
+            ticker = self.cik_to_ticker_map[csi]
+        except KeyError:
+            return 0
+        
+        cagr = self._calculate_cagr(ticker, filing_date)
+        sector_avg_cagr = self._get_sector_average_cagr(ticker, filing_date)
 
-    return {
-        "FILE_DATE": filing_date,
-        "CSI": csi,
-        "RISK_FACTOR": risk_factor,
-        "RISK_FACTOR_SCORE": risk_factor_score,
-        "READABILITY_SCORE": readability_score,
-        "MD&A": mdna,
-        "SENTIMENT_SCORE": sentiment_score,
-        "CAGR_RATIO": cagr_ratio
-    }
+        try:
+            cagr_ratio = cagr / sector_avg_cagr
+        except ZeroDivisionError:
+            return 0
+        return cagr_ratio
 
-def main():
-    base_path = "/teamspace/studios/this_studio/mcgill_fiam/datasets"
-    filings_txt = glob(os.path.join(base_path, "**/*.txt"), recursive=True)
+    def process_filing(self, filing):
+        with open(filing, "r") as file:
+            content = file.read()
+        content = self._clean_content(content)
+        filing_date = self._get_filed_as_of_date(content)
+        csi = self._get_central_index_key(content)
 
-    print(f"Processing {len(filings_txt)} filings")
+        if csi not in self.cik_to_ticker_map:
+            return self._empty_row()
+        
+        risk_factor = self._extract_risk_factors(content)
+        mdna = self._extract_mda(content)
+        
+        risk_factor_score = 0  # Placeholder
+        readability_score = 0  # Placeholder
+        sentiment_score = 0  # Placeholder
+        cagr_ratio = self._get_cagr_ratio(csi, filing_date)
 
-    # Use multiprocessing to process filings in parallel
-    with Pool(cpu_count()) as pool:
-        filing_struct = list(tqdm(pool.imap(process_filing, filings_txt), total=len(filings_txt)))
+        return {
+            "FILE_DATE": filing_date,
+            "CSI": csi,
+            "RISK_FACTOR": risk_factor,
+            "RISK_FACTOR_SCORE": risk_factor_score,
+            "READABILITY_SCORE": readability_score,
+            "MD&A": mdna,
+            "SENTIMENT_SCORE": sentiment_score,
+            "CAGR_RATIO": cagr_ratio
+        }
 
-    df_filing = pd.DataFrame(filing_struct)
+    def _empty_row(self):
+        return {key: "" for key in ["FILE_DATE", "CSI", "RISK_FACTOR", "RISK_FACTOR_SCORE", 
+                                    "READABILITY_SCORE", "MD&A", "SENTIMENT_SCORE", "CAGR_RATIO"]}
 
-    df_combined = df_filing.groupby(["CSI", "FILE_DATE"]).agg({
-        "RISK_FACTOR": lambda x: " ".join(filter(None, x)),
-        "RISK_FACTOR_SCORE": "first",
-        "READABILITY_SCORE": "first",
-        "MD&A": lambda x: " ".join(filter(None, x)),
-        "SENTIMENT_SCORE": "first",
-        "CAGR_RATIO": "first"
-    }).reset_index()
+    def main(self):
+        base_path = "/teamspace/studios/this_studio/mcgill_fiam/datasets"
+        filings_txt = glob(os.path.join(base_path, "**/*.txt"), recursive=True)
 
-    df_combined.to_csv("../datasets/10K-Stage2-parsed.csv", index=False)
+        print(f"Processing {len(filings_txt)} filings")
 
+        with Pool(cpu_count()) as pool:
+            filing_struct = list(tqdm(pool.imap(self.process_filing, filings_txt), total=len(filings_txt)))
 
+        df_filing = pd.DataFrame(filing_struct)
+
+        df_combined = df_filing.groupby(["CSI", "FILE_DATE"]).agg({
+            "RISK_FACTOR": lambda x: " ".join(filter(None, x)),
+            "RISK_FACTOR_SCORE": "first",
+            "READABILITY_SCORE": "first",
+            "MD&A": lambda x: " ".join(filter(None, x)),
+            "SENTIMENT_SCORE": "first",
+            "CAGR_RATIO": "first"
+        }).reset_index()
+
+        df_combined.to_parquet("../datasets/10K-Stage2-parsed.parquet", index=False)
 
 if __name__ == "__main__":
-    main()
+    processor = FilingProcessor()
+    processor.main()
