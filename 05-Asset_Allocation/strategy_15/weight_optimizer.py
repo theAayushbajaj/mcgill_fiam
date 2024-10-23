@@ -88,6 +88,7 @@ def getClusterVar(cov, cItems):
     cVar = np.dot(np.dot(w.T, cov_), w)[0, 0]
     return cVar
 
+
 def getClusterMeanVar():
     pass
 
@@ -110,8 +111,8 @@ def getQuasiDiag(link):
     return sortIx.tolist()
 
 
-# Compute HRP allocation
-def getRecBipart(cov, sortIx):
+# Compute HRP allocation with fallback to IVP in case of optimization failure
+def getRecBipart(cov, mu, sortIx, vol_state = 0, **kargs):
     w = pd.Series(1, index=sortIx)
     cItems = [sortIx]  # initialize all items in one cluster
     while len(cItems) > 0:
@@ -124,12 +125,24 @@ def getRecBipart(cov, sortIx):
         for i in range(0, len(cItems), 2):  # parse in pairs
             cItems0 = cItems[i]  # cluster 1
             cItems1 = cItems[i + 1]  # cluster 2
-            cVar0 = getClusterVar(cov, cItems0)
-            cVar1 = getClusterVar(cov, cItems1)
-            alpha = 1 - cVar0 / (cVar0 + cVar1)
-            w[cItems0] *= alpha  # weight 1
-            w[cItems1] *= 1 - alpha  # weight 2
-    return w
+            
+            # Attempt robust optimization
+            try:
+                cWeights0, cShrp0 = robust_optimizer(cov, mu, cItems0, **kargs)
+                cWeights1, cShrp1 = robust_optimizer(cov, mu, cItems1, **kargs)
+            except ValueError as e:
+                # Fallback to inverse-variance portfolio in case of failure
+                # print(f"Optimization failed for cluster {cItems0} or {cItems1}, using IVP. Error: {e}")
+                cShrp0 = 0.5
+                cShrp1 = 0.5
+                cWeights0 = getIVP(cov.loc[cItems0, cItems0])
+                cWeights1 = getIVP(cov.loc[cItems1, cItems1])
+            
+            alpha = cShrp0 / (cShrp0 + cShrp1)
+            w[cItems0] *= alpha
+            w[cItems1] *= (1 - alpha)
+    return w * (1 - 0.1 * vol_state)
+
 
 
 # A distance matrix based on correlation
@@ -138,15 +151,18 @@ def correlDist(corr):
     return dist
 
 
+def make_positive_definite(cov_matrix):
+    min_eigenvalue = np.min(np.linalg.eigvals(cov_matrix))
+    if min_eigenvalue < 0:
+        cov_matrix += np.eye(cov_matrix.shape[0]) * (-min_eigenvalue + 1e-6)
+    return cov_matrix
+
+
 def robust_optimizer(
-    weights,
     posterior_cov,
     posterior_mean,
     selected_stocks,
-    returns,
-    benchmark_df,
     lambda_=1.0,
-    soft_risk=0.01,
     num_scenarios=10,
     uncertainty_level=0.05,
     total_allocation=1.0,
@@ -168,14 +184,16 @@ def robust_optimizer(
         pd.DataFrame: DataFrame containing the weights of all the assets
         (not selected stocks will have 0 weight)
     """
-    # check = False
-    # if not check:
-    #     print("Check for weight_optimizer")
-    #     print(f"lambda is {lambda_}")
-    #     print(f"soft risk is {soft_risk}")
-    #     check = True
+    # print(f"There are {len(selected_stocks)} selected stocks")
+    # print(f"shape of posterior_cov: {posterior_cov.shape}")
+    # print(f"shape of posterior_mean: {posterior_mean.shape}")
+    posterior_cov = posterior_cov.loc[selected_stocks, selected_stocks]
+    posterior_mean = posterior_mean.loc[selected_stocks]
+    # print(f"shape of posterior_cov: {posterior_cov.shape}")
+    # print(f"shape of posterior_mean: {posterior_mean.shape}")
 
     n = len(selected_stocks)
+    posterior_cov = make_positive_definite(posterior_cov)
 
     # Generate multiple scenarios for posterior_mean and posterior_cov
     scenarios_mu, scenarios_cov = generate_scenarios(
@@ -228,14 +246,13 @@ def robust_optimizer(
 
     weights_opt = result.x
 
-    # Update the weights dataframe
-    weights.loc[selected_stocks, "Weight"] = weights_opt
-    
     # mean and variance
     mean = posterior_mean @ weights_opt
     variance = weights_opt @ posterior_cov @ weights_opt
 
-    return mean, variance
+    # sharpe = mean / (np.sqrt(variance) + 1e-6)
+    # sharpe = max(sharpe, 1e-6)
+    return weights_opt, -result.fun
 
 
 def main(
@@ -274,7 +291,7 @@ def main(
     corr = np.clip(corr, -1, 1)
     corr.values[range(corr.shape[0]), range(corr.shape[1])] = 1.0
     corr = pd.DataFrame(corr, index=selected_stocks, columns=selected_stocks)
-    
+
     # Now compute the distance matrix
     dist = correlDist(corr)
 
@@ -289,5 +306,20 @@ def main(
     sort_ix = getQuasiDiag(link)
     sort_ix = corr.index[sort_ix].tolist()
 
-    # Reorder covariance matrix for clustered stocks
-    cov_reordered = posterior_cov.loc[sort_ix, sort_ix]
+    # Compute HRP weights
+    hrp_weights = getRecBipart(
+        posterior_cov,
+        posterior_mean,
+        sort_ix,
+        lambda_=lambda_,
+        num_scenarios=num_scenarios,
+        uncertainty_level=uncertainty_level,
+        total_allocation=total_allocation,
+        vol_state=predict_volatility_state(benchmark_df),
+    )
+
+    # Assign the weights to the output DataFrame
+    weights.loc[hrp_weights.index, "Weight"] = hrp_weights
+    print(f'total allocation: {weights["Weight"].sum()}')
+
+    return weights

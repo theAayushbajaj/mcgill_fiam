@@ -21,7 +21,7 @@ warnings.filterwarnings("ignore", category=pd.errors.PerformanceWarning)
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 sys.path.append("../05-Asset_Allocation")
-import strategy_14.main as strat
+import strategy_15.main as strat
 path_to_strategy = "../05-Asset_Allocation/strategy_2"
 
 

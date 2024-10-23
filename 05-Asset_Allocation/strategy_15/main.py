@@ -18,7 +18,9 @@ import mean_cov_computer
 import stocks_selector
 import weight_optimizer
 
+import avici
 
+model = avici.load_pretrained(download="scm-v0")
 
 
 def asset_allocator(
@@ -62,7 +64,9 @@ def asset_allocator(
         "long_only": kwargs.get("long_only", True),
         "portfolio_size": kwargs.get("portfolio_size", 100),
     }
-    signal_stockSelector = signal_end # CHOOSE BETWEEN market_caps_df.iloc[end_date] OR signal_end
+    signal_stockSelector = (
+        signal_end  # CHOOSE BETWEEN market_caps_df.iloc[end_date] OR signal_end
+    )
     selected_stocks = stocks_selector.main(
         signal_stockSelector, prices, **stock_selector_kwargs
     )
@@ -70,6 +74,14 @@ def asset_allocator(
     prices = prices[selected_stocks]
     signal_end = signal_end[selected_stocks]
     returns = prices.pct_change().dropna()
+    returns_corr = returns.corr()
+    print(f"Returns correlation: {returns_corr}")
+    g_prob = model(x=returns.to_numpy())
+    print(f"Model output: {g_prob}")
+    normalized_matrix = g_prob / np.max(g_prob)
+    print(f"Normalized matrix: {normalized_matrix}")
+    normalized_matrix = np.maximum(normalized_matrix, normalized_matrix.T)
+    print(f"Normalized matrix (symmetric): {normalized_matrix}")
     market_caps_df = market_caps_df[selected_stocks]
     market_caps = market_caps_df.iloc[end_date]
 
@@ -81,6 +93,7 @@ def asset_allocator(
         "window": kwargs.get("window", 60),
         "span": kwargs.get("span", 60),
     }
+    
     u_vector, cov_matrix = mean_cov_computer.main(
         returns, signal_end, market_caps, selected_stocks, **mean_cov_kwargs
     )
@@ -93,7 +106,6 @@ def asset_allocator(
         "uncertainty_level": kwargs.get("uncertainty_level", 0.05),
         "total_allocation": kwargs.get("total_allocation", 1.0),
         "n_clusters": kwargs.get("n_clusters", 4),
-        
     }
     optimized_weights = weight_optimizer.main(
         weights,
@@ -106,5 +118,6 @@ def asset_allocator(
     )
 
     return optimized_weights
+
 
 # %%

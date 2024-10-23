@@ -1,2 +1,1 @@
-Main strategy at the moment, robust optimization where the risk is adressed by
-an HMM.
+CLusters as etfs -> robust on each -> compact everything together
