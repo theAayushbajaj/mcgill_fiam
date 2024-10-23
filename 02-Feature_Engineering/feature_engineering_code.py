@@ -461,7 +461,7 @@ with tqdm(total=total) as pbar:
         df.fillna(method='ffill', axis=0, inplace=True)
 
         # Fill the remaining NaNs with 1_000_000
-        df.fillna(1_000_000, inplace=True)
+        # df.fillna(1_000_000, inplace=True)
 
         # Save the updated DataFrame back to the CSV file
         df.to_csv(file_path)

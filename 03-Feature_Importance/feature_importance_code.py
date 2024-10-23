@@ -26,6 +26,8 @@ warnings.filterwarnings('ignore')
 # Load dataset and targets
 with open(os.path.join(parent_dir, 'objects/X_DATASET.pkl'), 'rb') as f:
     X = pickle.load(f)
+    # fill NaN values with 1e6
+    X.fillna(1e6, inplace=True)
 
 with open(os.path.join(parent_dir, 'objects/Y_DATASET.pkl'), 'rb') as f:
     Y = pickle.load(f)
