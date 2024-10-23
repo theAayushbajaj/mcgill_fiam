@@ -30,7 +30,6 @@ class FilingProcessor:
         sector_ticker_map = {}
         for csi, ticker in tqdm(cik_to_ticker_map.items(), desc="Building Sector Ticker Map"):
             try:
-                ticker = ticker.pop()
                 sector = yf.Ticker(ticker).info['sector']
                 sector_ticker_map[sector] = sector_ticker_map.get(sector, []) + [ticker]
             except:
@@ -203,6 +202,7 @@ class FilingProcessor:
             "CAGR_RATIO": "first"
         }).reset_index()
 
+        print(f"Number of rows: {len(df_combined)}")
         df_combined.to_parquet("../datasets/10K-Stage2-parsed.parquet", index=False)
 
 if __name__ == "__main__":
