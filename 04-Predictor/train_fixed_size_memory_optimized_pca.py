@@ -130,6 +130,11 @@ while True:
     X_train_vals_scaled = scaler.fit_transform(X_train_vals)
     X_validate_vals_scaled = scaler.transform(X_validate_vals)
     X_test_vals_scaled = scaler.transform(X_test_vals)
+    
+    # Fill NaN values with a large number
+    X_train_vals_scaled.fillna(1_000_000, inplace=True)
+    X_validate_vals_scaled.fillna(1_000_000, inplace=True)
+    X_test_vals_scaled.fillna(1_000_000, inplace=True)
 
     # **Apply PCA to X_train_vals_scaled**
     pca = PCA(n_components=0.80, svd_solver='full')  # Retain 80% of variance
