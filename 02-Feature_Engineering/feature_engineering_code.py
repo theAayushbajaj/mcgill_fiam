@@ -550,6 +550,7 @@ OBJECTS_DIR = "../objects"
 
 # Dataset creation for Causal Inference.
 causal_dataset = FULL_stacked_data[features_list + ['target']]
+causal_dataset.to_csv(f'{OBJECTS_DIR}/causal_dataset.pkl')
 causal_dataset.to_pickle(f'{OBJECTS_DIR}/causal_dataset.pkl')
 
 # Dataset creation for classification.

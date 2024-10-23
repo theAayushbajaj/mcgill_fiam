@@ -2,7 +2,7 @@
 This script preprocesses stock data by cleaning and splitting it into individual stock CSV files.
 Additionally, it processes market indicator data and saves it as a separate CSV file.
 """
-
+#%%
 import os
 import warnings
 import pandas as pd
@@ -25,11 +25,14 @@ OBJECTS_DIR = "../objects"
 if not os.path.exists(OBJECTS_DIR):
     os.makedirs(OBJECTS_DIR)
 
+#%%
 # Load the stock data from a CSV file
-data = pd.read_csv("../raw_data/hackathon_sample_v2.csv")
+data = pd.read_csv("/teamspace/uploads/hackathon_sample_v3.csv", index_col=False)
+data.columns = [x.lower() for x in data.columns]
 
+#%%
 # Convert 'date' column to a 't1' datetime column with the appropriate format
-data["t1"] = pd.to_datetime(data["date"], format="%Y%m%d")
+data["t1"] = pd.to_datetime(data["date"], format="%Y-%m-%d")
 
 # Define the minimum number of records required for saving
 MIN_RECORDS = 120
