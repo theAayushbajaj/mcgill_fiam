@@ -429,22 +429,22 @@ print('\n')
 
 
 # Add structural breaks
-# print("Adding 'sadf' column to each file...\n")
-# with tqdm(total=total) as pbar:
-#     for file_name in csv_files:
-#         file_path = os.path.join(STOCKS_DATA_DIR, file_name)
+print("Adding 'sadf' column to each file...\n")
+with tqdm(total=total) as pbar:
+    for file_name in csv_files:
+        file_path = os.path.join(STOCKS_DATA_DIR, file_name)
 
-#         df = pd.read_csv(file_path, index_col='t1', parse_dates=True)
-#         sadf = get_sadf(df['log_price'], 20, 'ct', 1)
+        df = pd.read_csv(file_path, index_col='t1', parse_dates=True)
+        sadf = get_sadf(df['log_price'], 20, 'ct', 1)
 
-#         # Merge SADF values with the original DataFrame
-#         # Assuming 'sadf_result' is a DataFrame with 'Date' as the index
-#         df_with_sadf = df.join(sadf.set_index('date'), on='t1')
-#         df_with_sadf['sadf'] = df_with_sadf['sadf'].fillna(0)
-#         df_with_sadf.to_csv(file_path)
+        # Merge SADF values with the original DataFrame
+        # Assuming 'sadf_result' is a DataFrame with 'Date' as the index
+        df_with_sadf = df.join(sadf.set_index('date'), on='t1')
+        df_with_sadf['sadf'] = df_with_sadf['sadf'].fillna(0)
+        df_with_sadf.to_csv(file_path)
 
-#         pbar.update(1)
-# print('\n')
+        pbar.update(1)
+print('\n')
 
 
 # Fill missing values with the previous value
