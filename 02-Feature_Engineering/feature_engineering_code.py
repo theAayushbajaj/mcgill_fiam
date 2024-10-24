@@ -544,14 +544,13 @@ features = pd.read_csv(PATH)
 features_list = features.values.ravel().tolist()
 
 # Added features
-added_features = ['log_diff', 'frac_diff', 'sadf']
+added_features = ['log_diff', 'frac_diff', 'sadf', 'random']
 
 OBJECTS_DIR = "../objects"
 
 # Dataset creation for Causal Inference.
 causal_dataset = FULL_stacked_data[features_list + ['target']]
-causal_dataset.to_csv(f'{OBJECTS_DIR}/causal_dataset.pkl')
-causal_dataset.to_pickle(f'{OBJECTS_DIR}/causal_dataset.pkl')
+causal_dataset.to_csv(f'{OBJECTS_DIR}/causal_dataset.csv')
 
 # Dataset creation for classification.
 # X_DATASET contains all relevant features for prediction.
