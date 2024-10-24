@@ -1,5 +1,5 @@
-raw_data/*
-!raw_data/.gitkeep
+# raw_data/*
+# !raw_data/.gitkeep
 
 stocks_data/*
 !stocks_data/.gitkeep
@@ -7,8 +7,14 @@ stocks_data/*
 # notebooks/*
 # !notebooks/.gitkeep
 
-objects/*
-!objects/.gitkeep
-papers/
-data/
+# objects/*
+# !objects/.gitkeep
+
 __pycache__/*
+*.pyc
+objects/causal_dataset.pkl
+objects/FULL_stacked_data.pkl
+objects/X_DATASET.pkl
+raw_data/hackathon_sample_v2.csv
+raw_data/stacked_data.pkl
+raw_data/X_dataset.pkl

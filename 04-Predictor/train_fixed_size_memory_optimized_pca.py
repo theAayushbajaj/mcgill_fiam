@@ -66,8 +66,8 @@ Y.index = pd.MultiIndex.from_tuples(
 )
 
 # Initialize parameters
-starting = pd.to_datetime("2004-01-01")
-training_window = pd.DateOffset(years=5)
+starting = pd.to_datetime("2001-01-01")
+training_window = pd.DateOffset(years=7)
 validation_window = pd.DateOffset(years=2)
 test_window = pd.DateOffset(years=1)
 step_size = pd.DateOffset(years=1)
@@ -132,9 +132,9 @@ while True:
     X_test_vals_scaled = scaler.transform(X_test_vals)
     
     # Fill NaN values with a large number
-    X_train_vals_scaled.fillna(1_000_000, inplace=True)
-    X_validate_vals_scaled.fillna(1_000_000, inplace=True)
-    X_test_vals_scaled.fillna(1_000_000, inplace=True)
+    X_train_vals_scaled = np.nan_to_num(X_train_vals_scaled, nan=1_000_000)
+    X_validate_vals_scaled = np.nan_to_num(X_validate_vals_scaled, nan=1_000_000)
+    X_test_vals_scaled = np.nan_to_num(X_test_vals_scaled, nan=1_000_000)
 
     # **Apply PCA to X_train_vals_scaled**
     pca = PCA(n_components=0.80, svd_solver='full')  # Retain 80% of variance

@@ -1,0 +1,1 @@
+This strat is the once with HRP, The one we submitted at the first phase 
