@@ -50,11 +50,12 @@ class Net(nn.Module):
     def forward(self,x):
         x = self.mamba(x)
         # out = nn.Tanh()(x)
-        prob = nn.Sigmoid()(x)
-        # Convert probability to -1 or 1 based on a 0.5 threshold
-        prediction = torch.where(prob >= 0.5, torch.tensor(1.0), torch.tensor(0.0))
+        # prob = nn.Sigmoid()(x)
+        # # Convert probability to -1 or 1 based on a 0.5 threshold
+        # prediction = torch.where(prob >= 0.5, torch.tensor(1.0), torch.tensor(0.0))
 
-        return prediction.flatten(), prob.flatten()
+        # return prediction.flatten(), prob.flatten()
+        return x.flatten()
 
 def PredictWithData(trainX, trainy, testX):
     clf = Net(len(trainX[0]),1)
@@ -70,8 +71,8 @@ def PredictWithData(trainX, trainy, testX):
 
     for e in tqdm(range(100), desc='Training Epochs'):
         clf.train()
-        preds, probs = clf(xt)
-        loss = F.binary_cross_entropy(probs,yt)
+        z = clf(xt)
+        loss = F.mse_loss(z,yt)
         opt.zero_grad()
         loss.backward()
         opt.step()
@@ -79,11 +80,11 @@ def PredictWithData(trainX, trainy, testX):
             print('Epoch %d | Lossp: %.4f' % (e, loss.item()))
 
     clf.eval()
-    preds, probs = clf(xv)
+    preds = clf(xv)
     # if args.cuda: mat = mat.cpu()
     yhat = preds.detach().numpy().flatten()
-    probs = probs.detach().numpy().flatten()
-    return yhat, probs
+    # probs = probs.detach().numpy().flatten()
+    return yhat
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

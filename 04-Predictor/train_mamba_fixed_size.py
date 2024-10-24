@@ -70,8 +70,8 @@ Y.index = pd.MultiIndex.from_tuples(
 )
 #%%
 # Initialize parameters
-starting = pd.to_datetime("2003-01-01")
-training_window = pd.DateOffset(years=5)
+starting = pd.to_datetime("2004-01-01")
+training_window = pd.DateOffset(years=3)
 validation_window = pd.DateOffset(years=2)
 test_window = pd.DateOffset(years=1)
 step_size = pd.DateOffset(years=1)
@@ -147,28 +147,30 @@ while True:
     Y_train_val['weight_attr'] *= Y_train_val.shape[0] / Y_train_val['weight_attr'].sum()
 
 
-    Y_train_val_binary = (Y_train_val[TGT_VAR].values + 1) / 2  # This converts -1 to 0 and 1 to 1
+    # Y_train_val_binary = (Y_train_val[TGT_VAR].values + 1) / 2  # This converts -1 to 0 and 1 to 1
 
-    # Make sure to cast to float for compatibility with F.binary_cross_entropy
-    Y_train_val_binary = Y_train_val_binary.astype(float)
+    # # Make sure to cast to float for compatibility with F.binary_cross_entropy
+    # Y_train_val_binary = Y_train_val_binary.astype(float)
 
     # Call the PredictWithData function with converted targets
-    preds, prob = PredictWithData(X_train_val, Y_train_val_binary, X_test_vals)
+    preds = PredictWithData(X_train_val, Y_train_val[['stock_exret']].values, X_test_vals)
 
-    # Convert predictions back from 0 and 1 to -1 and 1
-    preds_converted = np.where(preds == 1, 1.0, -1.0)
+    # # Convert predictions back from 0 and 1 to -1 and 1
+    # preds_converted = np.where(preds == 1, 1.0, -1.0)
 
     # Predict on test set
     # prob = best_estimator.predict_proba(X_test_pca)
-    score_ = -log_loss(Y_test[TGT_VAR].values, prob,
-                       sample_weight=Y_test["weight_attr"].values)
-    print("Log Loss on Test Set:", score_)
-    test_scores.append(score_)
+    # score_ = -log_loss(Y_test[TGT_VAR].values, prob,
+    #                    sample_weight=Y_test["weight_attr"].values)
+    # print("Log Loss on Test Set:", score_)
+    # test_scores.append(score_)
 
     # Store predictions in Y_test and save to disk immediately
-    Y_test['prediction'] = preds_converted
-    Y_test['probability'] = prob
-    Y_test[['prediction', 'probability']].to_csv(f"../objects/predictions_{COUNTER}.csv",
+    Y_test['prediction'] = preds
+    # Y_test['probability'] = prob
+    # Y_test[['prediction', 'probability']].to_csv(f"../objects/predictions_{COUNTER}.csv",
+    #                                              index=True)
+    Y_test[['prediction']].to_csv(f"../objects/predictions_{COUNTER}.csv",
                                                  index=True)
 
     COUNTER += 1
