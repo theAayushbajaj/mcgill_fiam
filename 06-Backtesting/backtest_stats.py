@@ -363,7 +363,7 @@ def plot_cumulative(portfolio_cumulative, benchmark_cumulative):
     - benchmark_cumulative : pd.Series : cumulative returns of the benchmark
     """
     # Set a professional style
-    plt.style.use("seaborn-whitegrid")
+    plt.style.use("ggplot")
 
     # Create a figure and axis object
     fig, ax = plt.subplots(figsize=(12, 6))
