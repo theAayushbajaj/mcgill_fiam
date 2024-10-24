@@ -136,7 +136,7 @@ class FilingProcessor:
         try:
             ticker = self.cik_to_ticker_map[csi]
         except KeyError:
-            return 0
+            return 0, None
         
         cagr = self._calculate_cagr(ticker, filing_date)
         sector_avg_cagr = self._get_sector_average_cagr(ticker, filing_date)
@@ -144,8 +144,8 @@ class FilingProcessor:
         try:
             cagr_ratio = cagr / sector_avg_cagr
         except ZeroDivisionError:
-            return 0
-        return cagr_ratio
+            return 0, ticker
+        return cagr_ratio, ticker
 
     def process_filing(self, filing):
         #print(f"filing: {filing}")
@@ -166,11 +166,12 @@ class FilingProcessor:
         risk_factor_score = 0  # Placeholder
         readability_score = 0  # Placeholder
         sentiment_score = 0  # Placeholder
-        cagr_ratio = self._get_cagr_ratio(csi, filing_date)
+        cagr_ratio, ticker = self._get_cagr_ratio(csi, filing_date)
 
         return {
             "FILE_DATE": filing_date,
             "CSI": csi,
+            "TICKER": ticker,
             "RISK_FACTOR": risk_factor,
             "RISK_FACTOR_SCORE": risk_factor_score,
             "READABILITY_SCORE": readability_score,
@@ -180,7 +181,7 @@ class FilingProcessor:
         }
 
     def _empty_row(self):
-        return {key: "" for key in ["FILE_DATE", "CSI", "RISK_FACTOR", "RISK_FACTOR_SCORE", 
+        return {key: "" for key in ["FILE_DATE", "CSI", "TICKER", "RISK_FACTOR", "RISK_FACTOR_SCORE", 
                                     "READABILITY_SCORE", "MD&A", "SENTIMENT_SCORE", "CAGR_RATIO"]}
 
     def main(self):
@@ -197,7 +198,7 @@ class FilingProcessor:
         # remove empty rows
         df_filing = df_filing[df_filing["CSI"] != ""]
 
-        df_combined = df_filing.groupby(["CSI", "FILE_DATE"]).agg({
+        df_combined = df_filing.groupby(["CSI", "FILE_DATE", "TICKER"]).agg({
             "RISK_FACTOR": lambda x: " ".join(filter(None, x)),
             "RISK_FACTOR_SCORE": "first",
             "READABILITY_SCORE": "first",
@@ -207,7 +208,7 @@ class FilingProcessor:
         }).reset_index()
 
         print(f"Number of rows: {len(df_combined)}")
-        df_combined.to_parquet("../datasets/10K-Stage2-parsed_2023.parquet", index=False)
+        df_combined.to_parquet("../datasets/10K-Stage2-parsed.parquet", index=False)
 
 if __name__ == "__main__":
     processor = FilingProcessor()
