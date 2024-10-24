@@ -21,11 +21,11 @@ class FilingProcessor:
             with open('assets/sector_ticker_map.json', 'r') as f:
                 self.sector_ticker_map = json.load(f)
         
-        with open('assets/cik_ticker_mapping.json', 'r') as f:
+        with open('assets/cik_to_ticker_mapping_phaseII.json', 'r') as f:
             self.cik_to_ticker_map = json.load(f)
 
     def _build_sector_ticker_map(self):
-        with open('assets/cik_ticker_mapping.json', 'r') as f:
+        with open('assets/cik_to_ticker_mapping_phaseII.json', 'r') as f:
             cik_to_ticker_map = json.load(f)
         sector_ticker_map = {}
         for csi, ticker in tqdm(cik_to_ticker_map.items(), desc="Building Sector Ticker Map"):
@@ -148,11 +148,14 @@ class FilingProcessor:
         return cagr_ratio
 
     def process_filing(self, filing):
+        #print(f"filing: {filing}")
         with open(filing, "r") as file:
             content = file.read()
         content = self._clean_content(content)
         filing_date = self._get_filed_as_of_date(content)
         csi = self._get_central_index_key(content)
+        #print(f"csi: {csi}")
+        #print("-"*100)
 
         if csi not in self.cik_to_ticker_map:
             return self._empty_row()
@@ -183,6 +186,7 @@ class FilingProcessor:
     def main(self):
         base_path = "/teamspace/studios/this_studio/mcgill_fiam/datasets"
         filings_txt = glob(os.path.join(base_path, "**/*.txt"), recursive=True)
+        #filings_txt = filings_txt[:10]
 
         print(f"Processing {len(filings_txt)} filings")
 
@@ -203,7 +207,7 @@ class FilingProcessor:
         }).reset_index()
 
         print(f"Number of rows: {len(df_combined)}")
-        df_combined.to_parquet("../datasets/10K-Stage2-parsed.parquet", index=False)
+        df_combined.to_parquet("../datasets/10K-Stage2-parsed_2023.parquet", index=False)
 
 if __name__ == "__main__":
     processor = FilingProcessor()
