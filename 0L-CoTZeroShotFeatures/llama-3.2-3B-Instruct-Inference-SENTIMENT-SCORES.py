@@ -24,8 +24,6 @@ def calculate_sentiment_score(samples):
         # Generate the output using the pipeline
         outputs = pipe(messages, max_new_tokens=50)
 
-        #print(outputs[0]['generated_text'][-1]['content'])
-
         # Extract the score from the generated text
         sentiment_score_string = outputs[0]['generated_text'][-1]['content']
         try:

@@ -27,8 +27,6 @@ def calculate_risk_factor_score(samples):
         # Generate the output using the pipeline
         outputs = pipe(messages, max_new_tokens=50)
 
-        #print(outputs[0]['generated_text'][-1]['content'])
-
         # Extract the score from the generated text
         risk_factor_string = outputs[0]['generated_text'][-1]['content']
         try:
@@ -52,31 +50,6 @@ if __name__ == "__main__":
     
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
-
-    # quantization_config = BitsAndBytesConfig(
-    #     load_in_8bit=True,
-    #     llm_int8_threshold=6.0,
-    #     llm_int8_has_fp16_weight=False
-    # )
-
-    # model = AutoModelForCausalLM.from_pretrained(
-    #     model_id,
-    #     quantization_config=quantization_config,
-    #     device_map="auto"
-    # )
-
-    # # Create a pipeline with specific generation settings
-    # pipe = pipeline(
-    #     "text-generation",
-    #     model=model,
-    #     tokenizer=tokenizer,
-    #     max_new_tokens=50,
-    #     do_sample=False,  # Set to True to use sampling
-    #     temperature=0, # Only used if do_sample=True
-    #     num_return_sequences=1,
-    #     eos_token_id=tokenizer.eos_token_id,
-    #     batch_size=8
-    # ) 
 
     pipe = pipeline(
         "text-generation",

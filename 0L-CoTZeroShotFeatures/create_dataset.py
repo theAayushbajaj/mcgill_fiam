@@ -148,14 +148,11 @@ class FilingProcessor:
         return cagr_ratio, ticker
 
     def process_filing(self, filing):
-        #print(f"filing: {filing}")
         with open(filing, "r") as file:
             content = file.read()
         content = self._clean_content(content)
         filing_date = self._get_filed_as_of_date(content)
         csi = self._get_central_index_key(content)
-        #print(f"csi: {csi}")
-        #print("-"*100)
 
         if csi not in self.cik_to_ticker_map:
             return self._empty_row()
