@@ -25,6 +25,12 @@ def get_market_implied_returns(cov, market_weights, lambda_=2.5):
     pi = lambda_ * cov @ market_weights
     return pi
 
+def make_positive_definite(cov_matrix):
+    min_eigenvalue = np.min(np.linalg.eigvals(cov_matrix))
+    if min_eigenvalue < 0:
+        cov_matrix += np.eye(cov_matrix.shape[0]) * (-min_eigenvalue + 1e-6)
+    return cov_matrix
+
 
 def main(
     returns,
@@ -39,17 +45,32 @@ def main(
 ):
     # check = False
     # if not check:
-    #     print('Check for mean_cov_computer')
-    #     print(f'tau is {tau}')
-    #     print(f'lambda is {lambda_}')
+    #     # print('Check for mean_cov_computer')
+    #     # print(f'tau is {tau}')
+    #     # print(f'lambda is {lambda_}')
     #     check = True
+    
+    # print("returns:")
+    # print(returns)
+    # print("returns.shape:")
+    # print(returns.shape)
+
     
     # Compute Prior Covariance Matrix and Expected Returns
     if use_ema:
         # Use EMA for both covariance and returns
         returns_ewm = returns.ewm(span=span)
         cov_ewm = returns_ewm.cov().dropna().iloc[-len(selected_stocks):, -len(selected_stocks):]
+        cov_ewm = make_positive_definite(cov_ewm)
         mean_returns = returns_ewm.mean().dropna().iloc[-1, :]
+        
+        # print("returns_ewm.mean():")
+        # print(returns_ewm.mean())
+        # print("returns_ewm.mean().dropna():")
+        # print(returns_ewm.mean().dropna())
+        # print("returns_ewm.mean().dropna().shape:")
+        # print(returns_ewm.mean().dropna().shape)
+
         
         # Apply Ledoit-Wolf shrinkage to EMA covariance matrix
         l_wolf = LedoitWolf()

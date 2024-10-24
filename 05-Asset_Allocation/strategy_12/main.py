@@ -50,13 +50,21 @@ def asset_allocator(
 
     # Step 0) Adjust the prices to the start and end date
     # Index in terms of months
+    # print(f"Start date: {start_date}")
+    # print(f"End date: {end_date}")
+    # print(f"Prices length: {len(prices)}")
     prices = prices[start_date : end_date + 1]
+    # print(f"Prices length: {len(prices)}")
+    # print(f"Prices shape: {prices.shape}")
     # print(f"Prices length: {len(prices)}")
 
     # =========================================================================
 
     # Step 1) Stock Selection
+    # fill NAs with 0 for signals
+    signals = signals.fillna(0)
     signal_end = signals.iloc[end_date]
+    signal_past = signals.iloc[end_date - 1]
     stock_selector_kwargs = {
         "min_size": kwargs.get("min_size", 60),
         "long_only": kwargs.get("long_only", True),
@@ -64,12 +72,18 @@ def asset_allocator(
     }
     signal_stockSelector = signal_end # CHOOSE BETWEEN market_caps_df.iloc[end_date] OR signal_end
     selected_stocks = stocks_selector.main(
-        signal_stockSelector, prices, **stock_selector_kwargs
+        signal_stockSelector, signal_past, prices, **stock_selector_kwargs
     )
     # Filter the data to only include the selected stocks
+    # print(f'prices before selection : {prices}')
     prices = prices[selected_stocks]
+    # print(f'prices after selection : {prices}')
     signal_end = signal_end[selected_stocks]
-    returns = prices.pct_change().dropna()
+    # print(f'signal_end after selection : {signal_end}')
+    # print(f'signal_past after selection : {signal_past[selected_stocks]}')
+    returns = prices.pct_change()
+    # fill nas with 0 for returns
+    returns = returns.fillna(0)
     market_caps_df = market_caps_df[selected_stocks]
     market_caps = market_caps_df.iloc[end_date]
 

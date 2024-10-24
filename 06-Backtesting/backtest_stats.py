@@ -174,6 +174,10 @@ def performance_benchmark(trading_log, benchmark, weights_df):
     portfolio_turnover = compute_portfolio_turnover(weights_df)
     trading_stats["Portfolio"]["Portfolio Turnover"] = portfolio_turnover
 
+    # number of stocks change
+    number_stocks_change = compute_number_stocks_change(weights_df)
+    trading_stats["Portfolio"]["Number of Stocks Change"] = number_stocks_change
+
     # Compute Portfolio Alpha
     alpha = compute_portfolio_alpha(df["Portfolio"], df["Benchmark"])
     trading_stats["Portfolio"]["Alpha Annualized"] = alpha
@@ -184,8 +188,8 @@ def performance_benchmark(trading_log, benchmark, weights_df):
         - trading_stats["Benchmark"]["Annualized Volatility"]
     )
     trading_stats["Portfolio"]["Annualized Tracking Error"] = tracking_error
-    trading_stats["Portfolio"]["Per trade Tracking Error"] = compute_tracking_error_count(
-        df["Portfolio"], df["Benchmark"]
+    trading_stats["Portfolio"]["Per trade Tracking Error"] = (
+        compute_tracking_error_count(df["Portfolio"], df["Benchmark"])
     )
 
     # Convert to DataFrame and save as CSV
@@ -196,9 +200,9 @@ def performance_benchmark(trading_log, benchmark, weights_df):
         trading_stats["Portfolio"]["Cumulative Return"],
         trading_stats["Benchmark"]["Cumulative Return"],
     )
-    
+
     plot_weights(weights_df)
-    
+
     # Print Benchmark Stats
     print("Benchmark Stats :")
     benchmark_stats = {
@@ -224,7 +228,6 @@ def performance_benchmark(trading_log, benchmark, weights_df):
     return trading_stats
 
 
-
 def compute_stats(returns):
     """
     Inputs :
@@ -246,16 +249,16 @@ def compute_stats(returns):
     # Total time in years
     total_years = TIME_DELTA * total_periods
     # Annualized Return
-    stats["Annualized Return"] = (
-        (stats["Total Return"]+1) ** (1 / total_years) - 1
-    )
-    stats['Average Annual Return'] = returns.mean() / TIME_DELTA
+    stats["Annualized Return"] = (stats["Total Return"] + 1) ** (1 / total_years) - 1
+    stats["Average Annual Return"] = returns.mean() / TIME_DELTA
     # Annualized Volatility
     stats["Annualized Volatility"] = returns.std() / np.sqrt(TIME_DELTA)
-    stats['Average Monthly Volatility'] = returns.std()
+    stats["Average Monthly Volatility"] = returns.std()
     # Sharpe Ratio
     # Assuming risk-free rate is zero (since we are working with excess returns)
-    stats["Sharpe Ratio"] = stats["Average Annual Return"] / stats["Annualized Volatility"]
+    stats["Sharpe Ratio"] = (
+        stats["Average Annual Return"] / stats["Annualized Volatility"]
+    )
     # Max Drawdown
     # Compute drawdowns
     cumulative = stats["Cumulative Return"]
@@ -332,8 +335,25 @@ def compute_portfolio_turnover(weights_df):
     return average_turnover
 
 
+def compute_number_stocks_change(weights_df):
+    """
+    Computes the number of stocks that change in the portfolio.
+    Inputs:
+    - weights_df : pd.DataFrame : portfolio weights over time
+    Output:
+    - number_stocks_change : int : number of stocks that change in the portfolio
+    """
+    weights_binary = weights_df.applymap(lambda x: 1 if x > 0 else 0)
+    # For each period, compute the number of stocks that change
+    number_stocks_change = weights_binary.diff().dropna().abs().sum(axis=1)
+    # change ratio
+    ratio = number_stocks_change / 100
+    return ratio.mean()
+
+
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
+
 
 def plot_cumulative(portfolio_cumulative, benchmark_cumulative):
     """
@@ -343,34 +363,46 @@ def plot_cumulative(portfolio_cumulative, benchmark_cumulative):
     - benchmark_cumulative : pd.Series : cumulative returns of the benchmark
     """
     # Set a professional style
-    plt.style.use('seaborn-whitegrid')
+    plt.style.use("seaborn-whitegrid")
 
     # Create a figure and axis object
     fig, ax = plt.subplots(figsize=(12, 6))
-    
+
     # Plot cumulative returns of the portfolio and benchmark
-    ax.plot(portfolio_cumulative.index, portfolio_cumulative.values, label="Portfolio", linewidth=2, color='steelblue')
-    ax.plot(benchmark_cumulative.index, benchmark_cumulative.values, label="Benchmark", linewidth=2, color='darkorange')
-    
+    ax.plot(
+        portfolio_cumulative.index,
+        portfolio_cumulative.values,
+        label="Portfolio",
+        linewidth=2,
+        color="steelblue",
+    )
+    ax.plot(
+        benchmark_cumulative.index,
+        benchmark_cumulative.values,
+        label="Benchmark",
+        linewidth=2,
+        color="darkorange",
+    )
+
     # Set axis labels with a larger font
     ax.set_xlabel("Date", fontsize=14, labelpad=10)
     ax.set_ylabel("Cumulative Return (%)", fontsize=14, labelpad=10)
-    
+
     # Set title with a larger font
-    ax.set_title("Cumulative Return Comparison", fontsize=16, pad=20, weight='bold')
-    
+    ax.set_title("Cumulative Return Comparison", fontsize=16, pad=20, weight="bold")
+
     # Format the y-axis to show percentages
     ax.yaxis.set_major_formatter(mticker.PercentFormatter(1.0))
-    
+
     # Add subtle gridlines
-    ax.grid(True, which='both', linestyle='--', linewidth=0.5, alpha=0.7)
-    
+    ax.grid(True, which="both", linestyle="--", linewidth=0.5, alpha=0.7)
+
     # Add a legend with larger font
     ax.legend(loc="upper left", fontsize=12)
 
     # Rotate the x-axis labels slightly for better readability
     plt.xticks(rotation=45)
-    
+
     # Save the plot to a file
     plt.savefig("professional_cumulative_return_comparison.png", bbox_inches="tight")
 
@@ -378,7 +410,6 @@ def plot_cumulative(portfolio_cumulative, benchmark_cumulative):
     plt.close()
 
 
-    
 def plot_weights(weights_df):
     """
     To track how the weights are being allocated, plot the sum of the weights
@@ -387,37 +418,42 @@ def plot_weights(weights_df):
     # Calculate sum of weights and sum of absolute weights
     weights = weights_df.sum(axis=1)
     abs_weights = weights_df.abs().sum(axis=1)
-    
+
     # Round the sums to avoid floating-point errors
     weights_rounded = weights.round(4)
     abs_weights_rounded = abs_weights.round(4)
-    
+
     # Create the plot
     plt.figure(figsize=(12, 6))
-    
+
     # Plot the sum of weights (solid line)
     plt.plot(weights_rounded.index, weights_rounded.values, label="Sum of Weights")
-    
+
     # Plot the sum of absolute weights (dotted line)
-    plt.plot(abs_weights_rounded.index, abs_weights_rounded.values, label="Sum of Absolute Weights", linestyle=':')
-    
+    plt.plot(
+        abs_weights_rounded.index,
+        abs_weights_rounded.values,
+        label="Sum of Absolute Weights",
+        linestyle=":",
+    )
+
     # Set plot labels and title
     plt.xlabel("Date")
     plt.ylabel("Weights")
     plt.title("Weights Allocation")
-    
+
     # Add a legend
     plt.legend()
-    
+
     # Set y-axis limits to focus on small variations around 1.0
     plt.ylim(0.80, 1.10)
-    
+
     # Add grid lines for better readability
     plt.grid(True)
-    
+
     # Save the plot to a file
     plt.savefig("weights_allocation.png")
-    
+
     # Do not show the plot to prevent freezing
     plt.close()
 
@@ -430,15 +466,15 @@ def plot_stats_table(stats_df):
     """
     # Create a figure for the table with a larger size to accommodate the table
     fig, ax = plt.subplots(figsize=(12, 6))  # Adjust the size as needed
-    ax.axis('off')  # Hide the axes
+    ax.axis("off")  # Hide the axes
 
     # Create the table with manual column widths and centered text
     table = ax.table(
         cellText=stats_df.values,
         colLabels=stats_df.columns,
         rowLabels=stats_df.index,
-        cellLoc='center',
-        loc='center'
+        cellLoc="center",
+        loc="center",
     )
 
     # Adjust font size and scaling for better readability
@@ -454,7 +490,6 @@ def plot_stats_table(stats_df):
     plt.savefig("portfolio_stats_table.png", bbox_inches="tight")
 
     plt.close()
-
 
 
 def compute_portfolio_alpha(returns, benchmark):
@@ -490,6 +525,5 @@ def compute_tracking_error_count(returns, benchmark):
     # compute tracking error
     tracking_error = rolling_vol - benchmark_vol
     # count number of times tracking error is higher than 1%
-    ratio = (tracking_error > 0.01).sum()/len(tracking_error)
+    ratio = (tracking_error > 0.01).sum() / len(tracking_error)
     return ratio
-

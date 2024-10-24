@@ -21,7 +21,7 @@ warnings.filterwarnings("ignore", category=pd.errors.PerformanceWarning)
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 sys.path.append("../05-Asset_Allocation")
-import strategy_15.main as strat
+import strategy_12.main as strat
 path_to_strategy = "../05-Asset_Allocation/strategy_2"
 
 
@@ -123,12 +123,12 @@ if __name__ == "__main__":
     benchmark_df = pd.read_csv("../objects/mkt_ind.csv")
     benchmark_df["t1"] = pd.to_datetime(benchmark_df["t1"])
     benchmark_df["t1_index"] = pd.to_datetime(benchmark_df["t1_index"])
-    WINDOW_SIZE = 120
+    WINDOW_SIZE = 50
     kwargs = {
         # Stock Selection
         "min_size": WINDOW_SIZE,
         "long_only": True,
-        "portfolio_size": 100,
+        "portfolio_size": 50,
         # Covariance Estimation, Black Litterman
         "tau": 1.0,
         "lambda_": 2,
@@ -149,7 +149,7 @@ if __name__ == "__main__":
     }
     REBALANCE_PERIOD = 1
     strategy = strat.asset_allocator
-    START_MONTH_PRED = 120
+    START_MONTH_PRED = 121
 
     weights = backtest(
         excess_returns,
