@@ -18,9 +18,7 @@ import mean_cov_computer
 import stocks_selector
 import weight_optimizer
 
-import avici
 
-model = avici.load_pretrained(download="scm-v0")
 
 
 def asset_allocator(
@@ -77,12 +75,12 @@ def asset_allocator(
     returns = prices.pct_change().dropna()
     returns_corr = returns.corr()
     print(f"Returns correlation: {returns_corr}")
-    g_prob = model(x=returns.to_numpy())
-    print(f"Model output: {g_prob}")
-    normalized_matrix = g_prob / np.max(g_prob)
-    print(f"Normalized matrix: {normalized_matrix}")
-    normalized_matrix = np.maximum(normalized_matrix, normalized_matrix.T)
-    print(f"Normalized matrix (symmetric): {normalized_matrix}")
+    # g_prob = model(x=returns.to_numpy())
+    # print(f"Model output: {g_prob}")
+    # normalized_matrix = g_prob / np.max(g_prob)
+    # print(f"Normalized matrix: {normalized_matrix}")
+    # normalized_matrix = np.maximum(normalized_matrix, normalized_matrix.T)
+    # print(f"Normalized matrix (symmetric): {normalizeds_matrix}")
     market_caps_df = market_caps_df[selected_stocks]
     market_caps = market_caps_df.iloc[end_date]
 
