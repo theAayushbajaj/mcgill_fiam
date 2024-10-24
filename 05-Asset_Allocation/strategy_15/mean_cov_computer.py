@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from sklearn.covariance import LedoitWolf
 from scipy.linalg import inv
+import avici
 
 # Black-Litterman Functions
 
@@ -24,6 +25,21 @@ def get_market_implied_returns(cov, market_weights, lambda_=2.5):
     # pi = delta * cov * market_weights
     pi = lambda_ * cov @ market_weights
     return pi
+
+
+def causal_matrix(returns):
+    model = avici.load_pretrained(download="scm-v0")
+    g_prob = model(x=returns.to_numpy())
+    normalized_matrix = g_prob / np.max(g_prob)
+    normalized_matrix = np.maximum(normalized_matrix, normalized_matrix.T)
+    return normalized_matrix
+
+
+def make_positive_definite(cov_matrix):
+    min_eigenvalue = np.min(np.linalg.eigvals(cov_matrix))
+    if min_eigenvalue < 0:
+        cov_matrix += np.eye(cov_matrix.shape[0]) * (-min_eigenvalue + 1e-6)
+    return cov_matrix
 
 
 def main(
@@ -49,12 +65,26 @@ def main(
         # Use EMA for both covariance and returns
         returns_ewm = returns.ewm(span=span)
         cov_ewm = returns_ewm.cov().dropna().iloc[-len(selected_stocks):, -len(selected_stocks):]
+
+        std_devs = np.sqrt(np.diag(cov_ewm))
+
+        normalized_matrix = causal_matrix(returns)
+    
+        print('shape of corr_ewm', cov_ewm.shape)
+        print('shape of normalized_matrix', normalized_matrix.shape)
+        corr_ewm = cov_ewm / np.outer(std_devs, std_devs)
+
+        corr_causal = corr_ewm @ normalized_matrix
+        cov = corr_causal * np.outer(std_devs, std_devs)
+
+        cov = make_positive_definite(cov)
+        
         mean_returns = returns_ewm.mean().dropna().iloc[-1, :]
         
         # Apply Ledoit-Wolf shrinkage to EMA covariance matrix
-        l_wolf = LedoitWolf()
-        shrunk_cov_matrix = l_wolf.fit(cov_ewm).covariance_
-        cov = pd.DataFrame(shrunk_cov_matrix, index=selected_stocks, columns=selected_stocks)
+        # l_wolf = LedoitWolf()
+        # shrunk_cov_matrix = l_wolf.fit(cov_ewm).covariance_
+        # cov = pd.DataFrame(shrunk_cov_matrix, index=selected_stocks, columns=selected_stocks)
     
     else:
         # Use rolling window for covariance and mean
