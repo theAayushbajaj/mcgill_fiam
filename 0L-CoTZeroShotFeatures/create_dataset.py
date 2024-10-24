@@ -10,11 +10,13 @@ from multiprocessing import Pool, cpu_count
 
 class FilingProcessor:
     def __init__(self):
+        """Initialize the FilingProcessor with mappings for sectors and CIK to ticker."""
         self.sector_ticker_map = {}
         self.cik_to_ticker_map = {}
         self._load_mappings()
 
     def _load_mappings(self):
+        """Load sector and CIK to ticker mappings from JSON files."""
         if not os.path.exists('assets/sector_ticker_map.json'):
             self._build_sector_ticker_map()
         else:
@@ -25,6 +27,7 @@ class FilingProcessor:
             self.cik_to_ticker_map = json.load(f)
 
     def _build_sector_ticker_map(self):
+        """Build a mapping of sectors to tickers and save it to a JSON file."""
         with open('assets/cik_to_ticker_mapping_phaseII.json', 'r') as f:
             cik_to_ticker_map = json.load(f)
         sector_ticker_map = {}
@@ -41,6 +44,14 @@ class FilingProcessor:
         self.sector_ticker_map = sector_ticker_map
 
     def _clean_content(self, content):
+        """Clean the filing content by removing newlines, punctuation, and converting to lowercase.
+
+        Args:
+            content (str): The raw content of the filing.
+
+        Returns:
+            str: The cleaned content.
+        """
         content = content.replace('\n', ' ').replace('\r', ' ')
         content = content.translate(str.maketrans('', '', string.punctuation))
         content = content.lower()
@@ -48,18 +59,50 @@ class FilingProcessor:
         return content
 
     def _get_filed_as_of_date(self, content):
+        """Extract the filing date from the content.
+
+        Args:
+            content (str): The cleaned content of the filing.
+
+        Returns:
+            str or None: The filing date in 'YYYYMMDD' format, or None if not found.
+        """
         match = re.search(r"filed as of date\s+(\d{8})", content)
         return match.group(1) if match else None
 
     def _get_central_index_key(self, content):
+        """Extract the Central Index Key (CIK) from the content.
+
+        Args:
+            content (str): The cleaned content of the filing.
+
+        Returns:
+            str or None: The CIK, or None if not found.
+        """
         match = re.search(r"central index key\s+(\d+)", content)
         return str(match.group(1).strip()) if match else None
 
     def _get_form_type(self, content):
+        """Extract the form type from the content.
+
+        Args:
+            content (str): The cleaned content of the filing.
+
+        Returns:
+            str or None: The form type, or None if not found.
+        """
         match = re.search(r"form type\s+(\w+)", content)
         return match.group(1).strip() if match else None
 
     def _extract_risk_factors(self, content):
+        """Extract the risk factors section from the content.
+
+        Args:
+            content (str): The cleaned content of the filing.
+
+        Returns:
+            str or None: The risk factors section, or None if not found.
+        """
         start_pattern = re.compile(r"item\s+1a\s+risk\s+factors", re.IGNORECASE)
         end_pattern = re.compile(r"item\s+\d+[a-z]?\s", re.IGNORECASE)
 
@@ -81,6 +124,14 @@ class FilingProcessor:
         return longest_section if longest_section else None
 
     def _extract_mda(self, content):
+        """Extract the Management's Discussion and Analysis (MD&A) section from the content.
+
+        Args:
+            content (str): The cleaned content of the filing.
+
+        Returns:
+            str: The combined MD&A sections.
+        """
         start_pattern = re.compile(r"item\s+7\s+management\s+s\s+discussion\s+and\s+analysis\s+of\s+financial\s+condition\s+and\s+results\s+of\s+operations", re.IGNORECASE)
         end_pattern = re.compile(r"item\s+\d+[a-z]?\s", re.IGNORECASE)
 
@@ -100,6 +151,15 @@ class FilingProcessor:
         return combined_sections
 
     def _calculate_cagr(self, ticker, filing_date):
+        """Calculate the Compound Annual Growth Rate (CAGR) for a given ticker and filing date.
+
+        Args:
+            ticker (str): The stock ticker symbol.
+            filing_date (str): The filing date in 'YYYYMMDD' format.
+
+        Returns:
+            float: The calculated CAGR, or 0 if insufficient data.
+        """
         start_date = pd.to_datetime(filing_date)
         end_date = start_date + pd.DateOffset(weeks=52)
         stock_data = yf.Ticker(ticker).history(start=start_date, end=end_date)
@@ -112,6 +172,15 @@ class FilingProcessor:
         return cagr
 
     def _get_sector_average_cagr(self, ticker, filing_date):
+        """Calculate the average CAGR for the sector of a given ticker.
+
+        Args:
+            ticker (str): The stock ticker symbol.
+            filing_date (str): The filing date in 'YYYYMMDD' format.
+
+        Returns:
+            float: The average CAGR for the sector, or 0 if not available.
+        """
         try:
             sector = yf.Ticker(ticker).info['sector']
         except:
@@ -133,6 +202,15 @@ class FilingProcessor:
             return sum(sector_cagrs) / len(sector_cagrs)
 
     def _get_cagr_ratio(self, csi, filing_date):
+        """Calculate the CAGR ratio for a given CIK and filing date.
+
+        Args:
+            csi (str): The Central Index Key (CIK).
+            filing_date (str): The filing date in 'YYYYMMDD' format.
+
+        Returns:
+            tuple: The CAGR ratio and the ticker, or (0, None) if not available.
+        """
         try:
             ticker = self.cik_to_ticker_map[csi]
         except KeyError:
@@ -148,6 +226,14 @@ class FilingProcessor:
         return cagr_ratio, ticker
 
     def process_filing(self, filing):
+        """Process a single filing to extract relevant information.
+
+        Args:
+            filing (str): The path to the filing file.
+
+        Returns:
+            dict: A dictionary containing extracted information from the filing.
+        """
         with open(filing, "r") as file:
             content = file.read()
         content = self._clean_content(content)
@@ -178,13 +264,18 @@ class FilingProcessor:
         }
 
     def _empty_row(self):
+        """Return an empty row dictionary with default values.
+
+        Returns:
+            dict: A dictionary with empty string values for each key.
+        """
         return {key: "" for key in ["FILE_DATE", "CSI", "TICKER", "RISK_FACTOR", "RISK_FACTOR_SCORE", 
                                     "READABILITY_SCORE", "MD&A", "SENTIMENT_SCORE", "CAGR_RATIO"]}
 
     def main(self):
+        """Main method to process all filings and save the results to a parquet file."""
         base_path = "/teamspace/studios/this_studio/mcgill_fiam/datasets"
         filings_txt = glob(os.path.join(base_path, "**/*.txt"), recursive=True)
-        #filings_txt = filings_txt[:10]
 
         print(f"Processing {len(filings_txt)} filings")
 

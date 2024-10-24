@@ -8,8 +8,15 @@ import pandas as pd
 from datasets import Dataset
 import datasets
 
-
 def calculate_risk_factor_score(samples):
+    """Calculate the risk factor score for each sample in the dataset.
+
+    Args:
+        samples (dict): A dictionary containing the dataset samples with 'RISK_FACTOR' sections.
+
+    Returns:
+        dict: A dictionary with the original samples and an additional 'RISK_FACTOR_SCORE' key.
+    """
     results = []
     for risk_factor in samples['RISK_FACTOR']:
         # Define the system and user prompts
@@ -40,8 +47,6 @@ def calculate_risk_factor_score(samples):
     return_dict['RISK_FACTOR_SCORE'] = results
     
     return return_dict
-        
-
 
 if __name__ == "__main__":
     # Initialize the model and tokenizer
@@ -59,7 +64,7 @@ if __name__ == "__main__":
         device_map="auto",
     )
     
-    # load the parquet file
+    # Load the parquet file
     df = pd.read_parquet("../datasets/10K-Stage2-parsed_2023.parquet")
     
     # Convert DataFrame to Dataset
@@ -79,5 +84,5 @@ if __name__ == "__main__":
 
     df_results = results.to_pandas()
 
-    # save the dataframe
+    # Save the dataframe
     df_results.to_csv("../datasets/10K-Stage3-risk-factor-scores_2023.csv")

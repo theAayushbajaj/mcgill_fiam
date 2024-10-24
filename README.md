@@ -60,24 +60,41 @@ Follow these steps to run the complete analysis:
    cd ..
    ```
 
+6. Backtesting
+   ```
+   cd 06-Backtesting
+   python useful_objects.py
+   python backtest_parallel.py
+   cd ..
+   ```
+
+7. Chain of ThoughtZero Shot Features
+   ```
+   cd 0L-CoTZeroShotFeatures
+   python create_dataset.py
+   python llama-3.2-3B-Instruct-Inference-READABILITY-SCORE.py
+   python llama-3.2-3B-Instruct-Inference-RISK_FACTORS.py
+   python llama-3.2-3B-Instruct-Inference-SENTIMENT-SCORES.py
+   cd ..
+   ```
 ## Output
 
 After running all the scripts, you'll find the following output:
 
 - `objects/FULL_stacked_data.pkl`   
-- `objects/causal_dataset.pkl`     
-- `objects/predictions_1.csv to predictions_13.csv`   
+- `objects/causal_dataset.pkl`      
 - `objects/WEIGHT_SAMPLING.pkl`    
 - `objects/mkt_ind.csv`            
 - `objects/X_DATASET.pkl`                   
 - `objects/Y_DATASET.pkl`          
 - `objects/predictions_0.csv to predictions_13.csv`
 - `objects/predictions.csv` -- Final predictions on the test dataset
+- `objects/prices.pkl` -- Dataframe of the prices of the assets
+- `objects/signals.pkl` -- Timeseries of signals from each stock
+- `objects/market_caps.pkl` -- Dataframe of market caps of the assets
+- `objects/stock_exret.pkl` -- Excess returns of the each stock
 
 The feature importance scores from MDI and MDA are:
-
-![MDI Feature Importance](03-Feature_Importance/featImportance_0MDI.png)
-![MDA Feature Importance](03-Feature_Importance/featImportance_0MDA.png)
 
 
 ## Additional Information

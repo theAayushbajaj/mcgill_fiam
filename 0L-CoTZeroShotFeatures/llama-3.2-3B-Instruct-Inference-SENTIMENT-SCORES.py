@@ -7,6 +7,14 @@ from datasets import Dataset
 import datasets
 
 def calculate_sentiment_score(samples):
+    """Calculate the sentiment score for each sample in the dataset.
+
+    Args:
+        samples (dict): A dictionary containing the dataset samples with 'MD&A' sections.
+
+    Returns:
+        dict: A dictionary with the original samples and an additional 'SENTIMENT_SCORE' key.
+    """
     results = []
     for mdna in samples['MD&A']:
         # Define the system and user prompts
@@ -55,7 +63,7 @@ if __name__ == "__main__":
         device_map="auto",
     )   
     
-    # load the parquet file
+    # Load the parquet file
     df = pd.read_parquet("../datasets/10K-Stage2-parsed_2023.parquet")
     
     # Convert DataFrame to Dataset
@@ -75,5 +83,5 @@ if __name__ == "__main__":
 
     df_results = results.to_pandas()
 
-    # save the dataframe
+    # Save the dataframe
     df_results.to_csv("../datasets/10K-Stage3-sentiment-scores_2023.csv")
