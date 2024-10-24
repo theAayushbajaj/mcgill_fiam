@@ -12,3 +12,12 @@ objects/*
 papers/
 data/
 __pycache__/*
+datasets/10-*
+
+.DS_Store
+docs/FIAM-MCGILL_HACKATHON_RELEASE FORM.pdf
+datasets/
+*.txt
+
+
+0L-CoTZeroShotFeatures/prompt_test.py
