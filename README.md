@@ -68,7 +68,9 @@ Follow these steps to run the complete analysis:
    cd ..
    ```
 
-7. Chain of ThoughtZero Shot Features
+7. Chain of Thought Zero Shot Features
+   Download the dataset from [here](https://drive.google.com/drive/folders/1tZP9A0hrAj8ptNP3VE9weYZ3WDn9jHic) and put it in the `datasets` directory.
+   Login into Hugging Face and download the model [here](https://huggingface.co/meta-llama/Llama-3.2-3B-Instruct).
    ```
    cd 0L-CoTZeroShotFeatures
    python create_dataset.py
