@@ -7,8 +7,8 @@ stocks_data/*
 # notebooks/*
 # !notebooks/.gitkeep
 
-# objects/*
-# !objects/.gitkeep
+objects/*
+!objects/.gitkeep
 
 __pycache__/*
 *.pyc

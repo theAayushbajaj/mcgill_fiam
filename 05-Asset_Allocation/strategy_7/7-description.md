@@ -1,1 +1,0 @@
-Like 6 but no obdate on mean cov
