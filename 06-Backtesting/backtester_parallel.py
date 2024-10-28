@@ -10,6 +10,7 @@ from backtest_stats import get_tl_stats, get_trading_log, performance_benchmark
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
+from multiprocessing import Pool, cpu_count
 
 # Suppress warnings
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -20,29 +21,30 @@ warnings.filterwarnings("ignore", category=pd.errors.PerformanceWarning)
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 sys.path.append("../05-Asset_Allocation")
-import strategy_2.main as strat
-path_to_strategy = "../05-Asset_Allocation/strategy_1"
+import strategy_12.main as strat
+path_to_strategy = "../05-Asset_Allocation/strategy_2"
 
 
-def compute_weights_for_period(i, prev_weight, strategy, **kwargs):
+def compute_weights_for_period(args):
     """
     Inputs:
-    - i: End Date
-    - strategy: Function that calls the strategy
-
+    - args: Tuple containing (i, strategy, kwargs)
     Outputs:
     - i: End Date
     - Weights calculated by the strategy for the current period
     """
+    i, strategy, kwargs = args
     # Call the strategy to get the weights for the current period
     weights = strategy(
-        previous_weight=prev_weight,
-        start_date=i-60,
+        # start_date= i - 60,
+        start_date= 0,
         end_date=i,
         **kwargs,
     )
-    print(f'At date {i}, the total allocation in the portfolio is {weights["Weight"].values.sum()}')
-    return i, weights["Weight"].values
+    total_allocation = weights["Weight"].sum()
+    # Uncomment the following line if you want to print the total allocation
+    # print(f'At date {i}, the total allocation in the portfolio is {total_allocation}')
+    return i, weights["Weight"]
 
 
 def backtest(
@@ -54,41 +56,45 @@ def backtest(
 ):
     """
     Inputs :
-    - Start Date
-    - End Date
-    - STRATEGY which outputs weights
-        - The strategy's arguments
+    - excess_returns: DataFrame of excess returns
+    - strategy: Function that outputs weights
+    - rebalance_period: Frequency of rebalancing
+    - start_month_pred: Start month index for predictions
 
     Outputs :
-    A dataframe where the row index are the same as prices
-    Divided in two parts :
-    - First half: Stockexret
-    - Second half : Weights
-    - example columns : [appl exret, msft exret, appl weight, msft weight]
-
-    Reason : for each row, dot product exret and weights = trade return
-
-    It should take the strategy, roll it forward, and compute the weights,
-    trade by trade, from start date to end date
+    - weights_df: DataFrame containing the weights over time
     """
 
     # Initialize the weights DataFrame with zeros
     weights_df = pd.DataFrame(
         data=0, columns=excess_returns.columns, index=excess_returns.index
     )
-    # Compute weights for each period sequentially
-    for i in tqdm(
-        range(start_month_pred, len(excess_returns), rebalance_period),
-        desc="Backtesting",
-    ):
-        _, weights = compute_weights_for_period(
-            i, weights_df.iloc[i - 1], strategy, **kwargs
+
+    # Create a list of arguments for each period
+    args_list = []
+    for i in range(start_month_pred, len(excess_returns), rebalance_period):
+        args_list.append((i, strategy, kwargs))
+
+    # Determine the number of processes to use
+    num_processes = min(cpu_count(), len(args_list))
+
+    # Use multiprocessing Pool to compute weights in parallel
+    with Pool(processes=num_processes) as pool:
+        results = list(
+            tqdm(
+                pool.imap(compute_weights_for_period, args_list),
+                total=len(args_list),
+                desc="Backtesting",
+            )
         )
+
+    # Collect the results into the weights DataFrame
+    for i, weights in results:
         weights_df.iloc[i] = weights
 
-    # ffill NAs
+    # Forward fill NAs
     weights_df = weights_df.ffill()
-    # fill the remaining NAs with 0
+    # Fill the remaining NAs with 0
     weights_df = weights_df.fillna(0.0)
 
     return weights_df
@@ -108,8 +114,8 @@ def stats(weights_df, excess_returns_df, benchmark, start_month_pred=100):
 
 
 if __name__ == "__main__":
-    if input("Do you want to run useful objects? (y/n): ") == "y":
-        import useful_objects
+    # if input("Do you want to run useful objects? (y/n): ") == "y":
+    #     import useful_objects
     prices = pd.read_pickle("../objects/prices.pkl")
     signals = pd.read_pickle("../objects/signals.pkl")
     market_caps_df = pd.read_pickle("../objects/market_caps.pkl")
@@ -117,25 +123,33 @@ if __name__ == "__main__":
     benchmark_df = pd.read_csv("../objects/mkt_ind.csv")
     benchmark_df["t1"] = pd.to_datetime(benchmark_df["t1"])
     benchmark_df["t1_index"] = pd.to_datetime(benchmark_df["t1_index"])
+    WINDOW_SIZE = 50
     kwargs = {
-        "pred_vol_scale": 1.00,
-        "tau": 1.0,  # the higher tau, the more weight is given to predictions
-        "lambda_": 3.07,
+        # Stock Selection
+        "min_size": WINDOW_SIZE,
+        "long_only": True,
+        "portfolio_size": 50,
+        # Covariance Estimation, Black Litterman
+        "tau": 1.0,
+        "lambda_": 2,
+        "use_ema": True,
+        "window": WINDOW_SIZE,
+        "span": WINDOW_SIZE,
+        # Weight Optimization
+        'soft_risk': 0.01,
+        "num_scenarios": 20,
+        "uncertainty_level": 0.05,
+        "total_allocation": 1.0,
+        "n_clusters": 6,
+        # OBJECTS
         "prices": prices,
         "signals": signals,
         "market_caps_df": market_caps_df,
-        "bl": True,
-        "lw": True,
-        "n_stocks": 100,
-        "long_only": True,
         "benchmark_df": benchmark_df,
-        "risk_aversion": 10.0,
-        "soft_risk": 0.01,
-        "link_method": "average",
     }
     REBALANCE_PERIOD = 1
     strategy = strat.asset_allocator
-    START_MONTH_PRED = 120
+    START_MONTH_PRED = 121
 
     weights = backtest(
         excess_returns,
@@ -145,10 +159,10 @@ if __name__ == "__main__":
         **kwargs,
     )
 
-    # Number of non 0 columns per row in weights
+    # Number of non-zero columns per row in weights
     print(weights.astype(bool).sum(axis=1).value_counts())
 
-    # weights
+    # Trim the weights and excess returns DataFrames
     weights = weights.iloc[START_MONTH_PRED:]
     excess_returns = excess_returns.iloc[START_MONTH_PRED:]
     Trading_Stats, TradingLog_Stats = stats(weights, excess_returns, benchmark_df)
@@ -157,29 +171,9 @@ if __name__ == "__main__":
     # 01/2010 to 12/2023
     print()
     print("Top 10 Holdings on Average Over OOS Testing Period")
-    # print(TradingLog_Stats['Stock']['Total'].sort_values(ascending = False).iloc[:10])
-    weight_stock = weights.sum(axis=0)
-    weight_stock = weight_stock / weights.shape[0]
+    weight_stock = weights.mean(axis=0)
     print(weight_stock.sort_values(ascending=False).iloc[:10])
 
-    # print()
-    # print("Overall Stats :")
-    # print(TradingLog_Stats["Overall"])
-
-    # print()
-    # print("Long vs Short Stats :")
-    # print(TradingLog_Stats["Long_Short"])
-
-    # print("Portfolio Exposure over time")
-    # weight_sum = weights.sum(axis=1)
-    # abs_weight_sum = np.abs(weights).sum(axis=1)
-    # print("Weight sum")
-    # print(weight_sum)
-    # print()
-    # print("Abs weight sum")
-    # print(abs_weight_sum)
-
-    # save in objects
     # Save Trading_Stats dictionary
     with open("../objects/Trading_Stats.pkl", "wb") as f:
         pickle.dump(Trading_Stats, f)

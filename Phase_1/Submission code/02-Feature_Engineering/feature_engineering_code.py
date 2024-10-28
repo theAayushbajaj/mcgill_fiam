@@ -283,25 +283,6 @@ def get_sadf(log_p, min_sl, constant, lags):
     # Return a DataFrame with sadf values and corresponding time index
     return pd.DataFrame({'date': log_p.index[min_sl:], 'sadf': gsadf_values})
 
-
-def getTimeDecay(tW, clfLastW=1.):
-    # Apply piecewise-linear decay to observed uniqueness (tW)
-    # Newest observation gets weight=1, oldest observation gets weight=clfLastW
-    clfW = pd.Series(tW).sort_index().cumsum()
-    # len(clfW)
-    if clfLastW >= 0:
-        slope = (1. - clfLastW) / clfW.iloc[-1]
-    else:
-        slope = 1. / ((clfLastW + 1) * clfW.iloc[-1])
-    
-    const = 1. - slope * clfW.iloc[-1]
-    clfW = const + slope * clfW
-    clfW[clfW < 0] = 0
-
-    # print(const, slope)
-    return clfW
-
-
 total = len(csv_files)
 
 # ADDING TARGET COLUMN TO EACH CSV FILE
@@ -377,9 +358,6 @@ with tqdm(total=total) as pbar:
 
         pbar.update(1)
 print('\n')
-
-
-
 
 
 # Add log price and log-diff columns to each stock CSV file.
@@ -461,7 +439,7 @@ with tqdm(total=total) as pbar:
         df.fillna(method='ffill', axis=0, inplace=True)
 
         # Fill the remaining NaNs with 1_000_000
-        # df.fillna(1_000_000, inplace=True)
+        df.fillna(1_000_000, inplace=True)
 
         # Save the updated DataFrame back to the CSV file
         df.to_csv(file_path)
@@ -472,51 +450,6 @@ print('\n')
 
 # Generate final datasets with all added features
 # Stack all the CSV files into one DataFrame
-
-print("Adding 'random column of range 1 to 100' column to each file...\n")
-with tqdm(total=total) as pbar:
-    for file_name in csv_files:
-        file_path = os.path.join(STOCKS_DATA_DIR, file_name)
-
-        # Read the CSV file into a DataFrame
-        df = pd.read_csv(file_path, index_col='t1', parse_dates=True)
-
-        df['random'] = np.random.randint(1, 101, size=len(df))
-
-        # Save the updated DataFrame back to the CSV file
-        df.to_csv(file_path)
-
-        pbar.update(1)
-print('\n')
-
-
-
-print("Adding time decay to the ...\n")
-with tqdm(total=total) as pbar:
-    for file_name in csv_files:
-        file_path = os.path.join(STOCKS_DATA_DIR, file_name)
-
-        # Read the CSV file into a DataFrame
-        df = pd.read_csv(file_path, index_col='t1', parse_dates=True)
-
-
-
-        start_date = df.index.min()
-
-        # df['days_since_start'] = (df.index - start_date).days
-        time_window = (df.index - start_date).days
-        # print('Time window : ', time_window.tolist())
-        y = getTimeDecay(time_window.tolist(), clfLastW=0)
-
-        y.index = df.index
-        
-        df['clfw'] = y
-
-        # print(df['clfw'])
-        # Save the updated DataFrame back to the CSV file
-        df.to_csv(file_path)
-
-        pbar.update(1)
 
 dfs = []
 print('Saving datasets...\n')
@@ -544,13 +477,13 @@ features = pd.read_csv(PATH)
 features_list = features.values.ravel().tolist()
 
 # Added features
-added_features = ['log_diff', 'frac_diff', 'sadf', 'random']
+added_features = ['log_diff', 'frac_diff', 'sadf']
 
 OBJECTS_DIR = "../objects"
 
 # Dataset creation for Causal Inference.
 causal_dataset = FULL_stacked_data[features_list + ['target']]
-causal_dataset.to_csv(f'{OBJECTS_DIR}/causal_dataset.csv')
+causal_dataset.to_pickle(f'{OBJECTS_DIR}/causal_dataset.pkl')
 
 # Dataset creation for classification.
 # X_DATASET contains all relevant features for prediction.
