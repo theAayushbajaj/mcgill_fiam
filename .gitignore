@@ -18,3 +18,12 @@ objects/X_DATASET.pkl
 raw_data/hackathon_sample_v2.csv
 raw_data/stacked_data.pkl
 raw_data/X_dataset.pkl
+datasets/10-*
+
+.DS_Store
+docs/FIAM-MCGILL_HACKATHON_RELEASE FORM.pdf
+datasets/
+*.txt
+
+
+0L-CoTZeroShotFeatures/prompt_test.py
