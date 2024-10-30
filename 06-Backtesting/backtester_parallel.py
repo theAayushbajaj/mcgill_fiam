@@ -114,8 +114,8 @@ def stats(weights_df, excess_returns_df, benchmark, start_month_pred=100):
 
 
 if __name__ == "__main__":
-    # if input("Do you want to run useful objects? (y/n): ") == "y":
-    #     import useful_objects
+    if input("Do you want to run useful objects? (y/n) (Should do 'y' if first time training signals): ") == "y":
+        import useful_objects
     prices = pd.read_pickle("../objects/prices.pkl")
     signals = pd.read_pickle("../objects/signals.pkl")
     market_caps_df = pd.read_pickle("../objects/market_caps.pkl")
@@ -128,7 +128,7 @@ if __name__ == "__main__":
         # Stock Selection
         "min_size": WINDOW_SIZE,
         "long_only": True,
-        "portfolio_size": 50,
+        "portfolio_size": 100,
         # Covariance Estimation, Black Litterman
         "tau": 1.0,
         "lambda_": 2,

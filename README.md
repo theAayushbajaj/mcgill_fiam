@@ -56,14 +56,13 @@ Follow these steps to run the complete analysis:
 5. Predictor:
    ```
    cd 04-Predictor
-   python train_fixed_size_memory_optimized_pca.py
+   python train_AlphaSignals.py
    cd ..
    ```
 
 6. Backtesting
    ```
    cd 06-Backtesting
-   python useful_objects.py
    python backtest_parallel.py
    cd ..
    ```
