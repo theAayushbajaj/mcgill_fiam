@@ -123,7 +123,7 @@ if __name__ == "__main__":
     benchmark_df = pd.read_csv("../objects/mkt_ind.csv")
     benchmark_df["t1"] = pd.to_datetime(benchmark_df["t1"])
     benchmark_df["t1_index"] = pd.to_datetime(benchmark_df["t1_index"])
-    WINDOW_SIZE = 50
+    WINDOW_SIZE = 100
     kwargs = {
         # Stock Selection
         "min_size": WINDOW_SIZE,
@@ -131,7 +131,7 @@ if __name__ == "__main__":
         "portfolio_size": 100,
         # Covariance Estimation, Black Litterman
         "tau": 1.0,
-        "lambda_": 2,
+        "lambda_": 10,
         "use_ema": True,
         "window": WINDOW_SIZE,
         "span": WINDOW_SIZE,
