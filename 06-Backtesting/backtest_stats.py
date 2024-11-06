@@ -152,7 +152,10 @@ def performance_benchmark(trading_log, benchmark, weights_df):
     portfolio_rets = pd.DataFrame(portfolio_rets)
     portfolio_rets.reset_index(inplace=True)
 
-    benchmark["exc_return"] = benchmark["sp_ret"] - benchmark["rf"]
+    try:
+        benchmark["exc_return"] = benchmark["sp_ret"] - benchmark["RF"]
+    except:
+        benchmark["exc_return"] = benchmark["sp_ret"] - benchmark["rf"]
     benchmark = benchmark[["t1", "exc_return"]]
     # create df as merge of portfolio_rets and benchmark with t1, t1 as index
     df = pd.merge(portfolio_rets, benchmark, on="t1")

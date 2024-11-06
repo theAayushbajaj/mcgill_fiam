@@ -173,18 +173,19 @@ while True:
         max_features_dist = [1]  # Use a fixed value of 1
 
     param_distributions = {
-        'estimator__n_estimators': randint(10, 100),
+        # 'estimator__n_estimators': randint(10, 100),
         'estimator__max_depth': randint(5, 20),
         'estimator__min_samples_split': randint(2, 5),
         'estimator__min_samples_leaf': randint(1, 3),
         'estimator__max_features': ['sqrt', 'log2'],
-        'n_estimators': randint(5, 20),
+        # 'n_estimators': randint(5, 20),
         'max_samples': uniform(0.1, 1.0),
         'max_features': max_features_dist
     }
 
     # Define the base estimator and bagging classifier with n_jobs=1
     base_rf = RandomForestClassifier(
+        n_estimators=1,
         criterion="entropy",
         bootstrap=False,
         class_weight="balanced_subsample",
@@ -194,6 +195,7 @@ while True:
     bagging_clf = BaggingClassifier(
         estimator=base_rf,
         oob_score=True,
+        n_estimators=1_000,
         n_jobs=1
     )
 

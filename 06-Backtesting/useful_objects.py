@@ -39,8 +39,12 @@ csv_files = [f for f in os.listdir(STOCKS_DATA_DIR) if f.endswith('.csv')]
 # Save it in \objects folder as prices.pkl
 
 # Load AAPL.csv since it has all the datetime indices
-PATH = '../stocks_data/AAPL.csv'
-aapl_df = pd.read_csv(PATH)
+try:
+    PATH = '../stocks_data/CNMD.csv'
+    aapl_df = pd.read_csv(PATH)
+except:
+    PATH = '../stocks_data/AAPL.csv'
+    aapl_df = pd.read_csv(PATH)
 
 # Initialize the datetime indices for `prices` dataframe from AAPL.csv
 prices = pd.DataFrame()
