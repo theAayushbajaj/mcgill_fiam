@@ -304,6 +304,19 @@ def getTimeDecay(tW, clfLastW=1.):
 
 total = len(csv_files)
 
+# Target as alpha instead of return sign
+# alpha = stock_exret - beta * market_exret
+# load market data
+
+market_data = pd.read_csv("../raw_data/mkt_ind.csv")
+try:
+    market_data['excess_ret'] = market_data['sp_ret'] - market_data['RF']
+except:
+    market_data['excess_ret'] = market_data['sp_ret'] - market_data['rf']
+# market_data['t1'] = pd.to_datetime(market_data[['year', 'month']].assign(day=1)) + pd.offsets.BMonthEnd(0)
+# # set index to t1
+# market_data.set_index('t1', inplace=True)
+
 # ADDING TARGET COLUMN TO EACH CSV FILE
 print("Adding 'target' column to each file...\n")
 with tqdm(total=total) as pbar:
@@ -330,7 +343,7 @@ print('\n')
 # Add 't1_index' which is the first business day of the current month
 # and 't1' which is the last business day of the current month.
 
-print("Adding 't1' and 't1_index' columns to each file...\n")
+print("Adding 't1' and 't1_index', 'year', 'month' columns to each file...\n")
 with tqdm(total=total) as pbar:
     for file_name in csv_files:
         file_path = os.path.join(STOCKS_DATA_DIR, file_name)
@@ -338,7 +351,7 @@ with tqdm(total=total) as pbar:
         # Read the CSV file into a DataFrame
         df = pd.read_csv(file_path, index_col='t1', parse_dates=True)
 
-        df['t1']=df.index
+        # df['t1']=df.index
 
         # 't1_index' which is the first business day of the current month
         df['t1_index'] = df.index - BMonthBegin(1)
@@ -348,6 +361,31 @@ with tqdm(total=total) as pbar:
         pbar.update(1)
 print('\n')
 
+
+# Add market return and alpha and alpha sign to each stock CSV file
+print("Adding 'market_exret', 'alpha' and 'alpha_sign' columns to each file...\n")
+with tqdm(total=total) as pbar:
+    for file_name in csv_files:
+        file_path = os.path.join(STOCKS_DATA_DIR, file_name)
+        
+        # Read the CSV file into a DataFrame
+        df = pd.read_csv(file_path)
+        
+        # Merge the market data with the stock data
+        # df['market_exret'] = market_data['excess_ret']
+        df  = pd.merge(df, market_data[['excess_ret', 'month', 'year']], on=['year', 'month'], how='left')
+        df.rename(columns={'excess_ret': 'market_exret'}, inplace=True)
+        
+    
+        # Calculate the alpha
+        df['alpha'] = df['stock_exret'] - df['beta_60m'] * df['market_exret']
+        df['target'] = df['alpha'].apply(lambda x: 1 if x >= 0 else -1)
+        
+        # Save the updated DataFrame back to the CSV file
+        df.to_csv(file_path, index=False)
+        
+        pbar.update(1)
+print('\n')
 
 # Adjusted Price
 # adj_price(t+1) = adj_price(t) * (1 + stock_exret(t) + rf(t))
@@ -401,7 +439,10 @@ with tqdm(total=total) as pbar:
 
         # Before training, needs to be scaled with
         # *= X_train.shape[0]/X_train['weight_attr'].sum()
-        df['weight_attr'] = df['stock_exret'].abs()
+        # df['weight_attr'] = df['stock_exret'].abs()
+        df['weight_attr'] = df['alpha'].abs()
+        # fill NaN values with 0
+        df['weight_attr'] = df['weight_attr'].fillna(0)
 
         # Save the updated DataFrame back to the CSV file (or to a new file)
         df.to_csv(file_path)
@@ -459,6 +500,8 @@ with tqdm(total=total) as pbar:
 
         # Fill missing values with the previous value
         df.fillna(method='ffill', axis=0, inplace=True)
+        # backfill
+        df.fillna(method='bfill', axis=0, inplace=True)
 
         # Fill the remaining NaNs with 1_000_000
         # df.fillna(1_000_000, inplace=True)
@@ -544,7 +587,7 @@ features = pd.read_csv(PATH)
 features_list = features.values.ravel().tolist()
 
 # Added features
-added_features = ['log_diff', 'frac_diff', 'sadf', 'random']
+added_features = ['log_diff', 'frac_diff', 'sadf', 'random', 'alpha']
 
 OBJECTS_DIR = "../objects"
 
