@@ -65,9 +65,9 @@ def backtest(
     - weights_df: DataFrame containing the weights over time
     """
 
-    # Initialize the weights DataFrame with zeros
+    # Initialize the weights DataFrame with NaNs
     weights_df = pd.DataFrame(
-        data=0, columns=excess_returns.columns, index=excess_returns.index
+        data=np.nan, columns=excess_returns.columns, index=excess_returns.index
     )
 
     # Create a list of arguments for each period
@@ -92,12 +92,13 @@ def backtest(
     for i, weights in results:
         weights_df.iloc[i] = weights
 
-    # Forward fill NAs
+    # Forward fill NAs to propagate weights to future periods
     weights_df = weights_df.ffill()
-    # Fill the remaining NAs with 0
+    # Fill any remaining NAs (at the beginning) with 0 to avoid NaNs in calculations
     weights_df = weights_df.fillna(0.0)
 
     return weights_df
+
 
 
 def stats(weights_df, excess_returns_df, benchmark, start_month_pred=100):
@@ -123,15 +124,15 @@ if __name__ == "__main__":
     benchmark_df = pd.read_csv("../objects/mkt_ind.csv")
     benchmark_df["t1"] = pd.to_datetime(benchmark_df["t1"])
     benchmark_df["t1_index"] = pd.to_datetime(benchmark_df["t1_index"])
-    WINDOW_SIZE = 100
+    WINDOW_SIZE = 50
     kwargs = {
         # Stock Selection
         "min_size": WINDOW_SIZE,
         "long_only": True,
-        "portfolio_size": 100,
+        "portfolio_size": 80,
         # Covariance Estimation, Black Litterman
         "tau": 1.0,
-        "lambda_": 10,
+        "lambda_": 2,
         "use_ema": True,
         "window": WINDOW_SIZE,
         "span": WINDOW_SIZE,
@@ -147,7 +148,7 @@ if __name__ == "__main__":
         "market_caps_df": market_caps_df,
         "benchmark_df": benchmark_df,
     }
-    REBALANCE_PERIOD = 1
+    REBALANCE_PERIOD = 4
     strategy = strat.asset_allocator
     START_MONTH_PRED = 121
 

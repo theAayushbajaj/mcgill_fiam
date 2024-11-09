@@ -1,3 +1,4 @@
+#%%
 """
 This script trains a Bagging Classifier with a Random Forest base estimator on stock market data
 using a rolling window approach. PCA is applied to reduce feature dimensionality, retaining 80%
@@ -17,6 +18,7 @@ Returns:
 - `predictions.csv`: Combined predictions from all test sets.
 - Updated stock CSV files with predictions and probabilities.
 """
+#%%
 
 import os
 import warnings
@@ -66,8 +68,8 @@ Y.index = pd.MultiIndex.from_tuples(
 )
 
 # Initialize parameters
-starting = pd.to_datetime("2001-01-01")
-training_window = pd.DateOffset(years=7)
+starting = pd.to_datetime("2005-01-01")
+training_window = pd.DateOffset(years=3)
 validation_window = pd.DateOffset(years=2)
 test_window = pd.DateOffset(years=1)
 step_size = pd.DateOffset(years=1)
@@ -131,13 +133,16 @@ while True:
     X_validate_vals_scaled = scaler.transform(X_validate_vals)
     X_test_vals_scaled = scaler.transform(X_test_vals)
     
-    # Fill NaN values with a large number
-    X_train_vals_scaled = np.nan_to_num(X_train_vals_scaled, nan=1_000_000)
-    X_validate_vals_scaled = np.nan_to_num(X_validate_vals_scaled, nan=1_000_000)
-    X_test_vals_scaled = np.nan_to_num(X_test_vals_scaled, nan=1_000_000)
+    # Calculate the median values for each column in the scaled training data
+    median_vals = np.nanmedian(X_train_vals_scaled, axis=0)
+
+    # Replace NaN values with the median in each dataset
+    X_train_vals_scaled = np.where(np.isnan(X_train_vals_scaled), median_vals, X_train_vals_scaled)
+    X_validate_vals_scaled = np.where(np.isnan(X_validate_vals_scaled), median_vals, X_validate_vals_scaled)
+    X_test_vals_scaled = np.where(np.isnan(X_test_vals_scaled), median_vals, X_test_vals_scaled)
 
     # **Apply PCA to X_train_vals_scaled**
-    pca = PCA(n_components=0.80, svd_solver='full')  # Retain 80% of variance
+    pca = PCA(n_components=0.85, svd_solver='full')  # Retain 80% of variance
     X_train_pca = pca.fit_transform(X_train_vals_scaled)
 
     # Determine the number of components

@@ -19,6 +19,7 @@ from pandas.tseries.offsets import BMonthBegin
 import numpy as np
 from tqdm import tqdm
 from statsmodels.tsa.stattools import adfuller
+from sklearn.preprocessing import MinMaxScaler
 
 warnings.filterwarnings('ignore')
 
@@ -501,7 +502,7 @@ with tqdm(total=total) as pbar:
         # Fill missing values with the previous value
         df.fillna(method='ffill', axis=0, inplace=True)
         # backfill
-        df.fillna(method='bfill', axis=0, inplace=True)
+        # df.fillna(method='bfill', axis=0, inplace=True)
 
         # Fill the remaining NaNs with 1_000_000
         # df.fillna(1_000_000, inplace=True)
@@ -595,10 +596,21 @@ OBJECTS_DIR = "../objects"
 causal_dataset = FULL_stacked_data[features_list + ['target']]
 causal_dataset.to_csv(f'{OBJECTS_DIR}/causal_dataset.csv')
 
-# Dataset creation for classification.
-# X_DATASET contains all relevant features for prediction.
-X_DATASET = FULL_stacked_data[features_list + added_features]
-X_DATASET.to_pickle(f'{OBJECTS_DIR}/X_DATASET.pkl')
+
+
+# Initialize an empty DataFrame to store the normalized data
+X_DATASET_normalized = pd.DataFrame()
+
+# Loop through each date and normalize features within each date group
+for date, group in FULL_stacked_data.groupby('t1'):
+    scaler = MinMaxScaler()
+    normalized_features = scaler.fit_transform(group[features_list + added_features])
+    normalized_df = pd.DataFrame(normalized_features, columns=features_list + added_features, index=group.index)
+    X_DATASET_normalized = pd.concat([X_DATASET_normalized, normalized_df])
+
+# Save the normalized X_DATASET
+X_DATASET_normalized.to_pickle(f'{OBJECTS_DIR}/X_DATASET.pkl')
+
 
 # Y_DATASET contains all the target variables.
 relevant_targets = ['stock_ticker', 'stock_exret', 'target', 't1', 't1_index', 'weight_attr']

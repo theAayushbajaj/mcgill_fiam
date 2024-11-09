@@ -174,12 +174,12 @@ def performance_benchmark(trading_log, benchmark, weights_df):
     )
 
     # Compute Portfolio Turnover
-    portfolio_turnover = compute_portfolio_turnover(weights_df)
-    trading_stats["Portfolio"]["Portfolio Turnover"] = portfolio_turnover
+    # portfolio_turnover = compute_portfolio_turnover(weights_df)
+    # trading_stats["Portfolio"]["Portfolio Turnover"] = portfolio_turnover
 
     # number of stocks change
-    number_stocks_change = compute_number_stocks_change(weights_df)
-    trading_stats["Portfolio"]["Number of Stocks Change"] = number_stocks_change
+    # number_stocks_change = compute_number_stocks_change(weights_df)
+    # trading_stats["Portfolio"]["Number of Stocks Change"] = number_stocks_change
 
     # Compute Portfolio Alpha
     alpha = compute_portfolio_alpha(df["Portfolio"], df["Benchmark"])
