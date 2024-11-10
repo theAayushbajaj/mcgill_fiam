@@ -19,7 +19,7 @@ from pandas.tseries.offsets import BMonthBegin
 import numpy as np
 from tqdm import tqdm
 from statsmodels.tsa.stattools import adfuller
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 warnings.filterwarnings('ignore')
 
@@ -588,7 +588,7 @@ features = pd.read_csv(PATH)
 features_list = features.values.ravel().tolist()
 
 # Added features
-added_features = ['log_diff', 'frac_diff', 'sadf', 'random', 'alpha']
+added_features = ['log_diff', 'frac_diff', 'sadf', 'random']
 
 OBJECTS_DIR = "../objects"
 
@@ -598,18 +598,26 @@ causal_dataset.to_csv(f'{OBJECTS_DIR}/causal_dataset.csv')
 
 
 
-# Initialize an empty DataFrame to store the normalized data
-X_DATASET_normalized = pd.DataFrame()
+# Initialize an empty DataFrame to store the transformed data
+X_DATASET_transformed = pd.DataFrame()
 
-# Loop through each date and normalize features within each date group
+# Loop through each date, standardize features within each date group
 for date, group in FULL_stacked_data.groupby('t1'):
-    scaler = MinMaxScaler()
-    normalized_features = scaler.fit_transform(group[features_list + added_features])
-    normalized_df = pd.DataFrame(normalized_features, columns=features_list + added_features, index=group.index)
-    X_DATASET_normalized = pd.concat([X_DATASET_normalized, normalized_df])
+    # Fill NaNs with the median across each column in the group
+    filled_group = group[features_list + added_features].apply(lambda x: x.fillna(x.median()))
 
-# Save the normalized X_DATASET
-X_DATASET_normalized.to_pickle(f'{OBJECTS_DIR}/X_DATASET.pkl')
+    # Standardize each column within the group
+    scaler = StandardScaler()
+    standardized_features = scaler.fit_transform(filled_group)
+    
+    # Create a DataFrame with standardized values and maintain original index
+    standardized_df = pd.DataFrame(standardized_features, columns=features_list + added_features, index=group.index)
+    
+    # Concatenate standardized data to the main DataFrame
+    X_DATASET_transformed = pd.concat([X_DATASET_transformed, standardized_df])
+
+# Save the standardized X_DATASET
+X_DATASET_transformed.to_pickle(f'{OBJECTS_DIR}/X_DATASET.pkl')
 
 
 # Y_DATASET contains all the target variables.

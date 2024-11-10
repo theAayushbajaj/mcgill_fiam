@@ -128,22 +128,22 @@ while True:
     X_test_vals = X_test[stock_vars].values.astype('float32')
 
     # **Scale the data**
-    scaler = StandardScaler()
-    X_train_vals_scaled = scaler.fit_transform(X_train_vals)
-    X_validate_vals_scaled = scaler.transform(X_validate_vals)
-    X_test_vals_scaled = scaler.transform(X_test_vals)
+    # scaler = StandardScaler()
+    # X_train_vals_scaled = scaler.fit_transform(X_train_vals)
+    # X_validate_vals_scaled = scaler.transform(X_validate_vals)
+    # X_test_vals_scaled = scaler.transform(X_test_vals)
     
     # Calculate the median values for each column in the scaled training data
-    median_vals = np.nanmedian(X_train_vals_scaled, axis=0)
+    # median_vals = np.nanmedian(X_train_vals_scaled, axis=0)
 
     # Replace NaN values with the median in each dataset
-    X_train_vals_scaled = np.where(np.isnan(X_train_vals_scaled), median_vals, X_train_vals_scaled)
-    X_validate_vals_scaled = np.where(np.isnan(X_validate_vals_scaled), median_vals, X_validate_vals_scaled)
-    X_test_vals_scaled = np.where(np.isnan(X_test_vals_scaled), median_vals, X_test_vals_scaled)
+    # X_train_vals_scaled = np.where(np.isnan(X_train_vals_scaled), median_vals, X_train_vals_scaled)
+    # X_validate_vals_scaled = np.where(np.isnan(X_validate_vals_scaled), median_vals, X_validate_vals_scaled)
+    # X_test_vals_scaled = np.where(np.isnan(X_test_vals_scaled), median_vals, X_test_vals_scaled)
 
     # **Apply PCA to X_train_vals_scaled**
     pca = PCA(n_components=0.85, svd_solver='full')  # Retain 80% of variance
-    X_train_pca = pca.fit_transform(X_train_vals_scaled)
+    X_train_pca = pca.fit_transform(X_train_vals)
 
     # Determine the number of components
     n_components = pca.n_components_
@@ -156,8 +156,8 @@ while True:
         continue
 
     # Transform validation and test data
-    X_validate_pca = pca.transform(X_validate_vals_scaled)
-    X_test_pca = pca.transform(X_test_vals_scaled)
+    X_validate_pca = pca.transform(X_validate_vals)
+    X_test_pca = pca.transform(X_test_vals)
 
     # Combine training and validation data
     X_train_val = np.vstack([X_train_pca, X_validate_pca])
