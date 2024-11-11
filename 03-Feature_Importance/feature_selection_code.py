@@ -15,9 +15,15 @@ The extraction process involves the following steps:
 """
 
 import pickle
+import sys
+import os
 import json
 import warnings
 warnings.filterwarnings('ignore')
+
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(os.path.join(parent_dir, 'src/ch_08'))
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
 def get_top_features(imp_estimates, n_features=100):
@@ -69,7 +75,7 @@ def get_top_features(imp_estimates, n_features=100):
     return top_features
 
 # load the fi_estimates from the pickle file
-with open('./fi_estimates.pkl', 'rb') as f:
+with open('./fi_estimates_fillna.pkl', 'rb') as f:
     fi_estimates = pickle.load(f)
 
 print(type(fi_estimates))
