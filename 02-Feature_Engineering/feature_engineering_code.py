@@ -382,9 +382,6 @@ with tqdm(total=total) as pbar:
         df['alpha'] = df['stock_exret'] - df['beta_60m'] * df['market_exret']
         df['target'] = df['alpha'].apply(lambda x: 1 if x >= 0 else -1)
         
-        # shift market_exret by 1 to include it as a feature
-        df['market_exret'] = df['market_exret'].shift(1)
-        
         # Save the updated DataFrame back to the CSV file
         df.to_csv(file_path, index=False)
         
@@ -591,7 +588,7 @@ features = pd.read_csv(PATH)
 features_list = features.values.ravel().tolist()
 
 # Added features
-added_features = ['log_diff', 'frac_diff', 'sadf', 'random', 'market_exret']
+added_features = ['log_diff', 'frac_diff', 'sadf', 'random']
 
 OBJECTS_DIR = "../objects"
 
@@ -624,7 +621,7 @@ X_DATASET_transformed.to_pickle(f'{OBJECTS_DIR}/X_DATASET.pkl')
 
 
 # Y_DATASET contains all the target variables.
-relevant_targets = ['stock_ticker', 'stock_exret', 'target', 't1', 't1_index', 'weight_attr', 'alpha']
+relevant_targets = ['stock_ticker', 'stock_exret', 'target', 't1', 't1_index', 'weight_attr', 'alpha', 'market_exret']
 Y_DATASET = FULL_stacked_data[relevant_targets]
 Y_DATASET.to_pickle(f'{OBJECTS_DIR}/Y_DATASET.pkl')
 
