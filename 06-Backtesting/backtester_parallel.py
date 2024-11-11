@@ -129,7 +129,7 @@ if __name__ == "__main__":
         # Stock Selection
         "min_size": WINDOW_SIZE,
         "long_only": True,
-        "portfolio_size": 80,
+        "portfolio_size": 50,
         # Covariance Estimation, Black Litterman
         "tau": 1.0,
         "lambda_": 2,
@@ -148,7 +148,7 @@ if __name__ == "__main__":
         "market_caps_df": market_caps_df,
         "benchmark_df": benchmark_df,
     }
-    REBALANCE_PERIOD = 4
+    REBALANCE_PERIOD = 1
     strategy = strat.asset_allocator
     START_MONTH_PRED = 121
 

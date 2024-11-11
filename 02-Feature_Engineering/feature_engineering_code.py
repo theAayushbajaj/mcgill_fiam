@@ -382,6 +382,9 @@ with tqdm(total=total) as pbar:
         df['alpha'] = df['stock_exret'] - df['beta_60m'] * df['market_exret']
         df['target'] = df['alpha'].apply(lambda x: 1 if x >= 0 else -1)
         
+        # shift market_exret by 1 to include it as a feature
+        df['market_exret'] = df['market_exret'].shift(1)
+        
         # Save the updated DataFrame back to the CSV file
         df.to_csv(file_path, index=False)
         
@@ -588,7 +591,7 @@ features = pd.read_csv(PATH)
 features_list = features.values.ravel().tolist()
 
 # Added features
-added_features = ['log_diff', 'frac_diff', 'sadf', 'random']
+added_features = ['log_diff', 'frac_diff', 'sadf', 'random', 'market_exret']
 
 OBJECTS_DIR = "../objects"
 
@@ -603,16 +606,16 @@ X_DATASET_transformed = pd.DataFrame()
 
 # Loop through each date, standardize features within each date group
 for date, group in FULL_stacked_data.groupby('t1'):
-    # Fill NaNs with the median across each column in the group
-    filled_group = group[features_list + added_features].apply(lambda x: x.fillna(x.median()))
-
-    # Standardize each column within the group
+    # Standardize each column within the group, skipping NaNs
     scaler = StandardScaler()
-    standardized_features = scaler.fit_transform(filled_group)
-    
-    # Create a DataFrame with standardized values and maintain original index
+    standardized_features = scaler.fit_transform(group[features_list + added_features])
+
+    # Create a DataFrame with standardized values and maintain the original index
     standardized_df = pd.DataFrame(standardized_features, columns=features_list + added_features, index=group.index)
-    
+
+    # Fill NaNs with the median of each column post-standardization
+    standardized_df = standardized_df.apply(lambda x: x.fillna(x.median()))
+
     # Concatenate standardized data to the main DataFrame
     X_DATASET_transformed = pd.concat([X_DATASET_transformed, standardized_df])
 
@@ -621,7 +624,7 @@ X_DATASET_transformed.to_pickle(f'{OBJECTS_DIR}/X_DATASET.pkl')
 
 
 # Y_DATASET contains all the target variables.
-relevant_targets = ['stock_ticker', 'stock_exret', 'target', 't1', 't1_index', 'weight_attr']
+relevant_targets = ['stock_ticker', 'stock_exret', 'target', 't1', 't1_index', 'weight_attr', 'alpha']
 Y_DATASET = FULL_stacked_data[relevant_targets]
 Y_DATASET.to_pickle(f'{OBJECTS_DIR}/Y_DATASET.pkl')
 
