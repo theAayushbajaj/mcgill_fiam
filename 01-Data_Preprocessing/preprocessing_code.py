@@ -7,6 +7,7 @@ import os
 import warnings
 import pandas as pd
 from pandas.tseries.offsets import BMonthEnd, BMonthBegin
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 warnings.filterwarnings('ignore')
 
@@ -24,12 +25,53 @@ OBJECTS_DIR = "../objects"
 
 if not os.path.exists(OBJECTS_DIR):
     os.makedirs(OBJECTS_DIR)
+    
+# Load benchmark data from a CSV file
+market_data = pd.read_csv("../raw_data/mkt_ind.csv")
+try:
+    market_data['market_exret'] = market_data['sp_ret'] - market_data['RF']
+except:
+    market_data['market_exret'] = market_data['sp_ret'] - market_data['rf']
+
 
 # Load the stock data from a CSV file
 data = pd.read_csv("../raw_data/hackathon_sample_v2.csv")
 
 # Convert 'date' column to a 't1' datetime column with the appropriate format
 data["t1"] = pd.to_datetime(data["date"], format="%Y%m%d")
+
+# Adding the alpha column to dataset
+for date, group in data.groupby('t1'):
+    # fill NAs in beta_60m with median
+    group['beta_60m'] = group['beta_60m'].fillna(group['beta_60m'].median())
+    data.loc[group.index, 'beta_60m'] = group['beta_60m']
+data = pd.merge(data, market_data[['market_exret', 'month', 'year']], on=['year', 'month'], how='left')
+data['alpha'] = data['stock_exret'] - data['beta_60m'] * data['market_exret']
+data['target'] = data['alpha'].apply(lambda x: 1 if x >= 0 else -1)
+
+# Rescale features
+FEATURES_PATH = '../raw_data/factor_char_list.csv'
+features = pd.read_csv(FEATURES_PATH)
+features_list = features.values.ravel().tolist()
+data_scaled = pd.DataFrame()
+for date, group in data.groupby('t1'):
+    # Standardize each column within the group, skipping NaNs
+    scaler = StandardScaler()
+    standardized_features = scaler.fit_transform(group[features_list])
+    
+    # Create a DataFrame with standardized values and maintain the original index
+    standardized_df = pd.DataFrame(standardized_features, columns=features_list, index=group.index)
+    
+    # Fill NaNs with the median of each column post-standardization
+    standardized_df = standardized_df.apply(lambda x: x.fillna(x.median()))
+    
+    # Append the standardized DataFrame to the scaled data
+    data_scaled = pd.concat([data_scaled, standardized_df])
+    
+# Assign the scaled features back to the original DataFrame
+data[features_list] = data_scaled[features_list]
+    
+
 
 # Define the minimum number of records required for saving
 MIN_RECORDS = 120

@@ -25,6 +25,7 @@ import warnings
 import glob
 import numpy as np
 import pandas as pd
+import json
 
 from sklearn.ensemble import RandomForestClassifier, BaggingClassifier
 from sklearn.metrics import log_loss
@@ -55,8 +56,18 @@ Y.set_index(['t1_index', 'index'], inplace=True)
 
 # Feature variables and target variable
 filtered_features = pd.read_json('../0X-Causal_discovery/filtered_features.json')
-added_features = ['log_diff', 'frac_diff', 'sadf']
-stock_vars = filtered_features['final'].to_list() + added_features
+
+# Define the directory containing the JSON files
+OBJECTS_DIR = "../objects"
+
+# Load the added features, factors, and features list from JSON files
+with open(f'{OBJECTS_DIR}/added_features.json', 'r') as f:
+    added_features = json.load(f)
+    
+with open(f'{OBJECTS_DIR}/factors_list.json', 'r') as f:
+    factors_list = json.load(f)
+    
+stock_vars = filtered_features['final'].to_list() + added_features + factors_list
 TGT_VAR = 'target'  # Target variable
 
 # Ensure the index is datetime

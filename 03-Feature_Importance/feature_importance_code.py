@@ -14,6 +14,7 @@ import pickle
 import sys
 import os
 import pandas as pd
+import json
 
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(os.path.join(parent_dir, 'src/ch_08'))
@@ -27,20 +28,24 @@ warnings.filterwarnings('ignore')
 with open(os.path.join(parent_dir, 'objects/X_DATASET.pkl'), 'rb') as f:
     X = pickle.load(f)
 
-    # Fill NaN values with the median of each column
-    X = X.apply(lambda col: col.fillna(col.median()), axis=0)
-
 with open(os.path.join(parent_dir, 'objects/Y_DATASET.pkl'), 'rb') as f:
     Y = pickle.load(f)
 
-# Load the feature list
-PATH = os.path.join(parent_dir, 'raw_data/factor_char_list.csv')
-features = pd.read_csv(PATH)
-features_list = features.values.ravel().tolist()
-features_list = features_list + ['random']
+# Define the directory containing the JSON files
+OBJECTS_DIR = "../objects"
+
+# Load the added features, factors, and features list from JSON files
+with open(f'{OBJECTS_DIR}/added_features.json', 'r') as f:
+    added_features = json.load(f)
+    
+with open(f'{OBJECTS_DIR}/factors_list.json', 'r') as f:
+    factors_list = json.load(f)
+    
+with open(f'{OBJECTS_DIR}/features_list.json', 'r') as f:
+    features_list = json.load(f)
 
 # We do feature importance on given features
-X = X[features_list]
+X = X[features_list + factors_list + ['random']]
 
 def get_cont(input_df, drop_index=None):
     """
@@ -136,7 +141,7 @@ def run_feature_importance(data, case_tag):
 # Replacing NaN values with 1e6
 
 print('Number of rows with NaN records: ', X.isna().any(axis=1).sum())
-X.fillna(1e6, inplace=True)
+
 print('Number of NaN records after filling NaN values: ', X.isna().any(axis=1).sum())
 
 cont = get_cont(Y)
