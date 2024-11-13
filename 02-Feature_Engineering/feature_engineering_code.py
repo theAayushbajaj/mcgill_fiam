@@ -316,43 +316,6 @@ def getTimeDecay(tW, clfLastW=1.0):
     return clfW
 
 
-FACTOR_PATH = "factors_theme.json"
-with open(FACTOR_PATH, "r") as f:
-    factor_themes = json.load(f)
-
-
-def addFactorThemes(df, factor_themes):
-    """
-    Add a new column for each factor theme based on the JSON file containing theme definitions.
-    Each theme aggregates factors based on signs provided in the JSON.
-
-    Parameters:
-    df (DataFrame): The input DataFrame containing factor columns.
-    factor_path (str): Path to the JSON file with theme definitions.
-
-    Returns:
-    DataFrame: The DataFrame with new columns for each factor theme.
-    """
-    # Loop through each theme and aggregate factors based on signs
-    for theme_name, factors in factor_themes.items():
-        theme_sum = pd.Series(0, index=df.index)
-        for factor in factors:
-            # Multiply the factor values by the sign and add to theme sum
-            factor_name = factor["name"]
-            factor_sign = factor["sign"]
-            if factor_name in df.columns:
-                theme_sum += df[factor_name] * factor_sign
-            else:
-                print(
-                    f"Warning: Factor '{factor_name}' not found in DataFrame columns."
-                )
-
-        # Add the aggregated theme column to the DataFrame
-        df[theme_name] = theme_sum
-
-    return df
-
-
 total = len(csv_files)
 
 
@@ -501,25 +464,6 @@ with tqdm(total=total) as pbar:
         pbar.update(1)
 print("\n")
 
-# Add factor themes to the dataset
-print("Adding factor themes to the dataset...\n")
-with tqdm(total=total) as pbar:
-    for file_name in csv_files:
-        file_path = os.path.join(STOCKS_DATA_DIR, file_name)
-
-        # Read the CSV file into a DataFrame
-        df = pd.read_csv(file_path, index_col="t1", parse_dates=True)
-
-        # Add factor themes to the dataset
-        df = addFactorThemes(df, factor_themes)
-
-        # Save the updated DataFrame back to the CSV file
-        df.to_csv(file_path)
-
-        pbar.update(1)
-print("\n")
-
-
 # Generate final datasets with all added features
 # Stack all the CSV files into one DataFrame
 
@@ -586,15 +530,17 @@ FULL_stacked_data = pd.concat(dfs, ignore_index=True)
 FULL_stacked_data = FULL_stacked_data.sort_values(by="t1")
 
 # Load relevant feature list
-PATH = "../raw_data/factor_char_list.csv"
-features = pd.read_csv(PATH)
+FEATURES_PATH = '../raw_data/factor_char_list.csv'
+features = pd.read_csv(FEATURES_PATH)
 features_list = features.values.ravel().tolist()
 
+OBJECTS_DIR = "../objects"
+# load factor list from object : objects/factors_list.json
+with open(f"{OBJECTS_DIR}/factors_list.json", "r") as f:
+    factors_list = json.load(f)
 # Added features
 added_features = ["log_diff", "frac_diff", "sadf"]
-factors_list = list(factor_themes.keys())
 
-OBJECTS_DIR = "../objects"
 
 # Dataset creation for Causal Inference.
 causal_dataset = FULL_stacked_data[features_list + ["target"]]
@@ -603,9 +549,6 @@ causal_dataset.to_csv(f"{OBJECTS_DIR}/causal_dataset.csv")
 # Save to json added features, factors and features list for future use
 with open(f"{OBJECTS_DIR}/added_features.json", "w") as f:
     json.dump(added_features, f)
-
-with open(f"{OBJECTS_DIR}/factors_list.json", "w") as f:
-    json.dump(factors_list, f)
 
 with open(f"{OBJECTS_DIR}/features_list.json", "w") as f:
     json.dump(features_list, f)
@@ -616,18 +559,18 @@ print("Scaling the new features...\n")
 for date, group in FULL_stacked_data.groupby("t1"):
     # Standardize each column within the group, skipping NaNs
     scaler = StandardScaler()
-    standardized_features = scaler.fit_transform(group[added_features + factors_list])
+    standardized_features = scaler.fit_transform(group[added_features])
 
     # Create a DataFrame with standardized values and maintain the original index
     standardized_df = pd.DataFrame(
-        standardized_features, columns=added_features + factors_list, index=group.index
+        standardized_features, columns=added_features, index=group.index
     )
 
     # Fill NaNs with the median of each column post-standardization
     standardized_df = standardized_df.apply(lambda x: x.fillna(x.median()))
 
     # Assign the standardized values back to the original DataFrame
-    FULL_stacked_data.loc[group.index, added_features + factors_list] = standardized_df
+    FULL_stacked_data.loc[group.index, added_features] = standardized_df
 
 print("\n")
 

@@ -119,6 +119,7 @@ if __name__ == "__main__":
         import useful_objects
     prices = pd.read_pickle("../objects/prices.pkl")
     signals = pd.read_pickle("../objects/signals.pkl")
+    factor_signals = pd.read_pickle("../objects/factor_signals.pkl")
     market_caps_df = pd.read_pickle("../objects/market_caps.pkl")
     excess_returns = pd.read_pickle("../objects/stockexret.pkl")
     benchmark_df = pd.read_csv("../objects/mkt_ind.csv")

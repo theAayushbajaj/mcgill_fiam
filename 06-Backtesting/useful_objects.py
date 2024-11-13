@@ -24,6 +24,7 @@ import os
 import pickle
 import pandas as pd
 from tqdm import tqdm
+import json
 
 # set the current working directory
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -83,6 +84,30 @@ for file_name in tqdm(csv_files):
 # Save the signals DataFrame
 with open('../objects/signals.pkl', 'wb') as f:
     pickle.dump(signals, f)
+    
+# factor signals
+Factor_signals = dict()
+OBJECTS_DIR = "../objects"
+# load factor list from object : objects/factors_list.json
+with open(f"{OBJECTS_DIR}/factors_list.json", "r") as f:
+    factors_list = json.load(f)
+    
+for factor in factors_list:
+    Factor_signals[factor] = pd.DataFrame()
+    Factor_signals[factor].index = pd.to_datetime(aapl_df['t1'])
+    
+    for file_name in tqdm(csv_files):
+        file_path = os.path.join(STOCKS_DATA_DIR, file_name)
+
+        # Read the CSV file into a DataFrame
+        df = pd.read_csv(file_path, index_col='t1', parse_dates=True)
+
+        # Add the 'signal' column to the signals DataFrame
+        Factor_signals[factor][file_name] = df[factor]
+        
+# Save the dictionary of factor signals
+with open(f"{OBJECTS_DIR}/Factor_signals.pkl", "wb") as f:
+    pickle.dump(Factor_signals, f)
 
 
 # Create a dataframe of market capitalizations for all stocks
