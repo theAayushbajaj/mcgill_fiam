@@ -16,36 +16,37 @@ import os
 import pandas as pd
 import json
 
-parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.append(os.path.join(parent_dir, 'src/ch_08'))
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.append(os.path.join(parent_dir, "src/ch_08"))
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 import code_ch_08 as f_ch8
 
-warnings.filterwarnings('ignore')
+warnings.filterwarnings("ignore")
 
 # Load dataset and targets
-with open(os.path.join(parent_dir, 'objects/X_DATASET.pkl'), 'rb') as f:
+with open(os.path.join(parent_dir, "objects/X_DATASET.pkl"), "rb") as f:
     X = pickle.load(f)
 
-with open(os.path.join(parent_dir, 'objects/Y_DATASET.pkl'), 'rb') as f:
+with open(os.path.join(parent_dir, "objects/Y_DATASET.pkl"), "rb") as f:
     Y = pickle.load(f)
 
 # Define the directory containing the JSON files
 OBJECTS_DIR = "../objects"
 
 # Load the added features, factors, and features list from JSON files
-with open(f'{OBJECTS_DIR}/added_features.json', 'r') as f:
+with open(f"{OBJECTS_DIR}/added_features.json", "r") as f:
     added_features = json.load(f)
-    
-with open(f'{OBJECTS_DIR}/factors_list.json', 'r') as f:
+
+with open(f"{OBJECTS_DIR}/factors_list.json", "r") as f:
     factors_list = json.load(f)
-    
-with open(f'{OBJECTS_DIR}/features_list.json', 'r') as f:
+
+with open(f"{OBJECTS_DIR}/features_list.json", "r") as f:
     features_list = json.load(f)
 
 # We do feature importance on given features
-X = X[features_list + factors_list + ['random']]
+X = X[features_list + factors_list + ["random"]]
+
 
 def get_cont(input_df, drop_index=None):
     """
@@ -66,22 +67,38 @@ def get_cont(input_df, drop_index=None):
         'bin' (the 'target' column), and 'w' (the 'weight_attr' column).
         The weight column 'w' is normalized by the sum of all weights.
     """
-    df = pd.concat([input_df['t1_index'], input_df['t1'], input_df['target'],
-                      input_df['weight_attr']], axis=1, ignore_index=True)
+    df = pd.concat(
+        [
+            input_df["t1_index"],
+            input_df["t1"],
+            input_df["target"],
+            input_df["weight_attr"],
+        ],
+        axis=1,
+        ignore_index=True,
+    )
 
-    df.rename(columns={df.columns[0]: 't1_index', df.columns[1]: 't1',
-                         df.columns[2]: 'bin', df.columns[3]: 'w'}, inplace=True)
+    df.rename(
+        columns={
+            df.columns[0]: "t1_index",
+            df.columns[1]: "t1",
+            df.columns[2]: "bin",
+            df.columns[3]: "w",
+        },
+        inplace=True,
+    )
 
     if drop_index is not None:
         df = df.drop(drop_index)
 
-    df.set_index('t1_index', inplace=True)
-    df['t1'] = pd.to_datetime(df['t1'])
+    df.set_index("t1_index", inplace=True)
+    df["t1"] = pd.to_datetime(df["t1"])
     df.index = pd.to_datetime(df.index)
 
-    df['w'] *= df.shape[0]/df['w'].sum()
+    df["w"] *= df.shape[0] / df["w"].sum()
 
     return df
+
 
 def run_feature_importance(data, case_tag):
     """
@@ -112,7 +129,7 @@ def run_feature_importance(data, case_tag):
     them in the specified output path.
     """
 
-    methods = ['MDI', 'MDA']
+    methods = ["MDI", "MDA"]
     fi_estimates = {method: {} for method in methods}
 
     n_estimators = 1000  # Number of trees in the random forest
@@ -123,32 +140,46 @@ def run_feature_importance(data, case_tag):
 
     for method in methods:
         print(f"Running feature importance for {method}...")
-        imp, oob, oos = f_ch8.featImportance(pd.DataFrame(data), cont,
-                                             n_estimators=n_estimators, cv=cv,
-                                             max_samples=max_samples, numThreads=num_threads,
-                                             pctEmbargo=pct_embargo, method=method)
+        imp, oob, oos = f_ch8.featImportance(
+            pd.DataFrame(data),
+            cont,
+            n_estimators=n_estimators,
+            cv=cv,
+            max_samples=max_samples,
+            numThreads=num_threads,
+            pctEmbargo=pct_embargo,
+            method=method,
+        )
 
-        fi_estimates[method]['imp'] = imp
-        fi_estimates[method]['oob'] = oob
-        fi_estimates[method]['oos'] = oos
+        fi_estimates[method]["imp"] = imp
+        fi_estimates[method]["oob"] = oob
+        fi_estimates[method]["oos"] = oos
 
         # Plot the feature importance using the provided function
-        f_ch8.plotFeatImportance(pathOut='./', imp=imp, oob=oob, oos=oos,
-                                 method=method, tag=case_tag, simNum=0)
+        f_ch8.plotFeatImportance(
+            pathOut="./",
+            imp=imp,
+            oob=oob,
+            oos=oos,
+            method=method,
+            tag=case_tag,
+            simNum=0,
+        )
 
     return fi_estimates
 
+
 # Replacing NaN values with 1e6
 
-print('Number of rows with NaN records: ', X.isna().any(axis=1).sum())
+print("Number of rows with NaN records: ", X.isna().any(axis=1).sum())
 
-print('Number of NaN records after filling NaN values: ', X.isna().any(axis=1).sum())
+print("Number of NaN records after filling NaN values: ", X.isna().any(axis=1).sum())
 
 cont = get_cont(Y)
-X['datetime'] = cont.index
-X.set_index('datetime', inplace=True)
+X["datetime"] = cont.index
+X.set_index("datetime", inplace=True)
 
-fi_estimates_fillna = run_feature_importance(X, 'fillNA')
+fi_estimates_fillna = run_feature_importance(X, "fillNA")
 
-with open('./fi_estimates_fillna.pkl', 'wb') as f:
+with open("./fi_estimates_fillna.pkl", "wb") as f:
     pickle.dump(fi_estimates_fillna, f)

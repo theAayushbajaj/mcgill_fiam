@@ -530,7 +530,7 @@ FULL_stacked_data = pd.concat(dfs, ignore_index=True)
 FULL_stacked_data = FULL_stacked_data.sort_values(by="t1")
 
 # Load relevant feature list
-FEATURES_PATH = '../raw_data/factor_char_list.csv'
+FEATURES_PATH = "../raw_data/factor_char_list.csv"
 features = pd.read_csv(FEATURES_PATH)
 features_list = features.values.ravel().tolist()
 

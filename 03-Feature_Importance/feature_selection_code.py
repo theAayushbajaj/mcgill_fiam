@@ -19,10 +19,11 @@ import sys
 import os
 import json
 import warnings
-warnings.filterwarnings('ignore')
 
-parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.append(os.path.join(parent_dir, 'src/ch_08'))
+warnings.filterwarnings("ignore")
+
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.append(os.path.join(parent_dir, "src/ch_08"))
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -39,51 +40,55 @@ def get_top_features(imp_estimates, n_features=100):
     """
     top_features = {}
 
-    for method in ['MDA', 'MDI']:
+    for method in ["MDA", "MDI"]:
         # Sort features by absolute importance (descending order)
-        sorted_features = imp_estimates[method]['imp']['mean'].abs().sort_values(ascending=False)
-        
-        important_features = sorted_features.loc[:'random'].index[:-1]
+        sorted_features = (
+            imp_estimates[method]["imp"]["mean"].abs().sort_values(ascending=False)
+        )
 
+        important_features = sorted_features.loc[:"random"].index[:-1]
 
         # Get top N features
         # top_features[method] = important_features.head(n_features).index.tolist()
         top_features[method] = important_features.tolist()
 
     # Get combined unique top features
-    combined_features = list(set(top_features['MDA'] + top_features['MDI']))
+    combined_features = list(set(top_features["MDA"] + top_features["MDI"]))
 
     # If the combined list is longer than n_features, prioritize based on normalized importance
     if len(combined_features) > n_features:
         feature_importance = {}
         for feature in combined_features:
-            mda_imp = abs(imp_estimates['MDA']['imp'].loc[feature, 'mean'])
-            mdi_imp = abs(imp_estimates['MDI']['imp'].loc[feature, 'mean'])
+            mda_imp = abs(imp_estimates["MDA"]["imp"].loc[feature, "mean"])
+            mdi_imp = abs(imp_estimates["MDI"]["imp"].loc[feature, "mean"])
 
             # Normalize importances
-            mda_norm = mda_imp / imp_estimates['MDA']['imp']['mean'].abs().max()
-            mdi_norm = mdi_imp / imp_estimates['MDI']['imp']['mean'].abs().max()
+            mda_norm = mda_imp / imp_estimates["MDA"]["imp"]["mean"].abs().max()
+            mdi_norm = mdi_imp / imp_estimates["MDI"]["imp"]["mean"].abs().max()
 
             # Average of normalized importances
             feature_importance[feature] = (mda_norm + mdi_norm) / 2
 
-        combined_features = sorted(feature_importance.items(), key=lambda x: x[1], reverse=True)
+        combined_features = sorted(
+            feature_importance.items(), key=lambda x: x[1], reverse=True
+        )
         combined_features = [feature for feature, _ in combined_features[:n_features]]
 
-    top_features['combined'] = combined_features
+    top_features["combined"] = combined_features
 
     return top_features
 
+
 # load the fi_estimates from the pickle file
-with open('./fi_estimates_fillna.pkl', 'rb') as f:
+with open("./fi_estimates_fillna.pkl", "rb") as f:
     fi_estimates = pickle.load(f)
 
 print(type(fi_estimates))
-print(type(fi_estimates['MDA']))
+print(type(fi_estimates["MDA"]))
 print(fi_estimates)
 
 top_100_features = get_top_features(fi_estimates, n_features=100)
-OUTPUT_FILE = './top_100_features.json'
+OUTPUT_FILE = "./top_100_features.json"
 
-with open(OUTPUT_FILE, 'w') as f:
+with open(OUTPUT_FILE, "w") as f:
     json.dump(top_100_features, f, indent=2)

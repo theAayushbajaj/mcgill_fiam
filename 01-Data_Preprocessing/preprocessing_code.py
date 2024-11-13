@@ -87,17 +87,22 @@ def addFactorThemes(df, factor_themes):
 
     return df
 
+
 # factors
 # scale the features min max
 # apply on these the addFactorThemes
 data_factors = data.copy()
 features = pd.read_csv(FEATURES_PATH)
 features_list = features.values.ravel().tolist()
+
+
 def minmax_fillmedian(df):
     minmax_scaler = MinMaxScaler()
     df[features_list] = minmax_scaler.fit_transform(df[features_list])
     df[features_list] = df[features_list].apply(lambda x: x.fillna(x.median()))
     return df
+
+
 data_factors = data_factors.groupby("t1", group_keys=False).apply(minmax_fillmedian)
 data_factors = data_factors.groupby(["cusip", "permno"], group_keys=False).apply(
     addFactorThemes, factor_themes=factor_themes
@@ -141,7 +146,7 @@ def customStandardize(df):
     return df
 
 
-data = data.groupby("t1",  group_keys=False).apply(customStandardize)
+data = data.groupby("t1", group_keys=False).apply(customStandardize)
 data.head()
 # %%
 

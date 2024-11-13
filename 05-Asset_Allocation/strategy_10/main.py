@@ -49,7 +49,14 @@ def asset_allocator(
     benchmark_df = benchmark_df.iloc[start_date:end_date]
 
     # Step 0) Adjust the prices to the start and end date
+    # Index in terms of months
+    # print(f"Start date: {start_date}")
+    # print(f"End date: {end_date}")
+    # print(f"Prices length: {len(prices)}")
     prices = prices[start_date : end_date + 1]
+    # print(f"Prices length: {len(prices)}")
+    # print(f"Prices shape: {prices.shape}")
+    # print(f"Prices length: {len(prices)}")
 
     # =========================================================================
 
@@ -68,6 +75,7 @@ def asset_allocator(
         signal_stockSelector, signal_past, prices, **stock_selector_kwargs
     )
     # Filter the data to only include the selected stocks
+    # print(f'prices before selection : {prices}')
     prices = prices[selected_stocks]
     # print(f'prices after selection : {prices}')
     signal_end = signal_end[selected_stocks]
@@ -95,9 +103,9 @@ def asset_allocator(
     weight_optimizer_kwargs = {
         "lambda_": kwargs.get("lambda_", 3.07),
         "soft_risk": kwargs.get("soft_risk", 0.01),
-        "num_scenarios": kwargs.get("num_scenarios", 10),
-        "uncertainty_level": kwargs.get("uncertainty_level", 0.05),
-        "total_allocation": kwargs.get("total_allocation", 1.0),
+        # "num_scenarios": kwargs.get("num_scenarios", 10),
+        # "uncertainty_level": kwargs.get("uncertainty_level", 0.05),
+        # "total_allocation": kwargs.get("total_allocation", 1.0),
         
     }
     optimized_weights = weight_optimizer.main(

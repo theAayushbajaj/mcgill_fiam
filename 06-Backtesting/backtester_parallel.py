@@ -21,7 +21,7 @@ warnings.filterwarnings("ignore", category=pd.errors.PerformanceWarning)
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 sys.path.append("../05-Asset_Allocation")
-import strategy_20.main as strat
+import strategy_10.main as strat
 path_to_strategy = "../05-Asset_Allocation/strategy_2"
 
 
@@ -119,7 +119,7 @@ if __name__ == "__main__":
         import useful_objects
     prices = pd.read_pickle("../objects/prices.pkl")
     signals = pd.read_pickle("../objects/signals.pkl")
-    factor_signals = pd.read_pickle("../objects/factor_signals.pkl")
+    Factor_signals = pd.read_pickle("../objects/Factor_signals.pkl")
     market_caps_df = pd.read_pickle("../objects/market_caps.pkl")
     excess_returns = pd.read_pickle("../objects/stockexret.pkl")
     benchmark_df = pd.read_csv("../objects/mkt_ind.csv")
@@ -146,6 +146,7 @@ if __name__ == "__main__":
         # OBJECTS
         "prices": prices,
         "signals": signals,
+        # "signals": Factor_signals['F_Size'] + Factor_signals['F_Momentum'] + Factor_signals['F_Value'] + Factor_signals['F_Profitability'] + Factor_signals['F_Investment'],
         "market_caps_df": market_caps_df,
         "benchmark_df": benchmark_df,
     }
