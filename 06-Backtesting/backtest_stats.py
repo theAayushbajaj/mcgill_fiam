@@ -407,7 +407,7 @@ def plot_cumulative(portfolio_cumulative, benchmark_cumulative):
     plt.xticks(rotation=45)
 
     # Save the plot to a file
-    plt.savefig("professional_cumulative_return_comparison.png", bbox_inches="tight")
+    plt.savefig("cumulative_return_comparison.png", bbox_inches="tight")
 
     # Close the plot to prevent display freezing
     plt.close()
