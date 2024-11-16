@@ -110,10 +110,10 @@ def stats(weights_df, excess_returns_df, benchmark, start_month_pred=100):
 if __name__ == "__main__":
     if input("Do you want to run useful objects? (y/n): ") == "y":
         import useful_objects
-    prices = pd.read_pickle("../objects/prices.pkl")
-    signals = pd.read_pickle("../objects/signals.pkl")
-    market_caps_df = pd.read_pickle("../objects/market_caps.pkl")
-    excess_returns = pd.read_pickle("../objects/stockexret.pkl")
+    prices = pd.read_csv("../objects/prices.csv", index_col='t1')
+    signals = pd.read_csv("../objects/signals.csv", index_col='t1')
+    market_caps_df = pd.read_csv("../objects/market_caps.csv", index_col='t1')
+    excess_returns = pd.read_csv("../objects/stockexret.csv", index_col='t1')
     benchmark_df = pd.read_csv("../objects/mkt_ind.csv")
     benchmark_df["t1"] = pd.to_datetime(benchmark_df["t1"])
     benchmark_df["t1_index"] = pd.to_datetime(benchmark_df["t1_index"])

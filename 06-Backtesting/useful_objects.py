@@ -29,124 +29,74 @@ import json
 # set the current working directory
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-# Set the directory containing your stock CSV files
-STOCKS_DATA_DIR = '../stocks_data'
+OBJECTS_DIR = "../objects"
 
-# Get a list of all CSV files in the directory
-csv_files = [f for f in os.listdir(STOCKS_DATA_DIR) if f.endswith('.csv')]
-
-
-# Create a dataframe of prices for all stocks
-# Save it in \objects folder as prices.pkl
-
-# Load AAPL.csv since it has all the datetime indices
-try:
-    PATH = '../stocks_data/CNMD.csv'
-    aapl_df = pd.read_csv(PATH)
-except:
-    PATH = '../stocks_data/AAPL.csv'
-    aapl_df = pd.read_csv(PATH)
+df = pd.read_csv('../objects/FULL_stacked_data_with_preds.csv', parse_dates=True)
+df = df.sort_values(by="t1")
 
 # Initialize the datetime indices for `prices` dataframe from AAPL.csv
 prices = pd.DataFrame()
-prices.index = pd.to_datetime(aapl_df['t1'])
+prices.index = pd.to_datetime(list(set(df['t1'].values)))
+prices = prices.sort_index()
+prices.index.name = 't1'
 
-for file_name in tqdm(csv_files):
-    file_path = os.path.join(STOCKS_DATA_DIR, file_name)
-
-    # Read the CSV file into a DataFrame
-    df = pd.read_csv(file_path, index_col='t1', parse_dates=True)
-
-    # Add the 'adj_price' column to the prices DataFrame
-    prices[file_name] = df['adj_price']
-
-# Save the prices DataFrame
-with open('../objects/prices.pkl', 'wb') as f:
-    pickle.dump(prices, f)
-
-
-# Create a dataframe of signals for all stocks
-# Save it in \objects folder as signals.pkl
-
-# Initialize the datetime indices for `signals` dataframe from AAPL.csv
 signals = pd.DataFrame()
-signals.index = pd.to_datetime(aapl_df['t1'])
+signals.index = prices.index
+signals.index.name = 't1'
 
-for file_name in tqdm(csv_files):
-    file_path = os.path.join(STOCKS_DATA_DIR, file_name)
+market_caps = pd.DataFrame()
+market_caps.index = prices.index
+market_caps.index.name = 't1'
 
-    # Read the CSV file into a DataFrame
-    df = pd.read_csv(file_path, index_col='t1', parse_dates=True)
+stockexret = pd.DataFrame()
+stockexret.index = prices.index
+stockexret.index.name = 't1'
 
-    # Add the 'signal' column to the signals DataFrame
-    signals[file_name] = df['prediction']*df['probability']
+# Group by 'cusip' and 'permno'
+grouped = df.groupby(["cusip", "permno"], group_keys=False)
 
-# Save the signals DataFrame
-with open('../objects/signals.pkl', 'wb') as f:
-    pickle.dump(signals, f)
-    
-# factor signals
-Factor_signals = dict()
-OBJECTS_DIR = "../objects"
 # load factor list from object : objects/factors_list.json
 with open(f"{OBJECTS_DIR}/factors_list.json", "r") as f:
     factors_list = json.load(f)
-    
+
+factor_signals = dict()
+
 for factor in factors_list:
-    Factor_signals[factor] = pd.DataFrame()
-    Factor_signals[factor].index = pd.to_datetime(aapl_df['t1'])
-    
-    for file_name in tqdm(csv_files):
-        file_path = os.path.join(STOCKS_DATA_DIR, file_name)
+    factor_signals[factor] = pd.DataFrame()
+    factor_signals[factor].index = prices.index
+    factor_signals[factor].index.name = 't1'
 
-        # Read the CSV file into a DataFrame
-        df = pd.read_csv(file_path, index_col='t1', parse_dates=True)
+for (cusip, permno), group in tqdm(grouped, desc="Processing groups"):
+    ticker = group['stock_ticker'].iloc[0]  # Get the ticker name from the group
 
-        # Add the 'signal' column to the signals DataFrame
-        Factor_signals[factor][file_name] = df[factor]
-        
-# Save the dictionary of factor signals
-with open(f"{OBJECTS_DIR}/Factor_signals.pkl", "wb") as f:
-    pickle.dump(Factor_signals, f)
+    group['t1'] = pd.to_datetime(group['t1'])
+    group.set_index('t1', inplace=True)
 
+    # Create and store the prices DataFrame
+    prices[ticker] = group[['adj_price']]
 
-# Create a dataframe of market capitalizations for all stocks
-# Save it in \objects folder as market_caps.pkl
+    # Create and store signals DataFrame
+    signals[ticker] = group['prediction'] * group['probability']
 
-# Initialize the datetime indices for `market_caps` dataframe from AAPL.csv
-market_caps = pd.DataFrame()
-market_caps.index = pd.to_datetime(aapl_df['t1'])
+    # Create and market_caps signals DataFrame
+    market_caps[ticker] = group[['market_equity']]
 
-for file_name in tqdm(csv_files):
-    file_path = os.path.join(STOCKS_DATA_DIR, file_name)
+    # Create and stockexret signals DataFrame
+    stockexret[ticker] = group[['stock_exret']]
 
-    # Read the CSV file into a DataFrame
-    df = pd.read_csv(file_path, index_col='t1', parse_dates=True)
+    for factor in factors_list:
+        factor_signals[factor][ticker] = group[factor]
 
-    # Add the 'market_cap' column to the market_caps DataFrame
-    market_caps[file_name] = df['market_equity']
+prices.to_csv(f'{OBJECTS_DIR}/prices.csv')
+signals.to_csv(f'{OBJECTS_DIR}/signals.csv')
+market_caps.to_csv(f'{OBJECTS_DIR}/market_caps.csv')
+stockexret.to_csv(f'{OBJECTS_DIR}/stockexret.csv')
 
-# Save the market_caps DataFrame
-with open('../objects/market_caps.pkl', 'wb') as f:
-    pickle.dump(market_caps, f)
+# Ensure the 'objects' directory exists, create it if not present
+FACTOR_DIR = f'{OBJECTS_DIR}/factors'
 
+if not os.path.exists(FACTOR_DIR):
+    os.makedirs(FACTOR_DIR)
 
-# Create a dataframe of stockexret for all stocks
-# Save it in \objects folder as stockexret.pkl
-
-# Initialize the datetime indices for `stock_exret` dataframe from AAPL.csv
-stockexret = pd.DataFrame()
-stockexret.index = pd.to_datetime(aapl_df['t1'])
-
-for file_name in tqdm(csv_files):
-    file_path = os.path.join(STOCKS_DATA_DIR, file_name)
-
-    # Read the CSV file into a DataFrame
-    df = pd.read_csv(file_path, index_col='t1', parse_dates=True)
-
-    # Add the 'stockexret' column to the stockexret DataFrame
-    stockexret[file_name] = df['stock_exret']
-
-# Save the stockexret DataFrame
-with open('../objects/stockexret.pkl', 'wb') as f:
-    pickle.dump(stockexret, f)
+for factor in factor_signals.keys():
+    factor_signals[factor].to_csv(f'{FACTOR_DIR}/{factor}.csv')

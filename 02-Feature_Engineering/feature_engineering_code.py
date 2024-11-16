@@ -21,21 +21,12 @@ from pandas.tseries.offsets import BMonthBegin
 import numpy as np
 from tqdm import tqdm
 from statsmodels.tsa.stattools import adfuller
-from sklearn.preprocessing import MinMaxScaler, StandardScaler
+from sklearn.preprocessing import StandardScaler
 
 warnings.filterwarnings("ignore")
 
 # set the current working directory
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
-
-# Set the directory containing your stock CSV files
-STOCKS_DATA_DIR = "../stocks_data"
-
-# Get a list of all CSV files in the directory
-csv_files = [f for f in os.listdir(STOCKS_DATA_DIR) if f.endswith(".csv")]
-
-# Fractionally Differentiated Price as a Feature
-
 
 # SNIPPET 5.3 THE NEW FIXED-WIDTH WINDOW FRACDIFF METHOD
 def frac_diff_ffd(series, d, thres=1e-5):
@@ -122,10 +113,6 @@ def find_min_ffd(input_df, col_name="adj_price"):
             d_req = d
             return d_req
     return 1
-
-
-# Structural Breaks
-
 
 # Snippet 17.1: SADF's inner loop
 def get_bsadf(log_p, min_sl, constant, lags):
@@ -316,218 +303,70 @@ def getTimeDecay(tW, clfLastW=1.0):
     return clfW
 
 
-total = len(csv_files)
+cleaned_df = pd.read_csv('../objects/cleaned_df.csv', index_col="t1", parse_dates=True)
 
+# Group by 'cusip' and 'permno'
+grouped = cleaned_df.groupby(["cusip", "permno"], group_keys=False)
 
-# Add 't1_index' which is the first business day of the current month
-# and 't1' which is the last business day of the current month.
+# Create an empty list to store processed groups
+processed_groups = []
 
-print("Adding 't1' and 't1_index', 'year', 'month' columns to each file...\n")
-with tqdm(total=total) as pbar:
-    for file_name in csv_files:
-        file_path = os.path.join(STOCKS_DATA_DIR, file_name)
-
-        # Read the CSV file into a DataFrame
-        df = pd.read_csv(file_path, index_col="t1", parse_dates=True)
-
-        # df['t1']=df.index
-
+# Process each group
+with tqdm(total=len(grouped)) as pbar:
+    for _, group in grouped:
         # 't1_index' which is the first business day of the current month
-        df["t1_index"] = df.index - BMonthBegin(1)
+        group["t1_index"] = group.index - BMonthBegin(1)
 
-        df.to_csv(file_path)
+        # Adjusted price calculation
+        group["total_return"] = group["stock_exret"] + group["rf"]
+        group["total_return"] = group["total_return"].shift(1)
+        group["total_return"].iloc[0] = 0
 
-        pbar.update(1)
-print("\n")
-
-
-# Adjusted Price
-# adj_price(t+1) = adj_price(t) * (1 + stock_exret(t) + rf(t))
-
-print("Adding 'adj_price' column to each file...\n")
-with tqdm(total=total) as pbar:
-    for file_name in csv_files:
-        file_path = os.path.join(STOCKS_DATA_DIR, file_name)
-
-        # Read the CSV file into a DataFrame
-        df = pd.read_csv(file_path, index_col="t1", parse_dates=True)
-
-        # Calculate the total return
-        df["total_return"] = df["stock_exret"] + df["rf"]
-        # lag the total return
-        df["total_return"] = df["total_return"].shift(1)
-        df["total_return"].iloc[0] = 0
-
-        # Start the adjusted price at the initial 'prc' value
-        # initial_price = df['prc'].iloc[0]
         initial_price = 100
+        group["adj_price"] = initial_price * (1 + group["total_return"]).cumprod()
 
-        # Compute the adjusted price
-        df["adj_price"] = initial_price * (1 + df["total_return"]).cumprod()
+        # Add log price and log-diff columns
+        group["log_price"] = group["adj_price"].apply(lambda x: 0 if x == 0 else np.log(x))
+        group["log_diff"] = group["log_price"].diff()
+        group["log_diff"].iloc[0] = 0
 
-        # Save the updated DataFrame back to the CSV file
-        df.to_csv(file_path)
+        group["weight_attr"] = group["alpha"].abs().fillna(0)
 
-        pbar.update(1)
-print("\n")
+        # Fractionally differentiated price as a feature
+        d_frac = find_min_ffd(group)
+        frac_diff = frac_diff_ffd(group[["log_price"]], d=d_frac, thres=0.01)
+        group["frac_diff"] = frac_diff.fillna(0)
 
+        # Add structural breaks (SADF)
+        sadf = get_sadf(group["log_price"], 20, "ct", 1)
+        group = group.join(sadf.set_index("date"), on="t1")
+        group["sadf"] = group["sadf"].fillna(0)
 
-# Add log price and log-diff columns to each stock CSV file.
-# For the first row, the log-diff is set to 0.
-# Return attribution weight as the absolute value of the stock_exret.
+        # Fill missing values
+        group.fillna(method="ffill", axis=0, inplace=True)
 
-print("Adding 'log_price', 'log_diff' and 'weight_attr' columns to each file...\n")
-with tqdm(total=total) as pbar:
-    for file_name in csv_files:
-        file_path = os.path.join(STOCKS_DATA_DIR, file_name)
+        # Add column with random integers
+        group["random"] = np.random.randint(1, 101, size=len(group))
 
-        # Read the CSV file into a DataFrame
-        df = pd.read_csv(file_path, index_col="t1", parse_dates=True)
-        df["log_price"] = df["adj_price"].apply(lambda x: 0 if x == 0 else np.log(x))
-
-        # Calculate the log-diff column
-        df["log_diff"] = df["log_price"].diff()
-        df["log_diff"].iloc[0] = 0
-
-        # Before training, needs to be scaled with
-        # *= X_train.shape[0]/X_train['weight_attr'].sum()
-        # df['weight_attr'] = df['stock_exret'].abs()
-        df["weight_attr"] = df["alpha"].abs()
-        # fill NaN values with 0
-        df["weight_attr"] = df["weight_attr"].fillna(0)
-
-        # Save the updated DataFrame back to the CSV file (or to a new file)
-        df.to_csv(file_path)
-
-        pbar.update(1)
-print("\n")
-
-
-# Add fractionally differentiated price as a feature
-print("Adding 'frac_diff' column to each file...\n")
-with tqdm(total=total) as pbar:
-    for file_name in csv_files:
-        file_path = os.path.join(STOCKS_DATA_DIR, file_name)
-
-        df = pd.read_csv(file_path, index_col="t1", parse_dates=True)
-        d_frac = find_min_ffd(df)
-
-        frac_diff = frac_diff_ffd(df[["log_price"]], d=d_frac, thres=0.01)
-        df["frac_diff"] = frac_diff
-        df["frac_diff"] = df["frac_diff"].fillna(0)
-        df.to_csv(file_path)
-
-        pbar.update(1)
-print("\n")
-
-
-# Add structural breaks
-print("Adding 'sadf' column to each file...\n")
-with tqdm(total=total) as pbar:
-    for file_name in csv_files:
-        file_path = os.path.join(STOCKS_DATA_DIR, file_name)
-
-        df = pd.read_csv(file_path, index_col="t1", parse_dates=True)
-        sadf = get_sadf(df["log_price"], 20, "ct", 1)
-
-        # Merge SADF values with the original DataFrame
-        # Assuming 'sadf_result' is a DataFrame with 'Date' as the index
-        df_with_sadf = df.join(sadf.set_index("date"), on="t1")
-        df_with_sadf["sadf"] = df_with_sadf["sadf"].fillna(0)
-        df_with_sadf.to_csv(file_path)
-
-        pbar.update(1)
-print("\n")
-
-
-# Fill missing values with the previous value
-# and remaining NaNs with 1e6.
-print("Forward-fill NaN values and replacing any remaining NaN values with 1e6...\n")
-with tqdm(total=total) as pbar:
-    for file_name in csv_files:
-        file_path = os.path.join(STOCKS_DATA_DIR, file_name)
-
-        # Read the CSV file into a DataFrame
-        df = pd.read_csv(file_path, index_col="t1", parse_dates=True)
-
-        # Fill missing values with the previous value
-        df.fillna(method="ffill", axis=0, inplace=True)
-        # backfill
-        # df.fillna(method='bfill', axis=0, inplace=True)
-
-        # Fill the remaining NaNs with 1_000_000
-        # df.fillna(1_000_000, inplace=True)
-
-        # Save the updated DataFrame back to the CSV file
-        df.to_csv(file_path)
-
-        pbar.update(1)
-print("\n")
-
-# Generate final datasets with all added features
-# Stack all the CSV files into one DataFrame
-
-print("Adding 'random column of range 1 to 100' column to each file...\n")
-with tqdm(total=total) as pbar:
-    for file_name in csv_files:
-        file_path = os.path.join(STOCKS_DATA_DIR, file_name)
-
-        # Read the CSV file into a DataFrame
-        df = pd.read_csv(file_path, index_col="t1", parse_dates=True)
-
-        df["random"] = np.random.randint(1, 101, size=len(df))
-
-        # Save the updated DataFrame back to the CSV file
-        df.to_csv(file_path)
-
-        pbar.update(1)
-print("\n")
-
-
-print("Adding time decay to the ...\n")
-with tqdm(total=total) as pbar:
-    for file_name in csv_files:
-        file_path = os.path.join(STOCKS_DATA_DIR, file_name)
-
-        # Read the CSV file into a DataFrame
-        df = pd.read_csv(file_path, index_col="t1", parse_dates=True)
-
-        start_date = df.index.min()
-
-        # df['days_since_start'] = (df.index - start_date).days
-        time_window = (df.index - start_date).days
-        # print('Time window : ', time_window.tolist())
+        # Add time decay
+        start_date = group.index.min()
+        time_window = (group.index - start_date).days
         y = getTimeDecay(time_window.tolist(), clfLastW=0)
+        y.index = group.index
+        group["clfw"] = y
 
-        y.index = df.index
-
-        df["clfw"] = y
-
-        # print(df['clfw'])
-        # Save the updated DataFrame back to the CSV file
-        df.to_csv(file_path)
+        # Append processed group to the list
+        processed_groups.append(group)
 
         pbar.update(1)
-
-dfs = []
-print("Saving datasets...\n")
-with tqdm(total=total) as pbar:
-    for file_name in csv_files:
-        file_path = os.path.join(STOCKS_DATA_DIR, file_name)
-
-        # Read the CSV file into a DataFrame
-        df = pd.read_csv(file_path)
-
-        # Append the DataFrame to the list
-        dfs.append(df)
-
-        pbar.update(1)
-print("\n")
 
 # Concatenate all the DataFrames in the list
 # and sort by values in 't1'.
-FULL_stacked_data = pd.concat(dfs, ignore_index=True)
-FULL_stacked_data = FULL_stacked_data.sort_values(by="t1")
+processed_cleaned_df = pd.concat(processed_groups, ignore_index=False)
+processed_cleaned_df.reset_index(inplace=True)
+
+FULL_stacked_data = processed_cleaned_df.sort_values(by="t1")
+FULL_stacked_data.index.name = 'index'
 
 # Load relevant feature list
 FEATURES_PATH = "../raw_data/factor_char_list.csv"
@@ -555,7 +394,7 @@ with open(f"{OBJECTS_DIR}/features_list.json", "w") as f:
 
 
 # Scaling the new features (olf features are already scaled)
-print("Scaling the new features...\n")
+print("Scaling the new features...")
 for date, group in FULL_stacked_data.groupby("t1"):
     # Standardize each column within the group, skipping NaNs
     scaler = StandardScaler()
@@ -578,8 +417,7 @@ X_DATASET_transformed = FULL_stacked_data[
     features_list + added_features + factors_list + ["random"]
 ]
 # Save the standardized X_DATASET
-X_DATASET_transformed.to_pickle(f"{OBJECTS_DIR}/X_DATASET.pkl")
-
+X_DATASET_transformed.to_csv(f"{OBJECTS_DIR}/X_DATASET.csv")
 
 # Y_DATASET contains all the target variables.
 relevant_targets = [
@@ -593,11 +431,11 @@ relevant_targets = [
     "market_exret",
 ]
 Y_DATASET = FULL_stacked_data[relevant_targets]
-Y_DATASET.to_pickle(f"{OBJECTS_DIR}/Y_DATASET.pkl")
+Y_DATASET.to_csv(f"{OBJECTS_DIR}/Y_DATASET.csv")
 
 # WEIGHT_SAMPLING contains all the sample weights.
 WEIGHT_SAMPLING = FULL_stacked_data["weight_attr"]
-WEIGHT_SAMPLING.to_pickle(f"{OBJECTS_DIR}/WEIGHT_SAMPLING.pkl")
+WEIGHT_SAMPLING.to_csv(f"{OBJECTS_DIR}/WEIGHT_SAMPLING.csv")
 
 # FULL_stacked_data contains all possible features and targets.
-FULL_stacked_data.to_pickle(f"{OBJECTS_DIR}/FULL_stacked_data.pkl")
+FULL_stacked_data.to_csv(f"{OBJECTS_DIR}/FULL_stacked_data.csv")

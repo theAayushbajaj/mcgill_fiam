@@ -151,6 +151,7 @@ def performance_benchmark(trading_log, benchmark, weights_df):
     portfolio_rets = trading_log.sum(axis=1)
     portfolio_rets = pd.DataFrame(portfolio_rets)
     portfolio_rets.reset_index(inplace=True)
+    portfolio_rets["t1"] = pd.to_datetime(portfolio_rets["t1"])
 
     try:
         benchmark["exc_return"] = benchmark["sp_ret"] - benchmark["RF"]
@@ -410,7 +411,7 @@ def plot_cumulative(portfolio_cumulative, benchmark_cumulative):
     plt.savefig("professional_cumulative_return_comparison.png", bbox_inches="tight")
 
     # Close the plot to prevent display freezing
-    plt.close()
+    plt.show()
 
 
 def plot_weights(weights_df):
@@ -458,7 +459,7 @@ def plot_weights(weights_df):
     plt.savefig("weights_allocation.png")
 
     # Do not show the plot to prevent freezing
-    plt.close()
+    plt.show()
 
 
 def plot_stats_table(stats_df):
@@ -492,7 +493,7 @@ def plot_stats_table(stats_df):
     # Save the table to a PNG file
     plt.savefig("portfolio_stats_table.png", bbox_inches="tight")
 
-    plt.close()
+    plt.show()
 
 
 def compute_portfolio_alpha(returns, benchmark):

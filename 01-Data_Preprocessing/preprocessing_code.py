@@ -6,8 +6,8 @@ Additionally, it processes market indicator data and saves it as a separate CSV 
 
 import os
 import warnings
-import pandas as pd
 import json
+import pandas as pd
 from pandas.tseries.offsets import BMonthEnd, BMonthBegin
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
@@ -15,12 +15,6 @@ warnings.filterwarnings("ignore")
 
 # Set the current working directory
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
-
-# Ensure the 'stocks_data' directory exists, create it if not present
-STOCKS_DATA_DIR = "../stocks_data"
-
-if not os.path.exists(STOCKS_DATA_DIR):
-    os.makedirs(STOCKS_DATA_DIR)
 
 # Ensure the 'objects' directory exists, create it if not present
 OBJECTS_DIR = "../objects"
@@ -31,9 +25,12 @@ if not os.path.exists(OBJECTS_DIR):
 FEATURES_PATH = "../raw_data/factor_char_list.csv"
 
 FACTOR_PATH = "factors_theme.json"
+
 with open(FACTOR_PATH, "r") as f:
     factor_themes = json.load(f)
+
 factors_list = list(factor_themes.keys())
+
 with open(f"{OBJECTS_DIR}/factors_list.json", "w") as f:
     json.dump(factors_list, f)
 
@@ -56,7 +53,7 @@ data["t1"] = pd.to_datetime(data["date"], format="%Y%m%d")
 
 
 # Adding Theme Factors
-def addFactorThemes(df, factor_themes):
+def add_factor_themes(df, factor_themes):
     """
     Add a new column for each factor theme based on the JSON file containing theme definitions.
     Each theme aggregates factors based on signs provided in the JSON.
@@ -90,7 +87,7 @@ def addFactorThemes(df, factor_themes):
 
 # factors
 # scale the features min max
-# apply on these the addFactorThemes
+# apply on these the add_factor_themes
 data_factors = data.copy()
 features = pd.read_csv(FEATURES_PATH)
 features_list = features.values.ravel().tolist()
@@ -105,7 +102,7 @@ def minmax_fillmedian(df):
 
 data_factors = data_factors.groupby("t1", group_keys=False).apply(minmax_fillmedian)
 data_factors = data_factors.groupby(["cusip", "permno"], group_keys=False).apply(
-    addFactorThemes, factor_themes=factor_themes
+    add_factor_themes, factor_themes=factor_themes
 )
 
 data[factors_list] = data_factors[factors_list]
@@ -126,13 +123,9 @@ data = pd.merge(
 # Calculate alpha and target
 data["alpha"] = data["stock_exret"] - data["beta_60m"] * data["market_exret"]
 data["target"] = data["alpha"].apply(lambda x: 1 if x >= 0 else -1)
-data.head()
-# %%
 
 # Rescale features
-
-
-def customStandardize(df):
+def custom_standardize(df):
     """
     Standardize features_list, minmax scale factors_list
     """
@@ -146,26 +139,18 @@ def customStandardize(df):
     return df
 
 
-data = data.groupby("t1", group_keys=False).apply(customStandardize)
-data.head()
-# %%
+data = data.groupby("t1", group_keys=False).apply(custom_standardize)
 
 # Define the minimum number of records required for saving
 MIN_RECORDS = 120
 
+# Group the stock data by 'cusip' and 'permno',
+grouped = data.groupby(["cusip", "permno"], group_keys=False)
 
-def apply_last_stock_ticker(group):
-    """
-    Processes each stock ticker group by sorting records by year and month.
-    Ensures the group has at least the minimum required records before saving it to a CSV file.
+# List to store processed groups
+processed_groups = []
 
-    Args:
-        group (DataFrame): A group of stock records corresponding to a specific stock ticker.
-
-    Returns:
-        DataFrame or None: Returns the processed group if valid, otherwise None.
-    """
-
+for _, group in grouped:
     if len(group) >= MIN_RECORDS:
         # Sort the group by 'year' and 'month' for chronological order
         group = group.sort_values(by=["year", "month"])
@@ -174,22 +159,17 @@ def apply_last_stock_ticker(group):
         last_ticker = group["stock_ticker"].iloc[-1]
         group["stock_ticker"] = last_ticker
 
-        # Save the group as a CSV file using the format '{ticker}.csv'
-        file_path = os.path.join(STOCKS_DATA_DIR, f"{last_ticker}.csv")
-        group.to_csv(file_path, index=False)
+        processed_groups.append(group)
 
-        return group
+# Concatenate all valid groups into a single DataFrame
+if processed_groups:
+    consolidated_data = pd.concat(processed_groups, ignore_index=True)
 
-    return None
-
-
-# Group the stock data by 'cusip' and 'permno',
-# without adding group labels to the index
-grouped = data.groupby(["cusip", "permno"], group_keys=False)
-
-# Apply the `apply_last_stock_ticker` function to
-# each group to process and save them
-grouped.apply(apply_last_stock_ticker)
+    # Save the consolidated DataFrame to a single CSV file
+    consolidated_data.to_csv('../objects/cleaned_df.csv', index=False)
+    print(f"Consolidated data saved to objects/cleaned_df.csv")
+else:
+    print("No valid groups to save.")
 
 # Load the market indicator data from a CSV file
 mkt_ind = pd.read_csv("../raw_data/mkt_ind.csv")
@@ -202,5 +182,3 @@ mkt_ind["t1_index"] = mkt_ind["t1"] - BMonthBegin(1)
 
 # Save the processed market indicator DataFrame as a CSV file
 mkt_ind.to_csv("../objects/mkt_ind.csv", index=False)
-
-# %%

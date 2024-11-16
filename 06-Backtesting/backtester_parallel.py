@@ -22,7 +22,6 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 sys.path.append("../05-Asset_Allocation")
 import strategy_10.main as strat
-path_to_strategy = "../05-Asset_Allocation/strategy_2"
 
 
 def compute_weights_for_period(args):
@@ -117,11 +116,15 @@ def stats(weights_df, excess_returns_df, benchmark, start_month_pred=100):
 if __name__ == "__main__":
     if input("Do you want to run useful objects? (y/n) (Should do 'y' if first time training signals): ") == "y":
         import useful_objects
-    prices = pd.read_pickle("../objects/prices.pkl")
-    signals = pd.read_pickle("../objects/signals.pkl")
-    Factor_signals = pd.read_pickle("../objects/Factor_signals.pkl")
-    market_caps_df = pd.read_pickle("../objects/market_caps.pkl")
-    excess_returns = pd.read_pickle("../objects/stockexret.pkl")
+    prices = pd.read_csv("../objects/prices.csv", index_col='t1')
+    signals = pd.read_csv("../objects/signals.csv", index_col='t1')
+    csv_files = [f for f in os.listdir('../objects/factors') if f.endswith(".csv")]
+    Factor_signals = {
+        file_name.replace('.csv', ''): pd.read_csv(os.path.join('../objects/factors', file_name), index_col='t1')
+        for file_name in csv_files
+    }
+    market_caps_df = pd.read_csv("../objects/market_caps.csv", index_col='t1')
+    excess_returns = pd.read_csv("../objects/stockexret.csv", index_col='t1')
     benchmark_df = pd.read_csv("../objects/mkt_ind.csv")
     benchmark_df["t1"] = pd.to_datetime(benchmark_df["t1"])
     benchmark_df["t1_index"] = pd.to_datetime(benchmark_df["t1_index"])

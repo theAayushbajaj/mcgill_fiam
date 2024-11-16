@@ -25,11 +25,8 @@ import code_ch_08 as f_ch8
 warnings.filterwarnings("ignore")
 
 # Load dataset and targets
-with open(os.path.join(parent_dir, "objects/X_DATASET.pkl"), "rb") as f:
-    X = pickle.load(f)
-
-with open(os.path.join(parent_dir, "objects/Y_DATASET.pkl"), "rb") as f:
-    Y = pickle.load(f)
+X = pd.read_csv('../objects/X_DATASET.csv')
+Y = pd.read_csv('../objects/Y_DATASET.csv')
 
 # Define the directory containing the JSON files
 OBJECTS_DIR = "../objects"
