@@ -125,7 +125,7 @@ if __name__ == "__main__":
     benchmark_df = pd.read_csv("../objects/mkt_ind.csv")
     benchmark_df["t1"] = pd.to_datetime(benchmark_df["t1"])
     benchmark_df["t1_index"] = pd.to_datetime(benchmark_df["t1_index"])
-    WINDOW_SIZE = 60
+    WINDOW_SIZE = 100
     kwargs = {
         # Stock Selection
         "min_size": WINDOW_SIZE,
@@ -145,8 +145,8 @@ if __name__ == "__main__":
         "n_clusters": 6,
         # OBJECTS
         "prices": prices,
-        "signals": signals,
-        # "signals": Factor_signals['F_Size'] + Factor_signals['F_Momentum'] + Factor_signals['F_Value'] + Factor_signals['F_Profitability'] + Factor_signals['F_Investment'],
+        # "signals": signals,
+        "signals": Factor_signals['F_Size'] + Factor_signals['F_Momentum'] + Factor_signals['F_Value'] + Factor_signals['F_Profitability'] + Factor_signals['F_Investment'],
         "market_caps_df": market_caps_df,
         "benchmark_df": benchmark_df,
     }

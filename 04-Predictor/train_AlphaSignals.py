@@ -55,7 +55,7 @@ Y = Y.reset_index()
 Y.set_index(["t1_index", "index"], inplace=True)
 
 # Feature variables and target variable
-filtered_features = pd.read_json("../0X-Causal_discovery/filtered_features.json")
+filtered_features = pd.read_json("../0X-Causal_discovery/Final_Features.json")
 
 # Define the directory containing the JSON files
 OBJECTS_DIR = "../objects"
@@ -79,8 +79,8 @@ Y.index = pd.MultiIndex.from_tuples(
 )
 
 # Initialize parameters
-starting = pd.to_datetime("2005-01-01")
-training_window = pd.DateOffset(years=3)
+starting = pd.to_datetime("2003-01-01")
+training_window = pd.DateOffset(years=5)
 validation_window = pd.DateOffset(years=2)
 test_window = pd.DateOffset(years=1)
 step_size = pd.DateOffset(years=1)
