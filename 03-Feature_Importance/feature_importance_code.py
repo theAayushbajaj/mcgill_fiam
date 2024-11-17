@@ -45,7 +45,7 @@ with open(f"{OBJECTS_DIR}/features_list.json", "r") as f:
     features_list = json.load(f)
 
 # We do feature importance on given features
-X = X[features_list + factors_list + ["random"]]
+# X = X[features_list + factors_list + ["random"]]
 
 
 def get_cont(input_df, drop_index=None):
