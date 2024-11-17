@@ -176,7 +176,7 @@ cont = get_cont(Y)
 X["datetime"] = cont.index
 X.set_index("datetime", inplace=True)
 
-fi_estimates_fillna = run_feature_importance(X, "fillNA")
+fi_estimates = run_feature_importance(X, "fillNA")
 
-with open("./fi_estimates_fillna.pkl", "wb") as f:
-    pickle.dump(fi_estimates_fillna, f)
+with open("./fi_estimates.pkl", "wb") as f:
+    pickle.dump(fi_estimates, f)

@@ -80,15 +80,15 @@ def get_top_features(imp_estimates, n_features=100):
 
 
 # load the fi_estimates from the pickle file
-with open("./fi_estimates_fillna.pkl", "rb") as f:
+with open("./fi_estimates.pkl", "rb") as f:
     fi_estimates = pickle.load(f)
 
 print(type(fi_estimates))
 print(type(fi_estimates["MDA"]))
 print(fi_estimates)
 
-top_100_features = get_top_features(fi_estimates, n_features=100)
-OUTPUT_FILE = "./top_100_features.json"
+top_features = get_top_features(fi_estimates, n_features=100)
+OUTPUT_FILE = "./top_features.json"
 
 with open(OUTPUT_FILE, "w") as f:
-    json.dump(top_100_features, f, indent=2)
+    json.dump(top_features, f, indent=2)

@@ -411,7 +411,7 @@ def plot_cumulative(portfolio_cumulative, benchmark_cumulative):
     plt.savefig("cumulative_return_comparison.png", bbox_inches="tight")
 
     # Close the plot to prevent display freezing
-    plt.show()
+    plt.close()
 
 
 def plot_weights(weights_df):
@@ -459,7 +459,7 @@ def plot_weights(weights_df):
     plt.savefig("weights_allocation.png")
 
     # Do not show the plot to prevent freezing
-    plt.show()
+    plt.close()
 
 
 def plot_stats_table(stats_df):
@@ -493,7 +493,7 @@ def plot_stats_table(stats_df):
     # Save the table to a PNG file
     plt.savefig("portfolio_stats_table.png", bbox_inches="tight")
 
-    plt.show()
+    plt.close()
 
 
 def compute_portfolio_alpha(returns, benchmark):

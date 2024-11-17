@@ -21,7 +21,7 @@ warnings.filterwarnings("ignore", category=pd.errors.PerformanceWarning)
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 sys.path.append("../05-Asset_Allocation")
-import strategy_10.main as strat
+import strategy_12.main as strat
 
 
 def compute_weights_for_period(args):
@@ -148,8 +148,8 @@ if __name__ == "__main__":
         "n_clusters": 6,
         # OBJECTS
         "prices": prices,
-        # "signals": signals,
-        "signals": Factor_signals['F_Size'] + Factor_signals['F_Momentum'] + Factor_signals['F_Value'] + Factor_signals['F_Profitability'] + Factor_signals['F_Investment'],
+        "signals": signals,
+        # "signals": Factor_signals['F_Size'] + Factor_signals['F_Momentum'] + Factor_signals['F_Value'] + Factor_signals['F_Profitability'] + Factor_signals['F_Investment'],
         "market_caps_df": market_caps_df,
         "benchmark_df": benchmark_df,
     }

@@ -66,7 +66,7 @@ with open(f"{OBJECTS_DIR}/added_features.json", "r") as f:
 with open(f"{OBJECTS_DIR}/factors_list.json", "r") as f:
     factors_list = json.load(f)
 
-stock_vars = filtered_features["final"].to_list() + added_features + factors_list
+stock_vars = filtered_features["final"].to_list()
 TGT_VAR = "target"  # Target variable
 
 # Ensure the index is datetime
@@ -82,8 +82,8 @@ FULL_stacked_data.index = pd.MultiIndex.from_tuples(
 )
 
 # Initialize parameters
-starting = pd.to_datetime("2003-01-01")
-training_window = pd.DateOffset(years=5)
+starting = pd.to_datetime("2001-01-01")
+training_window = pd.DateOffset(years=7)
 validation_window = pd.DateOffset(years=2)
 test_window = pd.DateOffset(years=1)
 step_size = pd.DateOffset(years=1)

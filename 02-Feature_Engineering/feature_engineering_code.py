@@ -285,30 +285,37 @@ def get_sadf(log_p, min_sl, constant, lags):
     return pd.DataFrame({"date": log_p.index[min_sl:], "sadf": gsadf_values})
 
 
+# Function to calculate time decay
 def getTimeDecay(tW, clfLastW=1.0):
-    # Apply piecewise-linear decay to observed uniqueness (tW)
-    # Newest observation gets weight=1, oldest observation gets weight=clfLastW
     clfW = pd.Series(tW).sort_index().cumsum()
-    # len(clfW)
     if clfLastW >= 0:
         slope = (1.0 - clfLastW) / clfW.iloc[-1]
     else:
         slope = 1.0 / ((clfLastW + 1) * clfW.iloc[-1])
-
     const = 1.0 - slope * clfW.iloc[-1]
     clfW = const + slope * clfW
     clfW[clfW < 0] = 0
-
-    # print(const, slope)
     return clfW
 
 
-cleaned_df = pd.read_csv('../objects/cleaned_df.csv', index_col="t1", parse_dates=True)
+# Processed dataset
+cleaned_df = pd.read_csv("../objects/cleaned_df.csv", index_col="t1", parse_dates=True)
 
-# Group by 'cusip' and 'permno'
+# Generate random values per date
+# unique_dates = cleaned_df.index.unique()
+# date_random_map = {date: np.random.randint(1, 101) for date in unique_dates}
+# cleaned_df['random'] = cleaned_df.index.map(date_random_map)
+
+# Calculate time decay per date
+start_date = cleaned_df.index.min()
+time_window = (cleaned_df.index - start_date).days
+time_decay_map = getTimeDecay(time_window.tolist(), clfLastW=0)
+time_decay_map.index = cleaned_df.index
+cleaned_df["clfw"] = time_decay_map
+
+# Group by 'cusip' and 'permno' and process
 grouped = cleaned_df.groupby(["cusip", "permno"], group_keys=False)
 
-# Create an empty list to store processed groups
 processed_groups = []
 
 # Process each group
@@ -326,7 +333,9 @@ with tqdm(total=len(grouped)) as pbar:
         group["adj_price"] = initial_price * (1 + group["total_return"]).cumprod()
 
         # Add log price and log-diff columns
-        group["log_price"] = group["adj_price"].apply(lambda x: 0 if x == 0 else np.log(x))
+        group["log_price"] = group["adj_price"].apply(
+            lambda x: 0 if x == 0 else np.log(x)
+        )
         group["log_diff"] = group["log_price"].diff()
         group["log_diff"].iloc[0] = 0
 
@@ -348,16 +357,8 @@ with tqdm(total=len(grouped)) as pbar:
         # Add column with random integers
         group["random"] = np.random.randint(1, 101, size=len(group))
 
-        # Add time decay
-        start_date = group.index.min()
-        time_window = (group.index - start_date).days
-        y = getTimeDecay(time_window.tolist(), clfLastW=0)
-        y.index = group.index
-        group["clfw"] = y
-
         # Append processed group to the list
         processed_groups.append(group)
-
         pbar.update(1)
 
 # Concatenate all the DataFrames in the list
@@ -366,7 +367,7 @@ processed_cleaned_df = pd.concat(processed_groups, ignore_index=False)
 processed_cleaned_df.reset_index(inplace=True)
 
 FULL_stacked_data = processed_cleaned_df.sort_values(by="t1")
-FULL_stacked_data.index.name = 'index'
+FULL_stacked_data.index.name = "index"
 
 # Load relevant feature list
 FEATURES_PATH = "../raw_data/factor_char_list.csv"
@@ -380,10 +381,6 @@ with open(f"{OBJECTS_DIR}/factors_list.json", "r") as f:
 # Added features
 added_features = ["log_diff", "frac_diff", "sadf"]
 
-
-# Dataset creation for Causal Inference.
-causal_dataset = FULL_stacked_data[features_list + ["target"]]
-causal_dataset.to_csv(f"{OBJECTS_DIR}/causal_dataset.csv")
 
 # Save to json added features, factors and features list for future use
 with open(f"{OBJECTS_DIR}/added_features.json", "w") as f:
@@ -432,6 +429,12 @@ relevant_targets = [
 ]
 Y_DATASET = FULL_stacked_data[relevant_targets]
 Y_DATASET.to_csv(f"{OBJECTS_DIR}/Y_DATASET.csv")
+
+# Dataset creation for Causal Inference.
+causal_dataset = FULL_stacked_data[
+    features_list + added_features + factors_list + ["random"] + ["target"]
+]
+causal_dataset.to_csv(f"{OBJECTS_DIR}/causal_dataset.csv")
 
 # WEIGHT_SAMPLING contains all the sample weights.
 WEIGHT_SAMPLING = FULL_stacked_data["weight_attr"]

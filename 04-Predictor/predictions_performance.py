@@ -21,14 +21,16 @@ import os
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 # Load predictions and true labels from stored CSV files
-predictions_df = pd.read_csv("../objects/predictions.csv")
+predictions_df = pd.read_csv('../objects/FULL_stacked_data_with_preds.csv', parse_dates=True)
+predictions_df = predictions_df[['t1_index', 'index', 'prediction', 'probability']]
 
 # Rename columns to match expected structure
-predictions_df.rename(columns={'Unnamed: 0': 't1_index', 'Unnamed: 1': 'index'}, inplace=True)
+# predictions_df.rename(columns={'Unnamed: 0': 't1_index', 'Unnamed: 1': 'index'}, inplace=True)
 predictions_df.set_index('index', inplace=True)
 
 # Load the actual target data
-Y = pd.read_pickle('../objects/Y_DATASET.pkl')
+Y = pd.read_csv('../objects/Y_DATASET.csv')
+Y.set_index('index', inplace=True)
 
 # Add true target values and weights to predictions_df based on 'index'
 predictions_df['target'] = Y['target']
