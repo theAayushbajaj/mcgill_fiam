@@ -1,4 +1,3 @@
-# %%
 """
 This script takes objects created in useful_objects.py and allocates a portion
 of the available capital to top N stocks.
@@ -106,7 +105,7 @@ def asset_allocator(
         "num_scenarios": kwargs.get("num_scenarios", 10),
         "uncertainty_level": kwargs.get("uncertainty_level", 0.05),
         "total_allocation": kwargs.get("total_allocation", 1.0),
-        
+
     }
     optimized_weights = weight_optimizer.main(
         weights,
@@ -118,5 +117,3 @@ def asset_allocator(
     )
 
     return optimized_weights
-
-# %%

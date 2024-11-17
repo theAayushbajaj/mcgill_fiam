@@ -18,24 +18,19 @@ Returns:
 - `predictions.csv`: Combined predictions from all test sets.
 - Updated stock CSV files with predictions and probabilities.
 """
-# %%
 
 import os
 import warnings
-import glob
+import json
 import numpy as np
 import pandas as pd
-import json
 
 from sklearn.ensemble import RandomForestClassifier, BaggingClassifier
 from sklearn.metrics import log_loss
 from sklearn.model_selection import PredefinedSplit, RandomizedSearchCV
 from sklearn.decomposition import PCA
-from sklearn.preprocessing import StandardScaler
 
 from scipy.stats import randint, uniform
-
-from tqdm import tqdm
 
 warnings.filterwarnings("ignore")
 
@@ -43,8 +38,9 @@ warnings.filterwarnings("ignore")
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 # Load your data
-X = pd.read_pickle("../objects/X_DATASET.pkl")
-Y = pd.read_pickle("../objects/Y_DATASET.pkl")
+X = pd.read_csv("../objects/X_DATASET.csv", index_col='index')
+Y = pd.read_csv("../objects/Y_DATASET.csv", index_col='index')
+FULL_stacked_data = pd.read_csv("../objects/FULL_stacked_data.csv", index_col='index')
 
 # Prepare the data
 X["t1_index"] = Y["t1_index"]
@@ -53,6 +49,9 @@ X.set_index(["t1_index", "index"], inplace=True)
 
 Y = Y.reset_index()
 Y.set_index(["t1_index", "index"], inplace=True)
+
+FULL_stacked_data = FULL_stacked_data.reset_index()
+FULL_stacked_data.set_index(["t1_index", "index"], inplace=True)
 
 # Feature variables and target variable
 filtered_features = pd.read_json("../0X-Causal_discovery/Final_Features.json")
@@ -78,6 +77,10 @@ Y.index = pd.MultiIndex.from_tuples(
     [(pd.to_datetime(t1_index), other_index) for t1_index, other_index in Y.index]
 )
 
+FULL_stacked_data.index = pd.MultiIndex.from_tuples(
+    [(pd.to_datetime(t1_index), other_index) for t1_index, other_index in FULL_stacked_data.index]
+)
+
 # Initialize parameters
 starting = pd.to_datetime("2003-01-01")
 training_window = pd.DateOffset(years=5)
@@ -88,7 +91,6 @@ end_date = pd.to_datetime("2024-01-01")
 
 COUNTER = 0
 test_scores = []
-
 
 while True:
     # Calculate start and end dates for each window
@@ -151,20 +153,6 @@ while True:
     X_train_vals = X_train[stock_vars].values.astype("float32")
     X_validate_vals = X_validate[stock_vars].values.astype("float32")
     X_test_vals = X_test[stock_vars].values.astype("float32")
-
-    # **Scale the data**
-    # scaler = StandardScaler()
-    # X_train_vals_scaled = scaler.fit_transform(X_train_vals)
-    # X_validate_vals_scaled = scaler.transform(X_validate_vals)
-    # X_test_vals_scaled = scaler.transform(X_test_vals)
-
-    # Calculate the median values for each column in the scaled training data
-    # median_vals = np.nanmedian(X_train_vals_scaled, axis=0)
-
-    # Replace NaN values with the median in each dataset
-    # X_train_vals_scaled = np.where(np.isnan(X_train_vals_scaled), median_vals, X_train_vals_scaled)
-    # X_validate_vals_scaled = np.where(np.isnan(X_validate_vals_scaled), median_vals, X_validate_vals_scaled)
-    # X_test_vals_scaled = np.where(np.isnan(X_test_vals_scaled), median_vals, X_test_vals_scaled)
 
     # **Apply PCA to X_train_vals_scaled**
     pca = PCA(n_components=0.85, svd_solver="full")  # Retain 80% of variance
@@ -269,77 +257,23 @@ while True:
         sample_weight=Y_test["weight_attr"].values,
         labels=best_estimator.classes_,
     )
+
     print("Log Loss on Test Set:", score_)
     test_scores.append(score_)
 
     # Store predictions in Y_test and save to disk immediately
     Y_test["prediction"] = best_estimator.predict(X_test_pca)
     Y_test["probability"] = prob.max(axis=1)
-    Y_test[["prediction", "probability"]].to_csv(
-        f"../objects/predictions_{COUNTER}.csv", index=True
-    )
 
-    # # Clean up variables to free memory
-    # del X_train, X_validate, X_test, Y_train, Y_validate, Y_test
-    # del X_train_vals, X_validate_vals, X_test_vals, X_train_pca, X_validate_pca,
-    # X_test_pca, X_train_val, Y_train_val
-    # del prob, best_estimator, optimizer, pca
-    # gc.collect()
+    FULL_stacked_data.loc[Y_test.index, "prediction"] = Y_test["prediction"]
+    FULL_stacked_data.loc[Y_test.index, "probability"] = Y_test["probability"]
+
+    Y_test[["prediction", "probability"]].to_csv(
+        f"../objects/predictions_{COUNTER}.csv"
+    )
 
     COUNTER += 1
 
-prediction_files = glob.glob("../objects/predictions_*.csv")
-pred_out = pd.concat((pd.read_csv(f, index_col=[0, 1]) for f in prediction_files))
-pred_out.to_csv("../objects/predictions.csv")
-
-
-temp_pred = pd.read_csv("../objects/predictions.csv")
-temp_pred.set_index(["Unnamed: 0", "Unnamed: 1"], inplace=True)
-temp_pred.index.names = ["t1_index", None]
-temp_pred.head()
-
-
-# set the current working directory
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
-
-# Set the directory containing your stock CSV files
-STOCKS_DATA_DIR = "../stocks_data"
-
-# Get a list of all CSV files in the directory
-csv_files = [f for f in os.listdir(STOCKS_DATA_DIR) if f.endswith(".csv")]
-
-dfs = []
-
-# Loop through each CSV file
-for file_name in tqdm(csv_files):
-    file_path = os.path.join(STOCKS_DATA_DIR, file_name)
-
-    # Read the CSV file into a DataFrame
-    df = pd.read_csv(file_path)
-
-    # Append the DataFrame to the list
-    dfs.append(df)
-
-stacked_data = pd.concat(dfs, ignore_index=True)
-stacked_data = stacked_data.sort_values(by="t1")
-
-# Set the 't1_index' to the first level
-stacked_data.set_index("t1_index", inplace=True, append=True)
-stacked_data = stacked_data.swaplevel(i=-1, j=0)
-
-stacked_data["prediction"] = temp_pred["prediction"]
-stacked_data["probability"] = temp_pred["probability"]
-
-stacked_data.reset_index(level=0, inplace=True)
-
-# Assuming 'stock_ticker' is one of the columns in stacked_data
-# Split the stacked_data by 'stock_ticker'
-grouped_data = stacked_data.groupby("stock_ticker")
-
-# Loop through each group and save to CSV
-for stock_ticker, group in tqdm(grouped_data):
-    # Define the file path for each stock ticker
-    file_path = os.path.join(STOCKS_DATA_DIR, f"{stock_ticker}.csv")
-
-    # Save the group DataFrame to a CSV file, overwriting if it exists
-    group.to_csv(file_path, index=True)  # Set index=True to keep 'row_index' as index
+FULL_stacked_data.to_csv('../objects/FULL_stacked_data_with_preds.csv')
+FULL_stacked_data.index.names = ['t1_index', 'index']
+FULL_stacked_data.to_csv("../objects/FULL_stacked_data_with_preds.csv")
