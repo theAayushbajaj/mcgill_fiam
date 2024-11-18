@@ -21,7 +21,7 @@ warnings.filterwarnings("ignore", category=pd.errors.PerformanceWarning)
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 sys.path.append("../05-Asset_Allocation")
-import strategy_12.main as strat
+import strategy_1.main as strat
 
 
 def compute_weights_for_period(args):
@@ -128,7 +128,7 @@ if __name__ == "__main__":
     benchmark_df = pd.read_csv("../objects/mkt_ind.csv")
     benchmark_df["t1"] = pd.to_datetime(benchmark_df["t1"])
     benchmark_df["t1_index"] = pd.to_datetime(benchmark_df["t1_index"])
-    WINDOW_SIZE = 100
+    WINDOW_SIZE = 60
     kwargs = {
         # Stock Selection
         "min_size": WINDOW_SIZE,

@@ -123,7 +123,7 @@ def main(
         return benchmark_std**2 + soft_risk - w @ posterior_cov.values @ w
 
     # Bounds for each weight: 0 <= w <= 0.10
-    bounds = [(0, 1.0)] * n
+    bounds = [(0, 0.1)] * n
 
     # Initial guess for weights (equally distributed)
     w0 = np.ones(n) / n
