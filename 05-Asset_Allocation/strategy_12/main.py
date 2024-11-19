@@ -48,14 +48,8 @@ def asset_allocator(
     benchmark_df = benchmark_df.iloc[start_date:end_date]
 
     # Step 0) Adjust the prices to the start and end date
-    # Index in terms of months
-    # print(f"Start date: {start_date}")
-    # print(f"End date: {end_date}")
-    # print(f"Prices length: {len(prices)}")
     prices = prices[start_date : end_date + 1]
-    # print(f"Prices length: {len(prices)}")
-    # print(f"Prices shape: {prices.shape}")
-    # print(f"Prices length: {len(prices)}")
+
 
     # =========================================================================
 
@@ -76,12 +70,8 @@ def asset_allocator(
     # Filter the data to only include the selected stocks
     # print(f'prices before selection : {prices}')
     prices = prices[selected_stocks]
-    # print(f'prices after selection : {prices}')
     signal_end = signal_end[selected_stocks]
-    # print(f'signal_end after selection : {signal_end}')
-    # print(f'signal_past after selection : {signal_past[selected_stocks]}')
     returns = prices.pct_change()
-    # fill nas with 0 for returns
     returns = returns.fillna(0)
     market_caps_df = market_caps_df[selected_stocks]
     market_caps = market_caps_df.iloc[end_date]

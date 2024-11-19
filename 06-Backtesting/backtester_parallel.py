@@ -21,7 +21,7 @@ warnings.filterwarnings("ignore", category=pd.errors.PerformanceWarning)
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 sys.path.append("../05-Asset_Allocation")
-import strategy_1.main as strat
+import strategy_3.main as strat
 
 
 def compute_weights_for_period(args):
@@ -133,7 +133,7 @@ if __name__ == "__main__":
         # Stock Selection
         "min_size": WINDOW_SIZE,
         "long_only": True,
-        "portfolio_size": 80,
+        "portfolio_size": 70,
         # Covariance Estimation, Black Litterman
         "tau": 1.0,
         "lambda_": 2,
@@ -149,7 +149,7 @@ if __name__ == "__main__":
         # OBJECTS
         "prices": prices,
         "signals": signals,
-        # "signals": Factor_signals['F_Size'] + Factor_signals['F_Momentum'] + Factor_signals['F_Value'] + Factor_signals['F_Profitability'] + Factor_signals['F_Investment'],
+        # "signals": Factor_signals['F_Value'] + Factor_signals['F_Momentum'] + Factor_signals['F_Quality'],
         "market_caps_df": market_caps_df,
         "benchmark_df": benchmark_df,
     }

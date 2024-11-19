@@ -10,7 +10,7 @@ def main(signal, signal_last, prices, portfolio_size, long_only=True, min_size=6
         portfolio_size (int): number of stocks to select
         long_only (bool): whether to only long the stocks
         min_size (int): minimum number of non-NA prices for a stock to be selected
-
+        
     Returns:
         list: list of selected stocks
     """
@@ -18,7 +18,7 @@ def main(signal, signal_last, prices, portfolio_size, long_only=True, min_size=6
     # Set signals to 0 for stocks with less than 60 non-NA price values
     sufficient_data = prices.count() >= min_size
 
-    portfolio_size = min(portfolio_size, (signal.astype(float) > 0).sum())
+    portfolio_size = min(portfolio_size, (signal > 0).sum())
     if not long_only:
         # Select top 100 stocks based on absolute signal value
         sort_signals = signal.abs()
@@ -29,7 +29,7 @@ def main(signal, signal_last, prices, portfolio_size, long_only=True, min_size=6
     else:
         # Select top stocks based on signal value
         sort_signals = signal
-        sort_signals = sort_signals.where(sufficient_data, 0.0)
+        sort_signals = sort_signals.where(sufficient_data, -1.0)
         sort_signals = sort_signals.sort_values(ascending=False)
         selected_stocks = sort_signals.index[:portfolio_size].tolist()
         signal = signal[selected_stocks]

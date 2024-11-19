@@ -30,7 +30,7 @@ def main(signal, signal_last, prices, portfolio_size, long_only=True, min_size=6
         # Select top stocks based on signal value
         sort_signals = signal
         sort_signals = sort_signals.where(sufficient_data, 0.0)
-        sort_signals = sort_signals.sort_values(ascending=False)
+        sort_signals = sort_signals.sort_values(ascending=True)
         selected_stocks = sort_signals.index[:portfolio_size].tolist()
         signal = signal[selected_stocks]
 

@@ -1,1 +1,0 @@
-Equally Weighted

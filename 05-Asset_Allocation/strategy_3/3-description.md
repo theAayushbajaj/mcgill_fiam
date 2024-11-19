@@ -1,0 +1,1 @@
+This strat is the once HRP, BL, emw

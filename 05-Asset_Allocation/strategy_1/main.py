@@ -26,7 +26,6 @@ def asset_allocator(
     signals,
     market_caps_df,
     benchmark_df,
-    portfolio_size=100,
     previous_weight=None,
     **kwargs
 ):
@@ -56,10 +55,12 @@ def asset_allocator(
     # Step 1) Stock Selection
     signal_end = signals.iloc[end_date]
     stock_selector_kwargs = {
-        key: kwargs[key] for key in ["min_size", "long_only"] if key in kwargs
+        "min_size": kwargs.get("min_size", 60),
+        "long_only": kwargs.get("long_only", True),
+        "portfolio_size": kwargs.get("portfolio_size", 100),
     }
     selected_stocks = stocks_selector.main(
-        signal_end, prices, portfolio_size, **stock_selector_kwargs
+        signal_end, prices, **stock_selector_kwargs
     )
     # Filter the data to only include the selected stocks
     prices = prices[selected_stocks]

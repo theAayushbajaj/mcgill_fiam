@@ -1,0 +1,1 @@
+Equally Weighted, selects based on worst signals.

@@ -86,7 +86,7 @@ def main(
     # Covariance on views (diagonal matrix)
     class_probs = signals.abs()
     omega_values = class_probs * (1 - class_probs)
-    omega = np.diag(omega_values) * pred_vol_scale**2
+    omega = np.diag(omega_values*returns_vol**2) * pred_vol_scale**2
 
     posterior_mean, posterior_cov = black_litterman(cov, pi, p, q, omega, tau=tau)
     posterior_mean = pd.Series(posterior_mean, index=selected_stocks)
