@@ -21,7 +21,7 @@ warnings.filterwarnings("ignore", category=pd.errors.PerformanceWarning)
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 sys.path.append("../05-Asset_Allocation")
-import strategy_3.main as strat
+import strategy_12.main as strat
 
 
 def compute_weights_for_period(args):
@@ -114,8 +114,8 @@ def stats(weights_df, excess_returns_df, benchmark, start_month_pred=100):
 
 
 if __name__ == "__main__":
-    if input("Do you want to run useful objects? (y/n) (Should do 'y' if first time training signals): ") == "y":
-        import useful_objects
+    # if input("Do you want to run useful objects? (y/n) (Should do 'y' if first time training signals): ") == "y":
+    #     import useful_objects
     prices = pd.read_csv("../objects/prices.csv", index_col='t1')
     signals = pd.read_csv("../objects/signals.csv", index_col='t1')
     csv_files = [f for f in os.listdir('../objects/factors') if f.endswith(".csv")]
@@ -133,7 +133,7 @@ if __name__ == "__main__":
         # Stock Selection
         "min_size": WINDOW_SIZE,
         "long_only": True,
-        "portfolio_size": 70,
+        "portfolio_size": 80,
         # Covariance Estimation, Black Litterman
         "tau": 1.0,
         "lambda_": 2,
@@ -149,7 +149,7 @@ if __name__ == "__main__":
         # OBJECTS
         "prices": prices,
         "signals": signals,
-        # "signals": Factor_signals['F_Value'] + Factor_signals['F_Momentum'] + Factor_signals['F_Quality'],
+        # "signals": Factor_signals['F_Value'] + Factor_signals['F_Momentum'] + Factor_signals['F_Size'],
         "market_caps_df": market_caps_df,
         "benchmark_df": benchmark_df,
     }

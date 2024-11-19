@@ -1,1 +1,1 @@
-This strat is the once HRP, BL, emw
+This strat is the one with HRP, BL, emw

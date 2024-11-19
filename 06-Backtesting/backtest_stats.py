@@ -204,6 +204,14 @@ def performance_benchmark(trading_log, benchmark, weights_df):
         trading_stats["Portfolio"]["Cumulative Return"],
         trading_stats["Benchmark"]["Cumulative Return"],
     )
+    
+    # create dataframe trading_stats["Portfolio"]["Cumulative Return"], 
+    # trading_stats["Benchmark"]["Cumulative Return"]
+    df_cumulative = pd.DataFrame()
+    df_cumulative["Portfolio"] = trading_stats["Portfolio"]["Cumulative Return"]
+    df_cumulative["Benchmark"] = trading_stats["Benchmark"]["Cumulative Return"]
+    # to csv
+    df_cumulative.to_csv("cumulative_return.csv", float_format="%.4f")
 
     plot_weights(weights_df)
 
