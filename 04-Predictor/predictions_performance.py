@@ -24,8 +24,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 predictions_df = pd.read_csv('../objects/FULL_stacked_data_with_preds.csv', parse_dates=True)
 predictions_df = predictions_df[['t1_index', 'index', 'prediction', 'probability']]
 
-# Rename columns to match expected structure
-# predictions_df.rename(columns={'Unnamed: 0': 't1_index', 'Unnamed: 1': 'index'}, inplace=True)
+# Set index in predictions_df
 predictions_df.set_index('index', inplace=True)
 
 # Load the actual target data
@@ -47,9 +46,11 @@ all_weight_attr = []
 def evaluate_performance(y_true, y_pred, y_prob, weight_attr=None):
     metrics = {
         'accuracy': accuracy_score(y_true, y_pred, sample_weight=weight_attr),
+        'macro_accuracy': accuracy_score(y_true, y_pred),
         'precision': precision_score(y_true, y_pred, average='binary', sample_weight=weight_attr),
         'recall': recall_score(y_true, y_pred, average='binary', sample_weight=weight_attr),
         'f1_score': f1_score(y_true, y_pred, average='binary', sample_weight=weight_attr),
+        'macro_f1_score': f1_score(y_true, y_pred, average='macro'),
         'roc_auc': roc_auc_score(y_true, y_prob, sample_weight=weight_attr),
         'log_loss': log_loss(y_true, y_prob, sample_weight=weight_attr),
         'confusion_matrix': confusion_matrix(y_true, y_pred, sample_weight=weight_attr),
@@ -152,7 +153,7 @@ plt.grid(False)
 cm_display.figure_.savefig(os.path.join(plot_dir, "confusion_matrix.png"))
 plt.close()
 
-# 4. Optional: Log-Loss Over Time
+# 4. Log-Loss Over Time
 log_losses = []
 
 for test_file in test_files:
