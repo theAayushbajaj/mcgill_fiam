@@ -1,6 +1,6 @@
 # Mcgill_fiam
 
-Slides presented at McGill-FIAM: https://docs.google.com/presentation/d/1IaeIL2KLTySGvnViWwAdReBMbUBrZwtIC3L7fnbO4I8/edit?usp=sharing
+Slides presented at McGill-FIAM: http://bit.ly/40GVIlI
 
 # Instructions to run the code
 
