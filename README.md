@@ -1,8 +1,6 @@
 # Mcgill_fiam
 
-# Details on the project
-
-https://docs.google.com/presentation/d/1IaeIL2KLTySGvnViWwAdReBMbUBrZwtIC3L7fnbO4I8/edit?usp=sharing
+Slides presented at McGill-FIAM: https://docs.google.com/presentation/d/1IaeIL2KLTySGvnViWwAdReBMbUBrZwtIC3L7fnbO4I8/edit?usp=sharing
 
 # Instructions to run the code
 
