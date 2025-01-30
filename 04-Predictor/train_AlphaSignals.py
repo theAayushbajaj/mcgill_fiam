@@ -1,4 +1,7 @@
 # %%
+
+# 04-Predictor/train_AlphaSignals.py
+
 """
 This script trains a Bagging Classifier with a Random Forest base estimator on stock market data
 using a rolling window approach. PCA is applied to reduce feature dimensionality, retaining 80%

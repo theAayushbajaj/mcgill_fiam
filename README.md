@@ -97,7 +97,7 @@ After running all the scripts, you'll find the following output:
 - `objects/market_caps.pkl` -- Dataframe of market caps of the assets
 - `objects/stock_exret.pkl` -- Excess returns of the each stock
 
-The feature importance scores from MDI and MDA are:
+<!-- The feature importance scores from MDI and MDA are: -->
 
 
 ## Additional Information

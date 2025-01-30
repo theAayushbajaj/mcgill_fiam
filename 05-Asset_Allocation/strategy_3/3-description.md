@@ -1,1 +1,1 @@
-This strat is the one with HRP, BL, emw
+HRP with Black-Litterman

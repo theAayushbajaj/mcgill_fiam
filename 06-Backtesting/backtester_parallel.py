@@ -1,3 +1,5 @@
+# 06-Backtesting/backtester_parallel.py
+
 """
 This script runs the backtest on the results of the strategy.
 """

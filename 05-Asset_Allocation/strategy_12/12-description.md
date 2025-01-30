@@ -1,2 +1,1 @@
-Main strategy at the moment, robust optimization where the risk is adressed by
-an HMM.
+Robust optimization where the risk is controlled by an HMM.

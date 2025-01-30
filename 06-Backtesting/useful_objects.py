@@ -1,3 +1,5 @@
+# 06-Backtesting/useful_objects.py
+
 """
 This script processes stock data from multiple CSV files located in the specified
 directory and compiles various DataFrames for analysis. It generates four primary

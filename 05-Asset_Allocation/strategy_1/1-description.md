@@ -1,1 +1,1 @@
-This strat is the one with HRP, The one we submitted at the first phase.
+HRP, the one we submitted at the first phase.

@@ -1,3 +1,5 @@
+# 05-Asset_Allocation/strategy_3/weight_optimizer.py
+
 """
 This script implements the HRP algorithm to obtain the optimal portfolio weights.
 """
