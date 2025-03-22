@@ -11,7 +11,7 @@ This repository contains a **quantitative investment strategy** pipeline develop
 Additionally, it integrates **causal discovery** techniques and **LLM-driven fundamental features** (from 10-K filings) for richer alpha signals.
 
 
-Slides presented at McGill-FIAM: http://bit.ly/40GVIlI
+Slides presented at McGill-FIAM: [link](https://docs.google.com/presentation/d/1IaeIL2KLTySGvnViWwAdReBMbUBrZwtIC3L7fnbO4I8/edit#slide=id.g2d4bb4f6e7b_13_2)
 
 
 ---
